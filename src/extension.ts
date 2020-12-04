@@ -11,7 +11,12 @@ import { resetStatusBarMessage, showErrorMessage, showInformationMessage } from 
 export function activate(context: vscode.ExtensionContext) {
 
 	const vscexpress = new VSCExpress(context, 'view');
-	const workspacePath = context.asAbsolutePath("");
+	const workspacePath = vscode.workspace.rootPath;
+	if (workspacePath === undefined) {
+		showErrorMessage("Workdirectory is empty");
+		throw "Workdirectory is empty";
+	}
+	console.log("workspacePath", workspacePath);
 	var projectList: Array<Project> = [];
 	let disposable = vscode.commands.registerCommand('nugetpackagemanagergui.ui', async () => {
 		vscexpress.open('index.html', 'Nuget Package Manager GUI', vscode.ViewColumn.One);

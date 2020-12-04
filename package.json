@@ -2,21 +2,14 @@
 	"name": "nugetpackagemanagergui",
 	"displayName": "NugetPackageManagerGUI",
 	"description": "nuget package manager gui",
-	"version": "0.0.1",
+	"author": "Ali Asadi (ali.asadi.dev@gmail.com)",
+	"publisher": "aliasadidev",
+	"version": "0.0.2",
 	"keywords": [
 		"nuget",
 		"nugetpackagemanager",
-		"package",
-		"csproj",
-		"fsproj",
 		".net core",
 		".net 5",
-		"manager",
-		"update",
-		"install",
-		"C#",
-		"F#",
-		"npm",
 		"npm-gui"
 	],
 	"bugs": {
@@ -41,7 +34,7 @@
 		"commands": [
 			{
 				"command": "nugetpackagemanagergui.ui",
-				"title": "Open Nuget Package Manager"
+				"title": "Nuget Package Manager GUI: Open"
 			}
 		]
 	},

@@ -1,0 +1,80 @@
+{
+	"name": "nugetpackagemanagergui",
+	"displayName": "NugetPackageManagerGUI",
+	"description": "nuget package manager gui",
+	"version": "0.0.1",
+	"keywords": [
+		"nuget",
+		"nugetpackagemanager",
+		"package",
+		"csproj",
+		"fsproj",
+		".net core",
+		".net 5",
+		"manager",
+		"update",
+		"install",
+		"C#",
+		"F#",
+		"npm",
+		"npm-gui"
+	],
+	"bugs": {
+		"url": "https://github.com/aliasadidev/vsocde-npm-gui/issues"
+	},
+	"homepage": "https://github.com/aliasadidev/vsocde-npm-gui/blob/master/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/aliasadidev/vsocde-npm-gui.git"
+	},
+	"engines": {
+		"vscode": "^1.51.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:nugetpackagemanagergui.ui"
+	],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "nugetpackagemanagergui.ui",
+				"title": "Open Nuget Package Manager"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run package",
+		"compile": "webpack --devtool nosources-source-map --config ./build/node-extension.webpack.config.js",
+		"watch": "webpack --watch --devtool nosources-source-map --info-verbosity verbose --config ./build/node-extension.webpack.config.js",
+		"package": "webpack --mode production --config ./build/node-extension.webpack.config.js",
+		"test-compile": "tsc -p ./",
+		"test-watch": "tsc -watch -p ./",
+		"pretest": "npm run test-compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.0.0",
+		"@types/node": "^12.11.7",
+		"@types/node-fetch": "^2.5.7",
+		"@types/vscode": "^1.51.0",
+		"@typescript-eslint/eslint-plugin": "^4.1.1",
+		"@typescript-eslint/parser": "^4.1.1",
+		"eslint": "^7.9.0",
+		"glob": "^7.1.6",
+		"mocha": "^8.1.3",
+		"ts-loader": "^8.0.3",
+		"typescript": "^4.0.2",
+		"vscode-test": "^1.4.0",
+		"webpack": "^4.44.1",
+		"webpack-cli": "^3.3.12"
+	},
+	"dependencies": {
+		"node-fetch": "^2.6.1",
+		"vscode-express": "^1.0.1"
+	}
+}

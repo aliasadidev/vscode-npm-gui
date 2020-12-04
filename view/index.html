@@ -1,0 +1,331 @@
+<script>
+  var loadingQueue = [];
+  function toggle(mode) {
+    console.log("mode", mode, loadingQueue);
+    console.log("show", loadingQueue.length)
+    var loader = document.getElementById("loader-main");
+    if (mode == "show") {
+      if (loadingQueue.length == 0)
+        loader.style.display = "table";
+      loadingQueue.push(1);
+    }
+    else {
+      loadingQueue.pop();
+      console.log("hide", loadingQueue.length)
+      if (loadingQueue.length == 0)
+        loader.style.display = "none";
+    }
+  }
+</script>
+
+
+<style>
+  #loader-main {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #e6e6e6;
+    opacity: 0.8;
+    display: none;
+    z-index: 100;
+    text-align: center;
+  }
+
+  #loader-main>span {
+    color: green;
+    height: 120px;
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 24px;
+    z-index: 1000;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  th,
+  td,
+  p,
+  input {
+    font: 14px Verdana;
+  }
+
+  table,
+  th,
+  td {
+
+    border-collapse: collapse;
+    padding: 2px 3px;
+    text-align: center;
+  }
+
+  table,
+  th {
+    border: solid 1px #0000008e;
+  }
+
+  td {
+    border: solid 1px #DDD;
+  }
+
+  th {
+    font-weight: bold;
+    background-color: rgba(197, 197, 197, 0.521);
+  }
+
+  table {
+    margin: 0 auto;
+    width: 90%;
+    margin-top: 20px;
+  }
+
+  .btn-box {
+    margin: 20px 0px;
+    text-align: center;
+  }
+
+  .tr-package:nth-child(even) {
+    background-color: #daecce77;
+  }
+
+  .tr-package:hover {
+    background-color: #727272c5;
+  }
+
+  select {
+    width: 100%;
+  }
+
+  .is-update {
+    background-color: green;
+  }
+
+  .is-out-dated {
+    background-color: indianred;
+  }
+
+  .info-box {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .important-label {
+
+    background-color: lightpink;
+  }
+
+  #project-container {
+    margin-bottom: 40px;
+  }
+</style>
+
+<body>
+  <div id="loader-main">
+    <span>Loading package versions from Nuget server...</span>
+  </div>
+
+  <div class="info-box">
+    <label class="important-label">Run dotnet restore to update your projects.</label>
+  </div>
+
+  <div class="btn-box">
+    <button onclick="initView()">Refresh</button>
+    <button onclick="closeTab()">Close</button>
+    <button onclick="reload()">Reload</button>
+  </div>
+
+  <div id="project-container">
+  </div>
+</body>
+<script>
+  const callbackStack = [];
+  const vscode = acquireVsCodeApi();
+  function command(cmd, callback) {
+    if (!cmd) {
+      return;
+    }
+    let args = Array.from(arguments);
+    if (typeof args[args.length - 1] === 'function') {
+      callback = args[args.length - 1];
+      args.length = args.length - 1;
+    } else {
+      callback = undefined;
+    }
+    args.shift();
+    const messageId = new Date().getTime() + Math.random();
+
+    callbackStack.push({
+      messageId,
+      callback
+    });
+    vscode.postMessage({
+      messageId,
+      command: cmd,
+      parameter: args
+    });
+  }
+  window.addEventListener('message', event => {
+    const message = event.data;
+    for (let index = 0; index < callbackStack.length; index++) {
+      const callbackItem = callbackStack[index];
+      if (callbackItem.messageId === message.messageId) {
+        if (callbackItem.callback) {
+          callbackItem.callback(message.payload);
+        }
+        callbackStack.splice(index, 1);
+        break;
+      }
+    }
+  });
+  function initView() {
+    command('nugetpackagemanagergui.getdata', function (res) {
+      if (res.result) {
+        createTables(res.result);
+      }
+    });
+  }
+  function reload() {
+    toggle("show");
+    document.getElementById("project-container").innerHTML = "";
+    command('nugetpackagemanagergui.reload', function (res) {
+      initView();
+      toggle("hide");
+    });
+  }
+  function closeTab() {
+    command('nugetpackagemanagergui.close');
+  }
+  function createTables(projects) {
+
+    var projContainer = document.getElementById("project-container");
+    projContainer.innerHTML = "";
+
+    var columns = [
+      "PackageName",
+      "Installed Version",
+      "VersionList",
+      "IsUpdated",
+      "NewerVersion",
+      "Action"
+    ]
+    for (var projIndex = 0; projIndex < projects.length; projIndex++) {
+
+      var currnetProj = projects[projIndex];
+      var packages = currnetProj.Packages;
+      var table = document.createElement("table");
+      table.id = "table-" + currnetProj.ID;
+
+      //TODO: shoud refactor
+      var tr = table.insertRow(0);
+      var th = document.createElement("th");
+      th.innerHTML = "Project Name";
+      th.colSpan = "1";
+      tr.appendChild(th);
+      var th = document.createElement("th");
+      th.innerHTML = currnetProj.ProjectName;
+      th.colSpan = columns.length - 1;
+      th.style.textAlign = "left";
+      tr.appendChild(th);
+
+      var tr = table.insertRow(1);
+      var th = document.createElement("th");
+      th.innerHTML = "Project Path";
+      th.colSpan = "1";
+      tr.appendChild(th);
+      var th = document.createElement("th");
+      th.innerHTML = currnetProj.ProjectPath;
+      th.colSpan = columns.length - 1;
+      th.style.textAlign = "left";
+      tr.appendChild(th);
+
+
+      var tr = table.insertRow(2);
+      for (var i = 0; i < columns.length; i++) {
+        var th = document.createElement("th");
+        th.innerHTML = columns[i];
+        if (columns[i] == "VersionList")
+          th.width = "200px";
+        tr.appendChild(th);
+      }
+
+
+      var currnetRowIndex = 3;
+
+      for (var i = 0; i < packages.length; i++) {
+
+        var tr = table.insertRow(currnetRowIndex++);
+        tr.id = `${table.id}_Row${i}`;
+        tr.classList = "tr-package";
+        let index = 0;
+
+        var td = document.createElement("td");
+        td.innerHTML = packages[i].PackageName;
+        tr.appendChild(td);
+
+        var td = document.createElement("td");
+        td.innerHTML = packages[i].PackageVersion;
+        tr.appendChild(td);
+
+
+        var td = document.createElement("td");
+
+        var options_str = "";
+        var versions = packages[i].VersionList;
+        for (let index = 0; index < versions.length; index++) {
+          const element = versions[index];
+          options_str += `<option value="${element}"  ${element == packages[i].PackageVersion ? "selected" : ""}>${element}</option>`;
+        }
+        td.innerHTML = `<select name="versionList">${options_str}</select>`;
+        tr.appendChild(td);
+
+
+        var td = document.createElement("td");
+        td.innerHTML = packages[i].IsUpdated ? "YES" : "NO";
+        td.classList = packages[i].IsUpdated ? "is-update" : "is-out-dated";
+        tr.appendChild(td);
+
+
+
+
+        var td = document.createElement("td");
+        td.innerHTML = packages[i].NewerVersion;
+        tr.appendChild(td);
+
+        var td = document.createElement("td");
+        td.innerHTML = `<button type="button" onclick='install(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Install</button>
+                        <button type="button" onclick='installForAll(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Install For All Projects</button>`;
+        tr.appendChild(td);
+
+
+
+
+      }
+
+
+
+      projContainer.appendChild(table);
+    }
+
+  }
+  function install(id, packageName, rowID) {
+    var row = document.getElementById(rowID);
+    var versionOptions = row.querySelector('[name="versionList"]');
+    var selectedVersion = versionOptions.value;
+
+    command('nugetpackagemanagergui.updatePackage', { ID: id, PackageName: packageName, SelectedVersion: selectedVersion }, function (res) {
+      initView();
+    });
+  }
+  function installForAll(id, packageName, rowID) {
+    var row = document.getElementById(rowID);
+    var versionOptions = row.querySelector('[name="versionList"]');
+    var selectedVersion = versionOptions.value;
+    command('nugetpackagemanagergui.updateAllPackage', { ID: id, PackageName: packageName, SelectedVersion: selectedVersion }, function (res) {
+      initView();
+    });
+  }
+
+  reload();
+</script>

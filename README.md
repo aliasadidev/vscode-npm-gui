@@ -6,3 +6,7 @@ An extension for Visual Studio Code that lets you easily update packages from Nu
 
 - An easy user interface
 - Handles workspaces with multiple `.csproj` or `.fsproj` files
+
+*Update a Package:*
+
+![Update a Package](https://raw.githubusercontent.com/aliasadidev/vsocde-npm-gui/main/images/demo1.gif)

@@ -4,7 +4,7 @@
 	"description": "nuget package manager gui",
 	"author": "Ali Asadi (ali.asadi.dev@gmail.com)",
 	"publisher": "aliasadidev",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"keywords": [
 		"nuget",
 		"nugetpackagemanager",
@@ -34,7 +34,7 @@
 		"commands": [
 			{
 				"command": "nugetpackagemanagergui.ui",
-				"title": "Nuget Package Manager GUI: Open"
+				"title": "Nuget Package Manager GUI: Update Packages"
 			}
 		]
 	},

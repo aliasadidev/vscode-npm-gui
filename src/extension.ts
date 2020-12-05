@@ -42,16 +42,20 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('nugetpackagemanagergui.updateAllPackage', (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
 
 		console.log(data, "nugetpackagemanagergui.updateAllPackage");
-
+		let updatedList: Array<string> = [];
 		projectList.forEach(proj => {
 			var pr = proj.Packages.filter(e => e.PackageName === data.PackageName);
-			if (pr) {
+			if (pr && pr.length > 0) {
 				var d = updateProjectFile(proj.ProjectPath, pr[0].Match, data.SelectedVersion);
 				pr[0].Match = d;
 				pr[0].IsUpdated = data.SelectedVersion == pr[0].NewerVersion;
 				pr[0].PackageVersion = data.SelectedVersion;
+				updatedList.push(proj.ProjectName)
 			}
 		});
+		if (updatedList.length > 0) {
+			showInformationMessage(`Projects updated:[${updatedList.join('|')}]`)
+		}
 		return null;
 	});
 

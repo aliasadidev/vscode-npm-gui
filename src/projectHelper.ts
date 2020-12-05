@@ -30,8 +30,10 @@ export async function loadProjects(workspacePath: string): Promise<Array<Project
 
         const projectPath = projectPathList[index];
         setStatusBarMessage('Loading project file...');
-        const data: string = readFile(projectPath);
-        var regexp = /PackageReference Include="([^"]*)" Version="([^"]*)"/g;
+        const originalData: string = readFile(projectPath);
+        const regexComment: RegExp = /<!--[\s\S\n]*?-->/gm;
+        const data: string = originalData.replace(regexComment, '')
+        var regexp: RegExp = /PackageReference Include="([^"]*)" Version="([^"]*)"/g;
         var matches = data.matchAll(regexp);
 
         var packageList: Array<Package> = [];

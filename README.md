@@ -1,4 +1,4 @@
-# vscode-nuget-package-manager
+# vscode-nuget-package-manager-gui
 
 An extension for Visual Studio Code that lets you easily update packages from Nuget server for .NET Core projects
 

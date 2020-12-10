@@ -9,4 +9,4 @@ An extension for Visual Studio Code that lets you easily update/remove/install p
 
 *Update/Install/Remove a Package:*
 
-![Update a Package](https://raw.githubusercontent.com/aliasadidev/vsocde-npm-gui/main/images/demo2.gif)
+![Update a Package](https://raw.githubusercontent.com/aliasadidev/vsocde-npm-gui/main/images/demo1.gif?v1)

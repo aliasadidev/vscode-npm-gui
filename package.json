@@ -4,7 +4,8 @@
 	"description": "nuget package manager gui",
 	"author": "Ali Asadi (ali.asadi.dev@gmail.com)",
 	"publisher": "aliasadidev",
-	"version": "0.0.5",
+	"version": "1.0.3",
+	"preview": true,
 	"icon": "images/icon.png",
 	"keywords": [
 		"nuget",

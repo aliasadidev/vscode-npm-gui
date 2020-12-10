@@ -1,203 +1,118 @@
-<script>
-  var loadingQueue = [];
-  function toggle(mode) {
-    console.log("mode", mode, loadingQueue);
-    console.log("show", loadingQueue.length)
-    var loader = document.getElementById("loader-main");
-    if (mode == "show") {
-      if (loadingQueue.length == 0)
-        loader.style.display = "table";
-      loadingQueue.push(1);
-    }
-    else {
-      loadingQueue.pop();
-      console.log("hide", loadingQueue.length)
-      if (loadingQueue.length == 0)
-        loader.style.display = "none";
-    }
-  }
-</script>
-
-
-<style>
-  #loader-main {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #e6e6e6;
-    opacity: 0.8;
-    display: none;
-    z-index: 100;
-    text-align: center;
-  }
-
-  #loader-main>span {
-    color: green;
-    height: 120px;
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 24px;
-    z-index: 1000;
-  }
-
-  body {
-    padding: 0;
-    margin: 0;
-  }
-
-  th,
-  td,
-  p,
-  input {
-    font: 14px Verdana;
-  }
-
-  table,
-  th,
-  td {
-
-    border-collapse: collapse;
-    padding: 2px 3px;
-    text-align: center;
-  }
-
-  table,
-  th {
-    border: solid 1px #0000008e;
-  }
-
-  td {
-    border: solid 1px #DDD;
-  }
-
-  th {
-    font-weight: bold;
-    background-color: rgba(197, 197, 197, 0.521);
-  }
-
-  table {
-    margin: 0 auto;
-    width: 90%;
-    margin-top: 20px;
-  }
-
-  .btn-box {
-    margin: 20px 0px;
-    text-align: center;
-  }
-
-  .tr-package:nth-child(even) {
-    background-color: #daecce77;
-  }
-
-  .tr-package:hover {
-    background-color: #727272c5;
-  }
-
-  select {
-    width: 100%;
-  }
-
-  .is-update {
-    background-color: green;
-  }
-
-  .is-out-dated {
-    background-color: indianred;
-  }
-
-  .info-box {
-    text-align: center;
-    margin-top: 20px;
-  }
-
-  .important-label {
-
-    background-color: lightpink;
-  }
-
-  #project-container {
-    margin-bottom: 40px;
-  }
-</style>
+<script src="./js/main.js"></script>
+<link href="./style/main.css" rel="stylesheet" />
+<link href="./style/bootstrap.min.css" rel="stylesheet" />
+<link href="./style/bootstrap-theme.min.css" rel="stylesheet" />
+<script src="./js/jquery.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
 
 <body>
   <div id="loader-main">
-    <span>Loading package versions from Nuget server...</span>
+    <span id="loader-main-message"></span>
   </div>
 
-  <div class="info-box">
+  <!-- <div class="info-box">
     <label class="important-label">Run dotnet restore to update your projects.</label>
-  </div>
+  </div> -->
 
   <div class="btn-box">
-    <button onclick="initView()">Refresh</button>
-    <button onclick="closeTab()">Close</button>
-    <button onclick="reload()">Reload</button>
+    <button class="btn btn-success" onclick="showPackageInstaller()">Install New Package</button>
+    <button class="btn btn-primary" onclick="initView()">Update & Uninstall Packages</button>
+    <button class="btn btn-danger" onclick="reload(true)">Load Package Versions</button>
+    <button class="btn btn-default" onclick="closeTab()">Close</button>
   </div>
 
-  <div id="project-container">
+  <div id="project-container" class="row"></div>
+  <div id="installer-container">
+
+    <div class="row">
+      <div class="col-md-10" style="float:none;margin:auto;">
+
+        <div class="input-group">
+          <input id="search-input" type="text" class="form-control" placeholder="Search for...">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" onclick="searchPackage()">Search</button>
+          </span>
+          <div class="input-group-btn">
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="item-select text-danger">select a project(*)</span>
+                <span class="caret"></span>
+              </button>
+              <ul id="project-list" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <!-- <li></li> -->
+              </ul>
+            </div>
+          </div>
+        </div><!-- /input-group -->
+
+
+
+      </div>
+
+      <div class="col-md-10" style="float:none;margin:auto;">
+        <!-- Table -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Package Name</th>
+              <th style="width: 40px;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="search-result">
+
+
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+    </div><!-- /.col-lg-6 -->
+
+  </div><!-- /.row -->
+
   </div>
 </body>
-<script>
-  const callbackStack = [];
-  const vscode = acquireVsCodeApi();
-  function command(cmd, callback) {
-    if (!cmd) {
-      return;
-    }
-    let args = Array.from(arguments);
-    if (typeof args[args.length - 1] === 'function') {
-      callback = args[args.length - 1];
-      args.length = args.length - 1;
-    } else {
-      callback = undefined;
-    }
-    args.shift();
-    const messageId = new Date().getTime() + Math.random();
 
-    callbackStack.push({
-      messageId,
-      callback
-    });
-    vscode.postMessage({
-      messageId,
-      command: cmd,
-      parameter: args
-    });
-  }
-  window.addEventListener('message', event => {
-    const message = event.data;
-    for (let index = 0; index < callbackStack.length; index++) {
-      const callbackItem = callbackStack[index];
-      if (callbackItem.messageId === message.messageId) {
-        if (callbackItem.callback) {
-          callbackItem.callback(message.payload);
-        }
-        callbackStack.splice(index, 1);
-        break;
-      }
-    }
-  });
+<script>
+
+  //var prjG = {};
+  var fullload = false;
   function initView() {
     command('nugetpackagemanagergui.getdata', function (res) {
       if (res.result) {
+        //    prjG = res.result;
         createTables(res.result);
       }
+      showProjectCont();
+      hideInstallerCont();
     });
   }
-  function reload() {
-    toggle("show");
+  function reload(loadVersion, callback) {
+    var msg = loadVersion ? "Loading package versions from Nuget server..." : "Loading projects...";
+    toggle("show", msg);
     document.getElementById("project-container").innerHTML = "";
-    command('nugetpackagemanagergui.reload', function (res) {
-      initView();
+    command('nugetpackagemanagergui.reload', { LoadVersion: loadVersion }, function (res) {
+      createTables(res.result);
       toggle("hide");
+      if (typeof callback == "function")
+        callback(res.result);
     });
+    if (loadVersion) {
+      showProjectCont();
+      hideInstallerCont();
+    }
+    //loadVersion && showProjectCont();
   }
+
   function closeTab() {
     command('nugetpackagemanagergui.close');
   }
+
   function createTables(projects) {
+
 
     var projContainer = document.getElementById("project-container");
     projContainer.innerHTML = "";
@@ -216,7 +131,7 @@
       var packages = currnetProj.Packages;
       var table = document.createElement("table");
       table.id = "table-" + currnetProj.ID;
-
+      table.width = "100%";
       //TODO: shoud refactor
       var tr = table.insertRow(0);
       var th = document.createElement("th");
@@ -247,14 +162,17 @@
         th.innerHTML = columns[i];
         if (columns[i] == "VersionList")
           th.width = "200px";
+        if (columns[i] == "Action")
+          th.width = "300px";
+
         tr.appendChild(th);
       }
 
 
       var currnetRowIndex = 3;
 
+      console.log("packeges", JSON.stringify(packages), packages.length);
       for (var i = 0; i < packages.length; i++) {
-
         var tr = table.insertRow(currnetRowIndex++);
         tr.id = `${table.id}_Row${i}`;
         tr.classList = "tr-package";
@@ -282,8 +200,9 @@
 
 
         var td = document.createElement("td");
-        td.innerHTML = packages[i].IsUpdated ? "YES" : "NO";
-        td.classList = packages[i].IsUpdated ? "is-update" : "is-out-dated";
+        var un = packages[i].NewerVersion !== "unknown";
+        td.innerHTML = packages[i].IsUpdated && un ? "YES" : un ? "NO" : "Unknown";
+        td.classList = packages[i].IsUpdated && un ? "is-update" : un ? "is-out-dated" : "is-unknown";
         tr.appendChild(td);
 
 
@@ -294,8 +213,15 @@
         tr.appendChild(td);
 
         var td = document.createElement("td");
-        td.innerHTML = `<button type="button" onclick='install(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Install</button>
-                        <button type="button" onclick='installForAll(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Install For All Projects</button>`;
+
+        var inc = `<button type="button" onclick='update(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Update</button>
+                        <button type="button" onclick='updateAll(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Update All</button>`;
+
+        inc += `<button type="button" onclick='remove(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Remove</button>
+                        <button type="button" onclick='removeAll(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Remove All</button>`;
+
+
+        td.innerHTML = inc;
         tr.appendChild(td);
 
 
@@ -309,7 +235,30 @@
     }
 
   }
-  function install(id, packageName, rowID) {
+  function install(packageName) {
+    toggle("show", "Installing...");
+    var selectedVersion = document.getElementById(`in_${packageName}`).value;
+    //console.log("selectedVersion ", selectedVersion);
+    var projectID = $(".item-select").attr("project-id");
+    if (projectID) {
+      command('nugetpackagemanagergui.installPackage', { ID: parseInt(projectID), PackageName: packageName, SelectedVersion: selectedVersion }, function (res) {
+        toggle("hide");
+        if (fullload) {
+          initView();
+        }
+        else {
+          reload(true);
+          fullload = true;
+        }
+
+
+      });
+    } else {
+      console.log("error");
+      toggle("hide");
+    }
+  }
+  function update(id, packageName, rowID) {
     var row = document.getElementById(rowID);
     var versionOptions = row.querySelector('[name="versionList"]');
     var selectedVersion = versionOptions.value;
@@ -318,7 +267,16 @@
       initView();
     });
   }
-  function installForAll(id, packageName, rowID) {
+  function remove(id, packageName, rowID) {
+    var row = document.getElementById(rowID);
+    var versionOptions = row.querySelector('[name="versionList"]');
+    var selectedVersion = versionOptions.value;
+
+    command('nugetpackagemanagergui.removePackage', { ID: id, PackageName: packageName, SelectedVersion: selectedVersion }, function (res) {
+      initView();
+    });
+  }
+  function updateAll(id, packageName, rowID) {
     var row = document.getElementById(rowID);
     var versionOptions = row.querySelector('[name="versionList"]');
     var selectedVersion = versionOptions.value;
@@ -326,6 +284,89 @@
       initView();
     });
   }
+  function removeAll(id, packageName, rowID) {
+    var row = document.getElementById(rowID);
+    var versionOptions = row.querySelector('[name="versionList"]');
+    command('nugetpackagemanagergui.removeAllPackage', { ID: id, PackageName: packageName }, function (res) {
+      initView();
+    });
+  }
+  function searchPackage() {
+    toggle("show", "Searching...");
+    var value = $("#search-input").val();
+    command('nugetpackagemanagergui.searchPackage', { Query: value }, function (res) {
+      res = res.result;
+      $("#search-result").html("");
+      for (const key in res.data) {
+        const element = res.data[key];
+        var options_str = "";
+        var versions = element.versions;
+        for (let index = versions.length - 1; index >= 0; index--) {
+          const element = versions[index].version;
+          options_str += `<option value="${element}" >${element}</option>`;
+        }
+        var eee = `<select id='in_${element.id}'>${options_str}</select>`;
 
-  reload();
+
+        $("#search-result").append(`
+          <tr>
+              <th scope="row">${parseInt(key) + 1}</th>
+              <td>
+                    <strong>${element.id}</strong>
+                    <strong style="float: right;">Total Downloads:${numberWithCommas(element.totalDownloads)}</strong>
+                    <p>
+                      ${element.description}
+                    </p>
+              </td>
+              <td style="width: 40px;">
+                ${eee}
+                <button type="button" onclick='install("${element.id}")'>Install</button>
+              </td>
+            </tr>
+          `)
+
+      }
+      toggle("hide");
+    });
+  }
+  function showPackageInstaller() {
+    command('nugetpackagemanagergui.getdata', function (res) {
+      if (res.result) {
+        proj = res.result;
+        $("#project-list").html("");
+        for (const key in proj) {
+          const element = proj[key];
+          $("#project-list").append(`<li>
+        <a href="#" onClick="$('.item-select').text(this.innerHTML)
+                  .attr('project-id','${element.ID}')
+                  .removeClass('text-danger');">${element.ProjectName}</a></li>`);
+        }
+      }
+    });
+    showInstallerCont();
+    hideProjectCont();
+  }
+
+  function toggleTabs() {
+    $("#project-container").toggle();
+    $("#installer-container").toggle();
+  }
+  function showProjectCont() {
+    $("#project-container").show();
+  }
+  function hideProjectCont() {
+    $("#project-container").hide();
+  }
+  function showInstallerCont() {
+    $("#installer-container").show();
+  }
+  function hideInstallerCont() {
+    $("#installer-container").hide();
+  }
+
+  reload(false, (res) => {
+    showPackageInstaller(res);
+    // $("#installer-container").show();
+  });
+
 </script>

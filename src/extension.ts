@@ -7,12 +7,12 @@ import { installProjectFile, removePackageInProjectFile, updatePackageInProjectF
 import { Project, SearchPackageResult } from './models';
 import { loadProjects } from './projectHelper';
 import { resetStatusBarMessage, showErrorMessage, showInformationMessage } from './vscodeNotify';
-import { searchPackage } from './nugetHelper';
+import { fetchPackageVersions, searchPackage } from './nugetHelper';
 
 export function activate(context: vscode.ExtensionContext) {
 
 	const vscexpress = new VSCExpress(context, 'view');
-	const workspacePath = context.asAbsolutePath("");
+	const workspacePath = vscode.workspace.rootPath;
 	if (workspacePath === undefined) {
 		showErrorMessage("Workdirectory is empty");
 		throw "Workdirectory is empty";
@@ -33,6 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 		updatePackageInProjectFile(project.ProjectPath, pkg.PackageName, data.SelectedVersion);
 		pkg.IsUpdated = data.SelectedVersion == pkg.NewerVersion;
 		pkg.PackageVersion = data.SelectedVersion;
+		showInformationMessage(`${data.PackageName} updated in ${project.ProjectName}`);
 		return projectList;
 	});
 
@@ -41,10 +42,11 @@ export function activate(context: vscode.ExtensionContext) {
 		var pkg = project.Packages.findIndex(e => e.PackageName === data.PackageName);
 		removePackageInProjectFile(project.ProjectPath, project.Packages[pkg].PackageName)
 		project.Packages.splice(pkg, 1);
+		showInformationMessage(`${data.PackageName} removed from ${project.ProjectName}`);
 		return projectList;
 	});
 
-	vscode.commands.registerCommand('nugetpackagemanagergui.installPackage', (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
+	vscode.commands.registerCommand('nugetpackagemanagergui.installPackage', async (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
 		var project = projectList.filter(d => d.ID === data.ID)[0];
 		var pkgIsInstalled: boolean = false;
 		if (project.Packages && project.Packages.length > 0) {
@@ -52,7 +54,19 @@ export function activate(context: vscode.ExtensionContext) {
 			pkgIsInstalled = pkgIndex != -1;
 		}
 		if (pkgIsInstalled == false) {
-			installProjectFile(project.ProjectPath, data.PackageName, data.SelectedVersion)
+			installProjectFile(project.ProjectPath, data.PackageName, data.SelectedVersion);
+			var pkgVersions = (await fetchPackageVersions(data.PackageName)).versions;
+			var newPackageVersion = pkgVersions[pkgVersions.length - 1];
+			var isUpdated = newPackageVersion == data.SelectedVersion;
+
+			project.Packages.push({
+				VersionList: pkgVersions,
+				IsUpdated: isUpdated,
+				NewerVersion: newPackageVersion,
+				PackageName: data.PackageName,
+				PackageVersion: data.SelectedVersion
+			});
+
 			showInformationMessage(`${data.PackageName} installed in ${project.ProjectName}`);
 		} else {
 			showInformationMessage(`${data.PackageName} installed before in ${project.ProjectName}`);
@@ -72,7 +86,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		});
 		if (pkgUpdatedList.length > 0) {
-			showInformationMessage(`Projects updated:[${pkgUpdatedList.join('|')}]`)
+			showInformationMessage(`${data.PackageName} updated in Projects[${pkgUpdatedList.join('|')}]`)
 		}
 		return projectList;
 	});
@@ -87,7 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		});
 		if (pkgUpdatedList.length > 0) {
-			showInformationMessage(`Projects updated:[${pkgUpdatedList.join('|')}]`)
+			showInformationMessage(`${data.PackageName} removed in Projects[${pkgUpdatedList.join('|')}]`)
 		}
 		return projectList;
 	});
@@ -97,7 +111,7 @@ export function activate(context: vscode.ExtensionContext) {
 		try {
 			projectList = await loadProjects(workspacePath, data.LoadVersion);
 			if (projectList.length == 0) {
-				showErrorMessage("Project file was not found")
+				showErrorMessage("Projects not found!");
 			}
 		} catch (ex) {
 			resetStatusBarMessage();

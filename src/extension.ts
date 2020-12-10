@@ -3,20 +3,21 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { VSCExpress } from 'vscode-express';
-import { updateProjectFile } from './updateProjectFile';
-import { Project } from './models';
+import { installProjectFile, removePackageInProjectFile, updatePackageInProjectFile } from './updateProjectFile';
+import { Project, SearchPackageResult } from './models';
 import { loadProjects } from './projectHelper';
 import { resetStatusBarMessage, showErrorMessage, showInformationMessage } from './vscodeNotify';
+import { searchPackage } from './nugetHelper';
 
 export function activate(context: vscode.ExtensionContext) {
 
 	const vscexpress = new VSCExpress(context, 'view');
-	const workspacePath = vscode.workspace.rootPath;
+	const workspacePath = context.asAbsolutePath("");
 	if (workspacePath === undefined) {
 		showErrorMessage("Workdirectory is empty");
 		throw "Workdirectory is empty";
 	}
-	console.log("workspacePath", workspacePath);
+
 	var projectList: Array<Project> = [];
 	let disposable = vscode.commands.registerCommand('nugetpackagemanagergui.ui', async () => {
 		vscexpress.open('index.html', 'Nuget Package Manager GUI', vscode.ViewColumn.One);
@@ -27,49 +28,95 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.updatePackage', (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
+		var project = projectList.filter(d => d.ID === data.ID)[0];
+		var pkg = project.Packages.filter(e => e.PackageName === data.PackageName)[0];
+		updatePackageInProjectFile(project.ProjectPath, pkg.PackageName, data.SelectedVersion);
+		pkg.IsUpdated = data.SelectedVersion == pkg.NewerVersion;
+		pkg.PackageVersion = data.SelectedVersion;
+		return projectList;
+	});
 
-		console.log(data, "nugetpackagemanagergui.updatePackage");
+	vscode.commands.registerCommand('nugetpackagemanagergui.removePackage', (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
+		var project = projectList.filter(d => d.ID === data.ID)[0];
+		var pkg = project.Packages.findIndex(e => e.PackageName === data.PackageName);
+		removePackageInProjectFile(project.ProjectPath, project.Packages[pkg].PackageName)
+		project.Packages.splice(pkg, 1);
+		return projectList;
+	});
 
-		var proj = projectList.filter(d => d.ID === data.ID)[0];
-		var pr = proj.Packages.filter(e => e.PackageName === data.PackageName)[0];
-		var d = updateProjectFile(proj.ProjectPath, pr.Match, data.SelectedVersion)
-		pr.Match = d;
-		pr.IsUpdated = data.SelectedVersion == pr.NewerVersion;
-		pr.PackageVersion = data.SelectedVersion;
-		return null;
+	vscode.commands.registerCommand('nugetpackagemanagergui.installPackage', (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
+		var project = projectList.filter(d => d.ID === data.ID)[0];
+		var pkgIsInstalled: boolean = false;
+		if (project.Packages && project.Packages.length > 0) {
+			var pkgIndex = project.Packages.findIndex(x => x.PackageName == data.PackageName);
+			pkgIsInstalled = pkgIndex != -1;
+		}
+		if (pkgIsInstalled == false) {
+			installProjectFile(project.ProjectPath, data.PackageName, data.SelectedVersion)
+			showInformationMessage(`${data.PackageName} installed in ${project.ProjectName}`);
+		} else {
+			showInformationMessage(`${data.PackageName} installed before in ${project.ProjectName}`);
+		}
+		return projectList;
 	});
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.updateAllPackage', (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
-
-		console.log(data, "nugetpackagemanagergui.updateAllPackage");
-		let updatedList: Array<string> = [];
-		projectList.forEach(proj => {
-			var pr = proj.Packages.filter(e => e.PackageName === data.PackageName);
-			if (pr && pr.length > 0) {
-				var d = updateProjectFile(proj.ProjectPath, pr[0].Match, data.SelectedVersion);
-				pr[0].Match = d;
-				pr[0].IsUpdated = data.SelectedVersion == pr[0].NewerVersion;
-				pr[0].PackageVersion = data.SelectedVersion;
-				updatedList.push(proj.ProjectName)
+		let pkgUpdatedList: Array<string> = [];
+		projectList.forEach(project => {
+			var pkg = project.Packages.filter(e => e.PackageName === data.PackageName);
+			if (pkg && pkg.length > 0) {
+				updatePackageInProjectFile(project.ProjectPath, pkg[0].PackageName, data.SelectedVersion);
+				pkg[0].IsUpdated = data.SelectedVersion == pkg[0].NewerVersion;
+				pkg[0].PackageVersion = data.SelectedVersion;
+				pkgUpdatedList.push(project.ProjectName);
 			}
 		});
-		if (updatedList.length > 0) {
-			showInformationMessage(`Projects updated:[${updatedList.join('|')}]`)
+		if (pkgUpdatedList.length > 0) {
+			showInformationMessage(`Projects updated:[${pkgUpdatedList.join('|')}]`)
 		}
-		return null;
+		return projectList;
 	});
 
-	vscode.commands.registerCommand('nugetpackagemanagergui.reload', async () => {
+	vscode.commands.registerCommand('nugetpackagemanagergui.removeAllPackage', (data: { ID: number, PackageName: string }) => {
+		let pkgUpdatedList: Array<string> = [];
+		projectList.forEach(project => {
+			var pkg = project.Packages.findIndex(e => e.PackageName === data.PackageName);
+			removePackageInProjectFile(project.ProjectPath, project.Packages[pkg].PackageName)
+			project.Packages.splice(pkg, 1);
+			pkgUpdatedList.push(project.ProjectName);
+
+		});
+		if (pkgUpdatedList.length > 0) {
+			showInformationMessage(`Projects updated:[${pkgUpdatedList.join('|')}]`)
+		}
+		return projectList;
+	});
+
+
+	vscode.commands.registerCommand('nugetpackagemanagergui.reload', async (data: { LoadVersion?: boolean }) => {
 		try {
-			projectList = await loadProjects(workspacePath);
+			projectList = await loadProjects(workspacePath, data.LoadVersion);
 			if (projectList.length == 0) {
-				showErrorMessage("No project file found")
+				showErrorMessage("Project file was not found")
 			}
-			console.log(projectList, "Project list:");
 		} catch (ex) {
 			resetStatusBarMessage();
 			console.log(ex);
 		}
+		return projectList;
+	});
+
+
+	vscode.commands.registerCommand('nugetpackagemanagergui.searchPackage', async (data: { Query: string }) => {
+		var searchResult: SearchPackageResult | undefined;
+		try {
+			searchResult = await searchPackage(data.Query);
+		} catch (ex) {
+			resetStatusBarMessage();
+			console.log(ex);
+		}
+
+		return searchResult;
 	});
 
 	context.subscriptions.push(disposable);

@@ -69,6 +69,7 @@
 	},
 	"dependencies": {
 		"node-fetch": "^2.6.1",
-		"vscode-express": "^1.0.1"
+		"vscode-express": "^1.0.1",
+		"xml-js": "^1.6.11"
 	}
 }

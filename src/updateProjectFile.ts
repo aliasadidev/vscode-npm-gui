@@ -1,14 +1,28 @@
 import { readFile, writeToFile } from './fileHelper';
+import { addPackage, removePackage, updatePackage } from './xmlHelper';
 
-export function updateProjectFile(projectPath: string, oldMatchExperssion: string, selectedVersion: string): string {
+export function updatePackageInProjectFile(projectPath: string, packageName: string, selectedVersion: string) {
+    var projectFileContent = readFile(projectPath);
+    const xml: string = updatePackage(projectFileContent, packageName, selectedVersion);
+    writeToFile(projectPath, xml);
+}
+
+
+export function removePackageInProjectFile(projectPath: string, packageName: string) {
 
     var projectFileContent = readFile(projectPath);
 
-    var versionRegExp = /Version="([^"]*)"/g;
-    var newMatchExperssion = oldMatchExperssion.replace(versionRegExp, `Version="${selectedVersion}"`);
-    var newProjectFileContent = projectFileContent.replace(oldMatchExperssion, newMatchExperssion);
+    const xml: string = removePackage(projectFileContent, packageName);
 
-    writeToFile(projectPath, newProjectFileContent);
-    return newMatchExperssion;
+    writeToFile(projectPath, xml);
 }
 
+
+export function installProjectFile(projectPath: string, pkgName: string, selectedVersion: string) {
+
+    var projectFileContent = readFile(projectPath);
+
+    const xml: string = addPackage(projectFileContent, pkgName, selectedVersion);
+
+    writeToFile(projectPath, xml);
+}

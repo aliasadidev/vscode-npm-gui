@@ -1,10 +1,11 @@
 // import fs from 'fs';
 import { glob } from 'glob';
 import { readFile } from './fileHelper';
-import { Package, Project } from './models';
-import { fetchPackageVersions } from './nugetHelper';
+import { PackageDetail, PackageVersion, Package, Project } from './models';
+import { fetchPackageVersions, fetchPackageVersionsBatch } from './nugetHelper';
 import * as path from 'path'
 import { resetStatusBarMessage, setStatusBarMessage } from './vscodeNotify';
+import { getPackages } from './xmlHelper';
 
 
 export function findProjects(workspaceFolder: string): Array<string> {
@@ -20,45 +21,44 @@ export function findProjects(workspaceFolder: string): Array<string> {
 }
 
 
-export async function loadProjects(workspacePath: string): Promise<Array<Project>> {
+export async function loadProjects(workspacePath: string, loadVersion: boolean = false): Promise<Array<Project>> {
     const projectPathList: Array<string> = findProjects(workspacePath);
 
     var projectID = 1;
     var projectList: Array<Project> = [];
 
-    for (const index in projectPathList) {
+    for (const pathIndex in projectPathList) {
 
-        const projectPath = projectPathList[index];
+        const projectPath = projectPathList[pathIndex];
         setStatusBarMessage('Loading project file...');
         const originalData: string = readFile(projectPath);
-        const regexComment: RegExp = /<!--[\s\S\n]*?-->/gm;
-        const data: string = originalData.replace(regexComment, '')
-        var regexp: RegExp = /PackageReference Include="([^"]*)" Version="([^"]*)"/g;
-        var matches = data.matchAll(regexp);
 
-        var packageList: Array<Package> = [];
-        setStatusBarMessage('Loading package versions...');
-        for (const group of matches) {
-            const match = group[0], packageName = group[1], packageVersion = group[2];
+        var packages: Array<Package> = getPackages(originalData);
+        var packageVersions: Array<PackageVersion> = loadVersion ? await fetchPackageVersionsBatch(packages) : [];
+        var packageList: Array<PackageDetail> = [];
 
-            var versionList: Array<string> = [];
+        for (const pkg of packages) {
+            const packageVersion = packages.filter(x => x.PackageName == pkg.PackageName)[0].PackageVersion;
+
+            var versionList: Array<string> = loadVersion ?
+                packageVersions.filter(x => x.PackageName == pkg.PackageName)[0].Versions :
+                [packageVersion];
             // don't load a package that is loaded.
-            const packageIsLoaded = firstOrDefaultPackage(projectList, packageName);
-            if (packageIsLoaded)
-                versionList = packageIsLoaded.VersionList;
-            else {
-                versionList = (await fetchPackageVersions(packageName)).versions;//versionList = ["1.0.0"];//for test                
-            }
+            // const packageIsLoaded = firstOrDefaultPackage(projectList, packageName);
+            // if (packageIsLoaded)
+            //     versionList = packageIsLoaded.VersionList;
+            // else {
+            //     versionList = (await fetchPackageVersions(packageName)).versions;//versionList = ["1.0.0"];//for test                
+            // }
             var newPackageVersion = versionList[versionList.length - 1];
             var isUpdated = newPackageVersion == packageVersion;
 
             packageList.push({
-                Match: match,
-                PackageName: packageName,
-                PackageVersion: packageVersion,
+                PackageName: pkg.PackageName,
+                PackageVersion: packageVersion ? packageVersion : "unknown",
                 VersionList: versionList,
                 IsUpdated: isUpdated,
-                NewerVersion: newPackageVersion
+                NewerVersion: loadVersion ? newPackageVersion : "unknown"
             });
         }
 
@@ -77,15 +77,15 @@ export async function loadProjects(workspacePath: string): Promise<Array<Project
     return projectList;
 }
 
-function firstOrDefaultPackage(projects: Array<Project>, packageName: string): Package | undefined {
-    let result: Package | undefined;
-    for (const proj in projects) {
-        const element = projects[proj];
-        let exist = element.Packages.find(x => x.PackageName === packageName);
-        if (exist) {
-            result = exist;
-            break;
-        }
-    }
-    return result;
-}
+// function firstOrDefaultPackage(projects: Array<Project>, packageName: string): PackageDetail | undefined {
+//     let result: PackageDetail | undefined;
+//     for (const proj in projects) {
+//         const element = projects[proj];
+//         let exist = element.Packages.find(x => x.PackageName === packageName);
+//         if (exist) {
+//             result = exist;
+//             break;
+//         }
+//     }
+//     return result;
+// }

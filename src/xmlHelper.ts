@@ -29,6 +29,9 @@ export function removePackage(xml: string, packageName: string) {
     var selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
     var delIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
     selectedItemGroup.elements.splice(delIndex, 1);
+    if (selectedItemGroup.elements.length === 0) {
+        itemGroup.ProjectElement.elements.splice(itemGroup.GroupItemIndex, 1);
+    }
     xmlResult = convert.js2xml(itemGroup.RootElement, { compact: false, spaces: 2 });
     return xmlResult;
 }

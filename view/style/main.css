@@ -18,9 +18,11 @@
     z-index: 1000;
 }
 
-body {
+body,
+html {
     padding: 0;
     margin: 0;
+    width: 99%;
 }
 
 th,
@@ -29,17 +31,23 @@ p,
 input {
     font: 14px Verdana;
 }
-
-#project-container table,
-#project-container th,
-#project-container td {
+#project-container-tables table {
+    width: 98%;
+}
+#project-container-tables,
+#installer-container {
+    padding: 0 25px;
+}
+#project-container-tables table,
+#project-container-tables th,
+#project-container-tables td {
     border-collapse: collapse;
     padding: 2px 3px;
     text-align: center;
 }
 
-#project-container table,
-#project-container th {
+#project-container-tables table,
+#project-container-tables th {
     border: solid 1px #0000008e;
 }
 
@@ -59,7 +67,7 @@ table {
 }
 
 .btn-box {
-    margin: 20px 0px;
+    margin: 20px 5px;
     text-align: center;
 }
 

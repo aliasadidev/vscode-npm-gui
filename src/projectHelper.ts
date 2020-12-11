@@ -50,7 +50,7 @@ export async function loadProjects(workspacePath: string, loadVersion: boolean =
             // else {
             //     versionList = (await fetchPackageVersions(packageName)).versions;//versionList = ["1.0.0"];//for test                
             // }
-            var newPackageVersion = versionList[versionList.length - 1];
+            var newPackageVersion = findStableVersion(versionList);
             var isUpdated = newPackageVersion == packageVersion;
 
             packageList.push({
@@ -89,3 +89,10 @@ export async function loadProjects(workspacePath: string, loadVersion: boolean =
 //     }
 //     return result;
 // }
+
+function findStableVersion(versions: Array<string>): string {
+    const re: RegExp = /^\d+\.\d+\.\d+$/m;
+    var version: string | undefined = versions.slice().reverse().find(x => re.test(x));
+    return version ?? "unknown";
+
+}

@@ -17,11 +17,18 @@
   <div class="btn-box">
     <button class="btn btn-success" onclick="showPackageInstaller()">Install New Package</button>
     <button class="btn btn-primary" onclick="initView()">Update & Uninstall Packages</button>
-    <button class="btn btn-danger" onclick="reload(true)">Load Package Versions</button>
     <button class="btn btn-default" onclick="closeTab()">Close</button>
   </div>
-
-  <div id="project-container" class="row"></div>
+  <hr>
+  <div id="project-container" class="row">
+    <div class="btn-box">
+      <button class="btn btn-primary" onclick="reload(true)">Load Package Versions</button>
+      <button class="btn btn-primary" onclick="updateAllProjects()">Update All Packages</button>
+    </div>
+    <hr>
+    <div id="project-container-tables">
+    </div>
+  </div>
   <div id="installer-container">
 
     <div class="row">
@@ -93,12 +100,15 @@
   function reload(loadVersion, callback) {
     var msg = loadVersion ? "Loading package versions from Nuget server..." : "Loading projects...";
     toggle("show", msg);
-    document.getElementById("project-container").innerHTML = "";
+    document.getElementById("project-container-tables").innerHTML = "";
     command('nugetpackagemanagergui.reload', { LoadVersion: loadVersion }, function (res) {
       createTables(res.result);
       toggle("hide");
       if (typeof callback == "function")
         callback(res.result);
+
+      if (fullload === false && loadVersion)
+        fullload = true;
     });
     if (loadVersion) {
       showProjectCont();
@@ -114,7 +124,7 @@
   function createTables(projects) {
 
 
-    var projContainer = document.getElementById("project-container");
+    var projContainer = document.getElementById("project-container-tables");
     projContainer.innerHTML = "";
 
     var columns = [
@@ -193,7 +203,7 @@
         var versions = packages[i].VersionList;
         for (let index = 0; index < versions.length; index++) {
           const element = versions[index];
-          options_str += `<option value="${element}"  ${element == packages[i].PackageVersion ? "selected" : ""}>${element}</option>`;
+          options_str += `<option value="${element}"  ${element == packages[i].NewerVersion ? "selected" : ""}>${element}</option>`;
         }
         td.innerHTML = `<select name="versionList">${options_str}</select>`;
         tr.appendChild(td);
@@ -248,7 +258,7 @@
         }
         else {
           reload(true);
-          fullload = true;
+
         }
 
 
@@ -284,6 +294,22 @@
       initView();
     });
   }
+
+  function updateAllProjects() {
+    if (fullload === false) {
+      reload(true, (data) => {
+        command('nugetpackagemanagergui.updateAllProjects', {}, function (res) {
+          initView();
+        });
+      });
+    } else {
+      command('nugetpackagemanagergui.updateAllProjects', {}, function (res) {
+        initView();
+      });
+    }
+
+  }
+
   function removeAll(id, packageName, rowID) {
     var row = document.getElementById(rowID);
     var versionOptions = row.querySelector('[name="versionList"]');

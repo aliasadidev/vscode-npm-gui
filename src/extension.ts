@@ -6,7 +6,7 @@ import { VSCExpress } from 'vscode-express';
 import { installProjectFile, removePackageInProjectFile, updatePackageInProjectFile } from './updateProjectFile';
 import { Project, SearchPackageResult } from './models';
 import { loadProjects } from './projectHelper';
-import { resetStatusBarMessage, showErrorMessage, showInformationMessage } from './vscodeNotify';
+import { resetStatusBarMessage, showErrorMessage, setStatusBarMessage } from './vscodeNotify';
 import { fetchPackageVersions, searchPackage } from './nugetHelper';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 		updatePackageInProjectFile(project.ProjectPath, pkg.PackageName, data.SelectedVersion);
 		pkg.IsUpdated = data.SelectedVersion == pkg.NewerVersion;
 		pkg.PackageVersion = data.SelectedVersion;
-		showInformationMessage(`${data.PackageName} updated in ${project.ProjectName}`);
+		setStatusBarMessage(`${data.PackageName} updated in ${project.ProjectName}`, 5000);
 		return projectList;
 	});
 
@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
 		var pkg = project.Packages.findIndex(e => e.PackageName === data.PackageName);
 		removePackageInProjectFile(project.ProjectPath, project.Packages[pkg].PackageName)
 		project.Packages.splice(pkg, 1);
-		showInformationMessage(`${data.PackageName} removed from ${project.ProjectName}`);
+		setStatusBarMessage(`${data.PackageName} removed from ${project.ProjectName}`, 5000);
 		return projectList;
 	});
 
@@ -67,9 +67,9 @@ export function activate(context: vscode.ExtensionContext) {
 				PackageVersion: data.SelectedVersion
 			});
 
-			showInformationMessage(`${data.PackageName} installed in ${project.ProjectName}`);
+			setStatusBarMessage(`${data.PackageName} installed in ${project.ProjectName}`, 5000);
 		} else {
-			showInformationMessage(`${data.PackageName} installed before in ${project.ProjectName}`);
+			setStatusBarMessage(`${data.PackageName} installed before in ${project.ProjectName}`, 5000);
 		}
 		return projectList;
 	});
@@ -86,22 +86,37 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		});
 		if (pkgUpdatedList.length > 0) {
-			showInformationMessage(`${data.PackageName} updated in Projects[${pkgUpdatedList.join('|')}]`)
+			setStatusBarMessage(`${data.PackageName} updated in Projects[${pkgUpdatedList.join('|')}]`, 5000)
 		}
+		return projectList;
+	});
+	vscode.commands.registerCommand('nugetpackagemanagergui.updateAllProjects', (data: {}) => {
+
+		projectList.forEach(project => {
+			var pkgs = project.Packages.filter(x => x.IsUpdated == false);
+			pkgs.forEach(pkgItem => {
+				updatePackageInProjectFile(project.ProjectPath, pkgItem.PackageName, pkgItem.NewerVersion);
+				pkgItem.IsUpdated = true;
+				pkgItem.PackageVersion = pkgItem.NewerVersion;
+			});
+		});
+
 		return projectList;
 	});
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.removeAllPackage', (data: { ID: number, PackageName: string }) => {
 		let pkgUpdatedList: Array<string> = [];
-		projectList.forEach(project => {
-			var pkg = project.Packages.findIndex(e => e.PackageName === data.PackageName);
-			removePackageInProjectFile(project.ProjectPath, project.Packages[pkg].PackageName)
-			project.Packages.splice(pkg, 1);
-			pkgUpdatedList.push(project.ProjectName);
 
+		projectList.forEach(project => {
+			var pkgIndex = project.Packages.findIndex(e => e.PackageName === data.PackageName);
+			if (pkgIndex > -1) {
+				removePackageInProjectFile(project.ProjectPath, project.Packages[pkgIndex].PackageName)
+				project.Packages.splice(pkgIndex, 1);
+				pkgUpdatedList.push(project.ProjectName);
+			}
 		});
 		if (pkgUpdatedList.length > 0) {
-			showInformationMessage(`${data.PackageName} removed in Projects[${pkgUpdatedList.join('|')}]`)
+			setStatusBarMessage(`${data.PackageName} removed in Projects[${pkgUpdatedList.join('|')}]`, 5000);
 		}
 		return projectList;
 	});

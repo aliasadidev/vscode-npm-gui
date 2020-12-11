@@ -13,15 +13,13 @@ export function checkFileExists(filepath: string): void {
 
 export function writeToFile(filePath: string, content: string) {
     checkFileExists(filePath);
-    fs.writeFile(filePath, content, function (err) {
-        if (err) {
-            console.error(err);
-            showErrorMessage(err);
-            throw err;
-        } else {
-            console.log(`${filePath} Updated!`);
-        }
-    });
+    try {
+        fs.writeFileSync(filePath, content);
+    } catch (err) {
+        console.error(err);
+        showErrorMessage(err);
+        throw err;
+    }
 }
 
 export function readFile(filePath: string): string {

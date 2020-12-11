@@ -48,7 +48,7 @@ export async function searchPackage(query: string): Promise<any> {
         q: query,
         prerelease: false,
         semVerLevel: "2.0.0",
-        take: 50
+        take: 35
     });
     var url = `${NUGET_SEARCH_URL}${queryString}`;
 

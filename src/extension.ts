@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	var projectList: Array<Project> = [];
-	let disposable = vscode.commands.registerCommand('nugetpackagemanagergui.ui', async () => {
+	let disposable = vscode.commands.registerCommand('nugetpackagemanagergui.view', async () => {
 		vscexpress.open('index.html', 'Nuget Package Manager GUI', vscode.ViewColumn.One);
 	});
 

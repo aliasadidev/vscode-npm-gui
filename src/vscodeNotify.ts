@@ -1,10 +1,12 @@
 import * as vscode from 'vscode';
+import { CommandResult } from './models';
 
-export function setStatusBarMessage(message: string, hideAfterTimeout?: number) {
-    if (hideAfterTimeout)
-        vscode.window.setStatusBarMessage(message, hideAfterTimeout)
-    else
-        vscode.window.setStatusBarMessage(message)
+export function setStatusBarMessage(message: string | undefined, hideAfterTimeout?: number) {
+    if (message)
+        if (hideAfterTimeout)
+            vscode.window.setStatusBarMessage(message, hideAfterTimeout)
+        else
+            vscode.window.setStatusBarMessage(message)
 }
 
 export function resetStatusBarMessage() {
@@ -17,4 +19,21 @@ export function showInformationMessage(message: string) {
 
 export function showErrorMessage(message: any) {
     vscode.window.showErrorMessage(message);
+}
+
+export function showCommandResult(commandResult: CommandResult, successMessage: string | undefined = undefined) {
+    resetStatusBarMessage();
+    if (commandResult.IsSuccessful && (successMessage || commandResult.Message)) {
+        setStatusBarMessage(successMessage ? successMessage : commandResult.Message, 5000);
+    } else {
+        if (commandResult.Message)
+            setStatusBarMessage(commandResult.Message, 5000);
+        showErrorMessage(commandResult.Exception)
+    }
+}
+
+export function showCommandResults(commandResults: Array<CommandResult>, successMessage: string | undefined = undefined) {
+    commandResults.forEach(x => {
+        showCommandResult(x, successMessage);
+    });
 }

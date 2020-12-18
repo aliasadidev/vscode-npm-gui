@@ -1,64 +1,50 @@
 import fetch from 'node-fetch';
-import { NUGET_SEARCH_URL, NUGET_VERSIONS_URL } from './constants';
-import { PackageVersion, Package } from './models';
+import { PackageVersion } from './models';
 import { jsonToQueryString } from './utils';
-import { showErrorMessage } from './vscodeNotify';
 
-export async function fetchPackageVersions(selectedPackageName: string): Promise<any> {
-    const result = await fetch(`${NUGET_VERSIONS_URL}${selectedPackageName}/index.json`, { timeout: 10000 })
+export async function fetchPackageVersions(packageName: string, packageVersionsUrl: string, nugetRequestTimeout: number): Promise<any> {
+    const result = fetch(`${packageVersionsUrl}${packageName}/index.json`, { timeout: nugetRequestTimeout })
         .then(response => {
             return response.json();
         })
+        .then(jsonResponse => {
+            var result: PackageVersion = {
+                PackageName: packageName,
+                Versions: jsonResponse.versions
+            };
+            return result;
+        })
         .catch(error => {
-            showErrorMessage(`[An error occurred in the loading package version] 
-             ${error.message}`);
-            console.log(error);
-            throw error;
+            throw `[An error occurred in the loading package versions (package:${packageName})] ${error.message}`;
         });
 
 
     return result;
 }
 
-export async function fetchPackageVersionsBatch(packages: Array<Package>): Promise<any> {
-
-    var result = await Promise.all(packages.map(pkg =>
-        fetch(`${NUGET_VERSIONS_URL}${pkg.PackageName}/index.json`).then(response => {
-            return response.json();
-        }).then(jsonResponse => {
-            var result: PackageVersion = {
-                PackageName: pkg.PackageName,
-                Versions: jsonResponse.versions
-            };
-            return result;
-        }).catch(error => {
-            showErrorMessage(`[An error occurred in the loading package version] 
-             ${error.message}`);
-            console.log(error);
-            throw error;
-        })
+export async function fetchPackageVersionsBatch(packages: Array<string>, packageVersionsUrl: string, timeout: number): Promise<any> {
+    var result = await Promise.all(packages.map(pkgName =>
+        fetchPackageVersions(pkgName, packageVersionsUrl, timeout)
     ));
     return result;
 }
 
 
-export async function searchPackage(query: string): Promise<any> {
+export async function searchPackage(query: string, searchPackageUrl: string, preRelease: boolean, take: number, skip: number, timeout: number): Promise<any> {
 
     const queryString = jsonToQueryString({
         q: query,
-        prerelease: false,
+        prerelease: preRelease,
         semVerLevel: "2.0.0",
-        take: 35
+        skip: skip,
+        take: take
     });
-    var url = `${NUGET_SEARCH_URL}${queryString}`;
 
-    var result = await fetch(url).then(response => {
+    var url = `${searchPackageUrl}${queryString}`;
+    var result = await fetch(url, { timeout: timeout }).then(response => {
         return response.json();
     }).catch(error => {
-        showErrorMessage(`[An error occurred in the package searching] 
-         ${error.message}`);
-        console.log(error);
-        throw error;
+        throw `[An error occurred in the searching package] ${error.message}`;
     })
 
     return result;

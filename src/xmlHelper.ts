@@ -77,11 +77,7 @@ export function addPackage(xml: string, packageName: string, version: string) {
     return xmlResult;
 }
 
-interface itemgroup {
-    RootElement: element;
-    GroupItemIndex: number;
-    ProjectElement: element;
-}
+
 
 function getItemGroupIndexResult(xml: string): itemgroup {
     var rootObj: element = getData(xml);
@@ -161,3 +157,8 @@ interface attribute {
 }
 
 
+interface itemgroup {
+    RootElement: element;
+    GroupItemIndex: number;
+    ProjectElement: element;
+}

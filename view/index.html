@@ -4,6 +4,8 @@
 <link href="./style/bootstrap-theme.min.css" rel="stylesheet" />
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@8.1.0/dist/css/autoComplete.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@8.1.0/dist/js/autoComplete.min.js"></script> -->
 
 <body>
   <div id="loader-main">
@@ -210,7 +212,7 @@
 
 
         var td = document.createElement("td");
-        var un = packages[i].NewerVersion !== "unknown";
+        var un = packages[i].NewerVersion !== "Unknown";
         td.innerHTML = packages[i].IsUpdated && un ? "YES" : un ? "NO" : "Unknown";
         td.classList = packages[i].IsUpdated && un ? "is-update" : un ? "is-out-dated" : "is-unknown";
         tr.appendChild(td);

@@ -4,7 +4,7 @@
 	"description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from Nuget server for .NET Core 1.1+/.Net5+ projects",
 	"author": "Ali Asadi (ali.asadi.dev@gmail.com)",
 	"publisher": "aliasadidev",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"preview": true,
 	"icon": "images/icon.png",
 	"keywords": [
@@ -49,27 +49,27 @@
 				"nugetpackagemanagergui.nuget.requestTimeout": {
 					"type": "number",
 					"default": 9000,
-					"description": ""
+					"description": "The maximum duration for completing a request from this extension"
 				},
 				"nugetpackagemanagergui.nuget.packageVersionsUrl": {
 					"type": "string",
-					"default": "https://api.nuget.org/v3-flatcontainer/",
-					"description": ""
+					"default": "https://api.nuget.org/v3-flatcontainer",
+					"description": "The Nuget endpoint address for getting package versions"
 				},
 				"nugetpackagemanagergui.nuget.searchPackage.url": {
 					"type": "string",
 					"default": "https://azuresearch-usnc.nuget.org/query",
-					"description": ""
+					"description": "The Nuget endpoint address for searching packages"
 				},
 				"nugetpackagemanagergui.nuget.searchPackage.preRelease": {
 					"type": "boolean",
 					"default": false,
-					"description": ""
+					"description": "true or false determining whether to include pre-release packages in the result of the search"
 				},
 				"nugetpackagemanagergui.nuget.searchPackage.defaultTake": {
 					"type": "number",
 					"default": 10,
-					"description": ""
+					"description": "The number of packages to return in the search result"
 				}
 			}
 		}

@@ -260,13 +260,10 @@
         }
         else {
           reload(true);
-
         }
-
-
       });
     } else {
-      console.log("error");
+      command('nugetpackagemanagergui.showMessage', { Message: "The target project isn't selected, select your target project from the drop-down beside the 'search' button.", Type: "error" }, function () { })
       toggle("hide");
     }
   }

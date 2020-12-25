@@ -5,7 +5,7 @@ import * as vscode from 'vscode';
 import { VSCExpress } from 'vscode-express';
 import { SearchPackageResult } from './models';
 import * as pms from './packageManagerService';
-import { showErrorMessage, setStatusBarMessage } from './vscodeNotify';
+import { showErrorMessage, setStatusBarMessage, resetStatusBarMessage, showInformationMessage } from './vscodeNotify';
 import { getConfiguration, tryCatch } from './utils'
 
 export function activate(context: vscode.ExtensionContext) {
@@ -13,8 +13,8 @@ export function activate(context: vscode.ExtensionContext) {
 	const vscexpress = new VSCExpress(context, 'view');
 	const workspacePath = vscode.workspace.rootPath;
 	if (workspacePath === undefined) {
-		showErrorMessage("Workdirectory is empty");
-		throw "Workdirectory is empty";
+		showErrorMessage("Workdirectory is empty!");
+		throw "Workdirectory is empty!";
 	}
 
 	var configOptions = getConfiguration();
@@ -26,9 +26,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.reload', async (data: { LoadVersion?: boolean }) => {
 		await tryCatch(async () => {
-			setStatusBarMessage('Loading projects...');
+			setStatusBarMessage(data.LoadVersion ? 'Loading packages...' : 'Loading projects...');
 			return pmService.reload(workspacePath, data.LoadVersion);
-		}, 'All packages loaded.');
+		}, data.LoadVersion ? 'All packages loaded.' : 'All projects loaded.');
 		return pmService.get();
 	});
 
@@ -37,6 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 		try {
 			searchResult = await pmService.searchPackage(data.Query);
 		} catch (ex) {
+			resetStatusBarMessage();
 			showErrorMessage(ex);
 		}
 		return searchResult;
@@ -75,6 +76,23 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.updateAllPackage', async (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
 		await tryCatch(async () => pmService.updateAllPackage(data.PackageName, data.SelectedVersion), undefined, true);
+	});
+
+	vscode.commands.registerCommand('nugetpackagemanagergui.showMessage', async (data: { Message: string, Type: string }) => {
+		switch (data.Type) {
+			case 'error': {
+				showErrorMessage(data.Message);
+				break;
+			}
+			case 'info': {
+				showInformationMessage(data.Message)
+				break;
+			}
+			default: {
+				showErrorMessage(`An internal error has occurred,[Message Type '${data.Type}' not found}]`);
+				break;
+			}
+		}
 	});
 
 	context.subscriptions.push(vscode.commands.registerCommand('nugetpackagemanagergui.view', () =>

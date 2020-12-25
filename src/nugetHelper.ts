@@ -3,7 +3,7 @@ import { PackageVersion } from './models';
 import { jsonToQueryString } from './utils';
 
 export async function fetchPackageVersions(packageName: string, packageVersionsUrl: string, nugetRequestTimeout: number): Promise<any> {
-    const result = fetch(`${packageVersionsUrl}${packageName}/index.json`, { timeout: nugetRequestTimeout })
+    const result = fetch(`${packageVersionsUrl}/${packageName}/index.json`, { timeout: nugetRequestTimeout })
         .then(response => {
             return response.json();
         })

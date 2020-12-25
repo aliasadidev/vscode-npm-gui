@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 1.1.2 - Dec 25, 2020
+#### Changed
+* Improve the speed of loading package versions from Nuget server(**`4x faster than the older versions`**)
+### Added
+* Some variables overridable in `settings.json`
+
 ## Version 1.1.1 - Dec 12, 2020
 #### Changed
 * Update `Command Title` from ~~`Nuget Package Manager GUI: Update Packages`~~ to **`Nuget Package Manager GUI`**

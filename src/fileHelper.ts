@@ -1,29 +1,68 @@
 import * as fs from 'fs';
-import { showErrorMessage } from './vscodeNotify';
+import { ValidationResult } from './models';
 
-export function checkFileExists(filepath: string): void {
-    try {
-        fs.accessSync(filepath, fs.constants.F_OK);
-    } catch (e) {
-        console.error(e);
-        showErrorMessage(e);
-        throw e;
-    }
-}
-
-export function writeToFile(filePath: string, content: string) {
-    checkFileExists(filePath);
-    try {
-        fs.writeFileSync(filePath, content);
-    } catch (err) {
-        console.error(err);
-        showErrorMessage(err);
-        throw err;
-    }
-}
-
+/**
+ * Reads content of a file
+ * @param filePath  The file path
+ * @returns {string} The file content
+ */
 export function readFile(filePath: string): string {
-    checkFileExists(filePath);
     var fileContent = fs.readFileSync(filePath, 'utf8');
     return fileContent;
 }
+/**
+ * Writes the new content to a file
+ * @param filePath The file path
+ * @param content The new content
+ */
+export function writeToFile(filePath: string, content: string): void {
+    fs.writeFileSync(filePath, content);
+}
+
+/**
+ * Checks whether a file exists
+ * @param filePath The file path
+ * @returns {ValidationResult} 
+ */
+export function checkFileExists(filePath: string): ValidationResult {
+    var isExists: boolean = fs.existsSync(filePath);
+    return { IsSuccessful: isExists, ErrorMessage: `File "${filePath}" does not exists` };
+}
+/**
+ * Checks access mode of a file 
+ * @param filePath The file path
+ * @param accessMode The access mode (e.g. fs.constants.R_OK | fs.constants.W_OK)
+ * @returns {ValidationResult}
+ */
+export function checkFileAccess(filePath: string, accessMode: number): ValidationResult {
+    var hasAccess: boolean = false, message: any, exception: any;
+    try {
+        fs.accessSync(filePath, accessMode);
+        hasAccess = true;
+    }
+    catch (ex) {
+        exception = ex;
+        message = `Access to the file is denied: This extension hasn't the read/write access to the project file ${filePath}`;
+    }
+    return { IsSuccessful: hasAccess, ErrorMessage: message, Exception: exception };
+}
+/**
+ * Checks whether a file exists, or has the right access
+ * @param filePath The file path
+ * @param accessMode The access mode of a file (e.g. fs.constants.R_OK | fs.constants.W_OK)
+ * @returns {ValidationResult}
+ */
+export function hasFileAccess(filePath: string, accessMode: number): ValidationResult {
+    var result: ValidationResult = { IsSuccessful: true };
+    const isExists = checkFileExists(filePath);
+
+    if (isExists.IsSuccessful) {
+        var hasAccess = checkFileAccess(filePath, accessMode);
+        if (!hasAccess.IsSuccessful)
+            result = { ErrorMessage: hasAccess.ErrorMessage, IsSuccessful: false, Exception: hasAccess.Exception };
+    } else
+        result = { ErrorMessage: isExists.ErrorMessage, IsSuccessful: false, Exception: isExists.Exception };
+
+    return result;
+}
+

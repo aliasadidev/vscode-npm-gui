@@ -39,7 +39,7 @@
 "nugetpackagemanagergui.nuget.searchPackage.preRelease": false,
 
 //The number of packages to return in the search result
-"nugetpackagemanagergui.nuget.searchPackage.defaultTak":  10		
+"nugetpackagemanagergui.nuget.searchPackage.defaultTake":  10		
 }
 
 ```

@@ -1,18 +1,18 @@
 "use strict";
 import { Package } from './models';
-var convert = require('xml-js');
+let convert = require('xml-js');
 
 export function getPackages(xml: string): Array<Package> {
-    var packageList: Array<Package> = [];
-    var itemGroup = getItemGroupIndexResult(xml);
+    let packageList: Array<Package> = [];
+    let itemGroup = getItemGroupIndexResult(xml);
 
     if (itemGroup.GroupItemIndex !== -1) {
         checkMoreThenOneItemGroup(itemGroup.ProjectElement);
-        var selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
-        var pacakges: Array<element> = getPackageReferences(selectedItemGroup);
+        let selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
+        let pacakges: Array<element> = getPackageReferences(selectedItemGroup);
         packageList = pacakges.map(e => {
-            var attr = (<attribute>e.attributes);
-            var result: Package = {
+            let attr = (<attribute>e.attributes);
+            let result: Package = {
                 PackageName: attr.Include,
                 PackageVersion: attr.Version
             }
@@ -23,11 +23,11 @@ export function getPackages(xml: string): Array<Package> {
 }
 
 export function removePackage(xml: string, packageName: string) {
-    var xmlResult: string = xml;
-    var itemGroup = getItemGroupIndexResult(xml);
+    let xmlResult: string = xml;
+    let itemGroup = getItemGroupIndexResult(xml);
     checkMoreThenOneItemGroup(itemGroup.ProjectElement);
-    var selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
-    var delIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
+    let selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
+    let delIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
     selectedItemGroup.elements.splice(delIndex, 1);
     if (selectedItemGroup.elements.length === 0) {
         itemGroup.ProjectElement.elements.splice(itemGroup.GroupItemIndex, 1);
@@ -37,18 +37,18 @@ export function removePackage(xml: string, packageName: string) {
 }
 
 export function updatePackage(xml: string, packageName: string, version: string) {
-    var xmlResult: string = xml;
-    var itemGroup = getItemGroupIndexResult(xml);
-    var selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
-    var packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
+    let xmlResult: string = xml;
+    let itemGroup = getItemGroupIndexResult(xml);
+    let selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
+    let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
     selectedItemGroup.elements[packageIndex].attributes["Version"] = version;
     xmlResult = convert.js2xml(itemGroup.RootElement, { compact: false, spaces: 2 });
     return xmlResult;
 }
 
 export function addPackage(xml: string, packageName: string, version: string) {
-    var xmlResult: string = xml;
-    var itemGroup = getItemGroupIndexResult(xml);
+    let xmlResult: string = xml;
+    let itemGroup = getItemGroupIndexResult(xml);
 
     if (itemGroup.GroupItemIndex == -1) {
         itemGroup.ProjectElement.elements.push({ type: "element", name: "ItemGroup", elements: [] });
@@ -56,11 +56,11 @@ export function addPackage(xml: string, packageName: string, version: string) {
     }
     checkMoreThenOneItemGroup(itemGroup.ProjectElement);
 
-    var selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
-    var packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
+    let selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
+    let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
     if (packageIndex === -1) {
 
-        var newElement: any = {
+        let newElement: any = {
             type: "element",
             name: "PackageReference",
             attributes: {
@@ -80,10 +80,10 @@ export function addPackage(xml: string, packageName: string, version: string) {
 
 
 function getItemGroupIndexResult(xml: string): itemgroup {
-    var rootObj: element = getData(xml);
-    var projectIndex: number = getProjectIndex(rootObj);
-    var projectElement: element = rootObj.elements[projectIndex];
-    var groupItemIndex: number = getItemGroupIndex(projectElement);
+    let rootObj: element = getData(xml);
+    let projectIndex: number = getProjectIndex(rootObj);
+    let projectElement: element = rootObj.elements[projectIndex];
+    let groupItemIndex: number = getItemGroupIndex(projectElement);
     return { RootElement: rootObj, GroupItemIndex: groupItemIndex, ProjectElement: projectElement };
 }
 

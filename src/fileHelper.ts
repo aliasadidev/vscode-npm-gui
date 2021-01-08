@@ -7,7 +7,7 @@ import { ValidationResult } from './models';
  * @returns {string} The file content
  */
 export function readFile(filePath: string): string {
-    var fileContent = fs.readFileSync(filePath, 'utf8');
+    let fileContent = fs.readFileSync(filePath, 'utf8');
     return fileContent;
 }
 /**
@@ -25,7 +25,7 @@ export function writeToFile(filePath: string, content: string): void {
  * @returns {ValidationResult} 
  */
 export function checkFileExists(filePath: string): ValidationResult {
-    var isExists: boolean = fs.existsSync(filePath);
+    let isExists: boolean = fs.existsSync(filePath);
     return { IsSuccessful: isExists, ErrorMessage: `File "${filePath}" does not exists` };
 }
 /**
@@ -35,7 +35,7 @@ export function checkFileExists(filePath: string): ValidationResult {
  * @returns {ValidationResult}
  */
 export function checkFileAccess(filePath: string, accessMode: number): ValidationResult {
-    var hasAccess: boolean = false, message: any, exception: any;
+    let hasAccess: boolean = false, message: any, exception: any;
     try {
         fs.accessSync(filePath, accessMode);
         hasAccess = true;
@@ -53,11 +53,11 @@ export function checkFileAccess(filePath: string, accessMode: number): Validatio
  * @returns {ValidationResult}
  */
 export function hasFileAccess(filePath: string, accessMode: number): ValidationResult {
-    var result: ValidationResult = { IsSuccessful: true };
+    let result: ValidationResult = { IsSuccessful: true };
     const isExists = checkFileExists(filePath);
 
     if (isExists.IsSuccessful) {
-        var hasAccess = checkFileAccess(filePath, accessMode);
+        let hasAccess = checkFileAccess(filePath, accessMode);
         if (!hasAccess.IsSuccessful)
             result = { ErrorMessage: hasAccess.ErrorMessage, IsSuccessful: false, Exception: hasAccess.Exception };
     } else

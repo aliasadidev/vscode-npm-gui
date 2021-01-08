@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 		throw "Workdirectory is empty!";
 	}
 
-	var configOptions = getConfiguration();
+	let configOptions = getConfiguration();
 	const pmService = new pms.packageManagerService(configOptions);
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.getdata', () => {
@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.searchPackage', async (data: { Query: string }) => {
-		var searchResult: SearchPackageResult | undefined;
+		let searchResult: SearchPackageResult | undefined;
 		try {
 			searchResult = await pmService.searchPackage(data.Query);
 		} catch (ex) {
@@ -60,22 +60,22 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('nugetpackagemanagergui.removeAllPackage', async (data: { PackageName: string }) => {
 		await tryCatch(async () => {
 			return pmService.removeAllPackage(data.PackageName)
-		}, undefined, true);
+		}, `${data.PackageName} removed in all projects`, true);
 	});
 
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.updateAllProjects', async (data: {}) => {
-		await tryCatch(async () => pmService.updateAllProjects(), undefined, true);
+		await tryCatch(async () => pmService.updateAllProjects(), `All packages in the projects, updated with the latest stable version`, true);
 	});
 
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.installPackage', async (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
-		await tryCatch(async () => pmService.install(data.ID, data.PackageName, data.SelectedVersion), undefined, true);
+		await tryCatch(async () => pmService.install(data.ID, data.PackageName, data.SelectedVersion), undefined, false);
 	});
 
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.updateAllPackage', async (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
-		await tryCatch(async () => pmService.updateAllPackage(data.PackageName, data.SelectedVersion), undefined, true);
+		await tryCatch(async () => pmService.updateAllPackage(data.PackageName, data.SelectedVersion), `${data.PackageName} updated in all projects`, true);
 	});
 
 	vscode.commands.registerCommand('nugetpackagemanagergui.showMessage', async (data: { Message: string, Type: string }) => {

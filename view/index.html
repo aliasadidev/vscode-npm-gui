@@ -1,397 +1,87 @@
+<link href="./css/bootstrap.min.css" rel="stylesheet" />
+<link href="./css/main.css" rel="stylesheet" />
 <script src="./js/main.js"></script>
-<link href="./style/main.css" rel="stylesheet" />
-<link href="./style/bootstrap.min.css" rel="stylesheet" />
-<link href="./style/bootstrap-theme.min.css" rel="stylesheet" />
 <script src="./js/jquery.min.js"></script>
+<script src="./js/popper.js"></script>
 <script src="./js/bootstrap.min.js"></script>
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@8.1.0/dist/css/autoComplete.min.css">
-<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@8.1.0/dist/js/autoComplete.min.js"></script> -->
 
 <body>
-  <div id="loader-main">
-    <span id="loader-main-message"></span>
+
+  <div id="loading-main">
+    <span id="loading-main-message"></span>
   </div>
 
-  <!-- <div class="info-box">
-    <label class="important-label">Run dotnet restore to update your projects.</label>
-  </div> -->
 
-  <div class="btn-box">
-    <button class="btn btn-success" onclick="showPackageInstaller()">Install New Package</button>
-    <button class="btn btn-primary" onclick="initView()">Update & Uninstall Packages</button>
-    <button class="btn btn-default" onclick="closeTab()">Close</button>
-  </div>
-  <hr>
-  <div id="project-container" class="row">
-    <div class="btn-box">
-      <button class="btn btn-primary" onclick="reload(true)">Load Package Versions</button>
-      <button class="btn btn-primary" onclick="updateAllProjects()">Update All Packages</button>
-    </div>
-    <hr>
-    <div id="project-container-tables">
-    </div>
-  </div>
-  <div id="installer-container">
+  <div class="container" id="main-container">
 
-    <div class="row">
-      <div class="col-md-10" style="float:none;margin:auto;">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a data-target="#project-container" href="#" title="Update / Remove Packages" class="nav-link" id="project-container-tab" data-toggle="tab">Update / Remove Packages</a>
+      </li>
+      <li class="nav-item">
+        <a data-target="#installer-container" href="#" title="Install New Package" class="nav-link" id="installer-container-tab" data-toggle="tab">Install New Package</a>
+      </li>
+      <li class="nav-item">
+        <a onclick="closeTab()" class="nav-link" href="#">Close</a>
+      </li>
+    </ul>
 
-        <div class="input-group">
-          <input id="search-input" type="text" class="form-control" placeholder="Search for...">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" onclick="searchPackage()">Search</button>
-          </span>
-          <div class="input-group-btn">
-            <div class="dropdown">
-              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <span class="item-select text-danger">select a project(*)</span>
-                <span class="caret"></span>
-              </button>
-              <ul id="project-list" class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <!-- <li></li> -->
-              </ul>
+    <div class="tab-content">
+      <!-- Update / Remove Packages -->
+      <div id="project-container" class="tab-pane container">
+        <div class="row">
+          <div class="btn-box col-md-12">
+            <button class="btn btn-primary" onclick="reload(true)">Load Package Versions</button>
+            <button class="btn btn-success" onclick="updateAllProjects()" style="margin-right: 3px;">Update All Packages</button>
+          </div>
+          <div id="project-container-tables">
+
+          </div>
+        </div>
+      </div>
+      <!-- Install New Package -->
+      <div id="installer-container" class="tab-pane container">
+        <div class="row">
+          <div class="col-md-12 row-item">
+            <div class="input-group">
+              <input id="search-input" type="text" class="form-control" placeholder="Search for..." aria-describedby="search-box-group">
+              <div class="input-group-append" id="search-box-group">
+                <button class="btn btn-primary" type="button" onclick="searchPackage()">Search</button>
+                <div class="input-group-btn">
+                  <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="projectDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="item-select">Select a project(*)</span>
+                    </a>
+                    <div id="project-list" class="dropdown-menu" aria-labelledby="projectDropdown">
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div><!-- /input-group -->
-
-
-
+          <div class="col-md-12 row-item table-box">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width: 5px;" class="text-center">#</th>
+                  <th style="width: 100%;" class="text-center">Package Name</th>
+                  <th style="width: 40px;" class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody id="search-result">
+                <tr class='tr-package'>
+                  <td colspan='3' class="text-center empty-table" style="vertical-align: middle;font-size:14px;">
+                    Empty!
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-
-      <div class="col-md-10" style="float:none;margin:auto;">
-        <!-- Table -->
-        <table class="table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Package Name</th>
-              <th style="width: 40px;">Action</th>
-            </tr>
-          </thead>
-          <tbody id="search-result">
-
-
-
-          </tbody>
-        </table>
-      </div>
-
-
-
-    </div><!-- /.col-lg-6 -->
-
-  </div><!-- /.row -->
-
+    </div>
   </div>
+
 </body>
 
-<script>
-
-  //var prjG = {};
-  var fullload = false;
-  function initView() {
-    command('nugetpackagemanagergui.getdata', function (res) {
-      if (res.result) {
-        //    prjG = res.result;
-        createTables(res.result);
-      }
-      showProjectCont();
-      hideInstallerCont();
-    });
-  }
-  function reload(loadVersion, callback) {
-    var msg = loadVersion ? "Loading package versions from Nuget server..." : "Loading projects...";
-    toggle("show", msg);
-    document.getElementById("project-container-tables").innerHTML = "";
-    command('nugetpackagemanagergui.reload', { LoadVersion: loadVersion }, function (res) {
-      createTables(res.result);
-      toggle("hide");
-      if (typeof callback == "function")
-        callback(res.result);
-
-      if (fullload === false && loadVersion)
-        fullload = true;
-    });
-    if (loadVersion) {
-      showProjectCont();
-      hideInstallerCont();
-    }
-    //loadVersion && showProjectCont();
-  }
-
-  function closeTab() {
-    command('nugetpackagemanagergui.close');
-  }
-
-  function createTables(projects) {
-
-
-    var projContainer = document.getElementById("project-container-tables");
-    projContainer.innerHTML = "";
-
-    var columns = [
-      "PackageName",
-      "Installed Version",
-      "VersionList",
-      "IsUpdated",
-      "NewerVersion",
-      "Action"
-    ]
-    for (var projIndex = 0; projIndex < projects.length; projIndex++) {
-
-      var currnetProj = projects[projIndex];
-      var packages = currnetProj.Packages;
-      var table = document.createElement("table");
-      table.id = "table-" + currnetProj.ID;
-      table.width = "100%";
-      //TODO: shoud refactor
-      var tr = table.insertRow(0);
-      var th = document.createElement("th");
-      th.innerHTML = "Project Name";
-      th.colSpan = "1";
-      tr.appendChild(th);
-      var th = document.createElement("th");
-      th.innerHTML = currnetProj.ProjectName;
-      th.colSpan = columns.length - 1;
-      th.style.textAlign = "left";
-      tr.appendChild(th);
-
-      var tr = table.insertRow(1);
-      var th = document.createElement("th");
-      th.innerHTML = "Project Path";
-      th.colSpan = "1";
-      tr.appendChild(th);
-      var th = document.createElement("th");
-      th.innerHTML = currnetProj.ProjectPath;
-      th.colSpan = columns.length - 1;
-      th.style.textAlign = "left";
-      tr.appendChild(th);
-
-
-      var tr = table.insertRow(2);
-      for (var i = 0; i < columns.length; i++) {
-        var th = document.createElement("th");
-        th.innerHTML = columns[i];
-        if (columns[i] == "VersionList")
-          th.width = "200px";
-        if (columns[i] == "Action")
-          th.width = "300px";
-
-        tr.appendChild(th);
-      }
-
-
-      var currnetRowIndex = 3;
-
-      console.log("packeges", JSON.stringify(packages), packages.length);
-      for (var i = 0; i < packages.length; i++) {
-        var tr = table.insertRow(currnetRowIndex++);
-        tr.id = `${table.id}_Row${i}`;
-        tr.classList = "tr-package";
-        let index = 0;
-
-        var td = document.createElement("td");
-        td.innerHTML = packages[i].PackageName;
-        tr.appendChild(td);
-
-        var td = document.createElement("td");
-        td.innerHTML = packages[i].PackageVersion;
-        tr.appendChild(td);
-
-
-        var td = document.createElement("td");
-
-        var options_str = "";
-        var versions = packages[i].VersionList;
-        for (let index = 0; index < versions.length; index++) {
-          const element = versions[index];
-          options_str += `<option value="${element}"  ${element == packages[i].NewerVersion ? "selected" : ""}>${element}</option>`;
-        }
-        td.innerHTML = `<select name="versionList">${options_str}</select>`;
-        tr.appendChild(td);
-
-
-        var td = document.createElement("td");
-        var un = packages[i].NewerVersion !== "Unknown";
-        td.innerHTML = packages[i].IsUpdated && un ? "YES" : un ? "NO" : "Unknown";
-        td.classList = packages[i].IsUpdated && un ? "is-update" : un ? "is-out-dated" : "is-unknown";
-        tr.appendChild(td);
-
-
-
-
-        var td = document.createElement("td");
-        td.innerHTML = packages[i].NewerVersion;
-        tr.appendChild(td);
-
-        var td = document.createElement("td");
-
-        var inc = `<button type="button" onclick='update(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Update</button>
-                        <button type="button" onclick='updateAll(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Update All</button>`;
-
-        inc += `<button type="button" onclick='remove(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Remove</button>
-                        <button type="button" onclick='removeAll(${currnetProj.ID},"${packages[i].PackageName}","${tr.id}")'>Remove All</button>`;
-
-
-        td.innerHTML = inc;
-        tr.appendChild(td);
-
-
-
-
-      }
-
-
-
-      projContainer.appendChild(table);
-    }
-
-  }
-  function install(packageName) {
-    toggle("show", "Installing...");
-    var selectedVersion = document.getElementById(`in_${packageName}`).value;
-    //console.log("selectedVersion ", selectedVersion);
-    var projectID = $(".item-select").attr("project-id");
-    if (projectID) {
-      command('nugetpackagemanagergui.installPackage', { ID: parseInt(projectID), PackageName: packageName, SelectedVersion: selectedVersion }, function (res) {
-        toggle("hide");
-        if (fullload) {
-          initView();
-        }
-        else {
-          reload(true);
-        }
-      });
-    } else {
-      command('nugetpackagemanagergui.showMessage', { Message: "The target project isn't selected, select your target project from the drop-down beside the 'search' button.", Type: "error" }, function () { })
-      toggle("hide");
-    }
-  }
-  function update(id, packageName, rowID) {
-    var row = document.getElementById(rowID);
-    var versionOptions = row.querySelector('[name="versionList"]');
-    var selectedVersion = versionOptions.value;
-
-    command('nugetpackagemanagergui.updatePackage', { ID: id, PackageName: packageName, SelectedVersion: selectedVersion }, function (res) {
-      initView();
-    });
-  }
-  function remove(id, packageName, rowID) {
-    var row = document.getElementById(rowID);
-    var versionOptions = row.querySelector('[name="versionList"]');
-    var selectedVersion = versionOptions.value;
-
-    command('nugetpackagemanagergui.removePackage', { ID: id, PackageName: packageName, SelectedVersion: selectedVersion }, function (res) {
-      initView();
-    });
-  }
-  function updateAll(id, packageName, rowID) {
-    var row = document.getElementById(rowID);
-    var versionOptions = row.querySelector('[name="versionList"]');
-    var selectedVersion = versionOptions.value;
-    command('nugetpackagemanagergui.updateAllPackage', { ID: id, PackageName: packageName, SelectedVersion: selectedVersion }, function (res) {
-      initView();
-    });
-  }
-
-  function updateAllProjects() {
-    if (fullload === false) {
-      reload(true, (data) => {
-        command('nugetpackagemanagergui.updateAllProjects', {}, function (res) {
-          initView();
-        });
-      });
-    } else {
-      command('nugetpackagemanagergui.updateAllProjects', {}, function (res) {
-        initView();
-      });
-    }
-
-  }
-
-  function removeAll(id, packageName, rowID) {
-    var row = document.getElementById(rowID);
-    var versionOptions = row.querySelector('[name="versionList"]');
-    command('nugetpackagemanagergui.removeAllPackage', { ID: id, PackageName: packageName }, function (res) {
-      initView();
-    });
-  }
-  function searchPackage() {
-    toggle("show", "Searching...");
-    var value = $("#search-input").val();
-    command('nugetpackagemanagergui.searchPackage', { Query: value }, function (res) {
-      res = res.result;
-      $("#search-result").html("");
-      for (const key in res.data) {
-        const element = res.data[key];
-        var options_str = "";
-        var versions = element.versions;
-        for (let index = versions.length - 1; index >= 0; index--) {
-          const element = versions[index].version;
-          options_str += `<option value="${element}" >${element}</option>`;
-        }
-        var eee = `<select id='in_${element.id}'>${options_str}</select>`;
-
-
-        $("#search-result").append(`
-          <tr>
-              <th scope="row">${parseInt(key) + 1}</th>
-              <td>
-                    <strong>${element.id}</strong>
-                    <strong style="float: right;">Total Downloads:${numberWithCommas(element.totalDownloads)}</strong>
-                    <p>
-                      ${element.description}
-                    </p>
-              </td>
-              <td style="width: 40px;">
-                ${eee}
-                <button type="button" onclick='install("${element.id}")'>Install</button>
-              </td>
-            </tr>
-          `)
-
-      }
-      toggle("hide");
-    });
-  }
-  function showPackageInstaller() {
-    command('nugetpackagemanagergui.getdata', function (res) {
-      if (res.result) {
-        proj = res.result;
-        $("#project-list").html("");
-        for (const key in proj) {
-          const element = proj[key];
-          $("#project-list").append(`<li>
-        <a href="#" onClick="$('.item-select').text(this.innerHTML)
-                  .attr('project-id','${element.ID}')
-                  .removeClass('text-danger');">${element.ProjectName}</a></li>`);
-        }
-      }
-    });
-    showInstallerCont();
-    hideProjectCont();
-  }
-
-  function toggleTabs() {
-    $("#project-container").toggle();
-    $("#installer-container").toggle();
-  }
-  function showProjectCont() {
-    $("#project-container").show();
-  }
-  function hideProjectCont() {
-    $("#project-container").hide();
-  }
-  function showInstallerCont() {
-    $("#installer-container").show();
-  }
-  function hideInstallerCont() {
-    $("#installer-container").hide();
-  }
-
-  reload(false, (res) => {
-    showPackageInstaller(res);
-    // $("#installer-container").show();
-  });
-
-</script>
+<script src="./js/command.js"></script>

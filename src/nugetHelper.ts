@@ -8,7 +8,7 @@ export async function fetchPackageVersions(packageName: string, packageVersionsU
             return response.json();
         })
         .then(jsonResponse => {
-            var result: PackageVersion = {
+            let result: PackageVersion = {
                 PackageName: packageName,
                 Versions: jsonResponse.versions
             };
@@ -23,7 +23,7 @@ export async function fetchPackageVersions(packageName: string, packageVersionsU
 }
 
 export async function fetchPackageVersionsBatch(packages: Array<string>, packageVersionsUrl: string, timeout: number): Promise<any> {
-    var result = await Promise.all(packages.map(pkgName =>
+    let result = await Promise.all(packages.map(pkgName =>
         fetchPackageVersions(pkgName, packageVersionsUrl, timeout)
     ));
     return result;
@@ -40,8 +40,8 @@ export async function searchPackage(query: string, searchPackageUrl: string, pre
         take: take
     });
 
-    var url = `${searchPackageUrl}${queryString}`;
-    var result = await fetch(url, { timeout: timeout }).then(response => {
+    let url = `${searchPackageUrl}${queryString}`;
+    let result = await fetch(url, { timeout: timeout }).then(response => {
         return response.json();
     }).catch(error => {
         throw `[An error occurred in the searching package] ${error.message}`;

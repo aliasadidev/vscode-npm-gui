@@ -18,7 +18,7 @@
 
 
 
-![Update a Package](https://raw.githubusercontent.com/aliasadidev/vsocde-npm-gui/main/images/demo1.gif?v2)
+![Update a Package](https://raw.githubusercontent.com/aliasadidev/vsocde-npm-gui/main/images/demo1.gif?v3)
 
 
 
@@ -45,6 +45,14 @@
 ```
 
 # What's New
+
+
+## Version 1.1.3 - Jan 08, 2021
+#### Changed
+* Improve UI/UX
+
+#### Fixed
+* Install new package bug fixed
 
 ## Version 1.1.2 - Dec 25, 2020
 #### Changed

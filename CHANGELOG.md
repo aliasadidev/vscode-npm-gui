@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 1.1.3 - Jan 08, 2021
+#### Changed
+* Improve UI/UX
+#### Fixed
+* Install new package bug fixed
+
 ## Version 1.1.2 - Dec 25, 2020
 #### Changed
 * Improve the speed of loading package versions from Nuget server(**`4x faster than the older versions`**)

@@ -181,7 +181,7 @@ function closeTab() {
 
 function install(packageName) {
     loading("show", "Installing...");
-    const selectedVersion = $(`#in_${packageName}`).val();
+    const selectedVersion = document.getElementById(`in_${packageName}`).value;
     const projectID = $(".item-select").attr("project-id");
 
     if (projectID) {

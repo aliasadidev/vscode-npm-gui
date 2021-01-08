@@ -58,7 +58,7 @@ body {
 }
 
 #loading-main {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     background-color: #e6e6e6;
@@ -66,6 +66,9 @@ body {
     display: none;
     z-index: 100;
     text-align: center;
+    display: table;
+    top: 0;
+    left: 0;
 }
 
 #loading-main > span {

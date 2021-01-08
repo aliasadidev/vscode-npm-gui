@@ -45,12 +45,10 @@ function toggleTab(tab) {
     }
 }
 
-function initView() {
+function initMainView() {
     command('nugetpackagemanagergui.getdata', function (res) {
         if (res.result)
             createProjectTable(res.result);
-
-        toggleTab(Tabs.ProjectContainer);
     });
 }
 
@@ -186,11 +184,8 @@ function install(packageName) {
 
     if (projectID) {
         command('nugetpackagemanagergui.installPackage', { ID: parseInt(projectID), PackageName: packageName, SelectedVersion: selectedVersion }, function () {
+            initMainView();
             loading("hide");
-            if (fullload)
-                initView();
-            else
-                reload(true);
         });
     } else {
         command('nugetpackagemanagergui.showMessage', { Message: "The target project isn't selected, select your target project from the drop-down beside the 'search' button.", Type: "error" }, function () { })
@@ -201,21 +196,21 @@ function install(packageName) {
 function update(id, packageName, rowID) {
     const selectedVersion = getSelectedVersion(rowID);
     command('nugetpackagemanagergui.updatePackage', { ID: id, PackageName: packageName, SelectedVersion: selectedVersion }, function () {
-        initView();
+        initMainView();
     });
 }
 
 function remove(id, packageName, rowID) {
     const selectedVersion = getSelectedVersion(rowID);
     command('nugetpackagemanagergui.removePackage', { ID: id, PackageName: packageName, SelectedVersion: selectedVersion }, function () {
-        initView();
+        initMainView();
     });
 }
 
 function updateAll(id, packageName, rowID) {
     const selectedVersion = getSelectedVersion(rowID);
     command('nugetpackagemanagergui.updateAllPackage', { ID: id, PackageName: packageName, SelectedVersion: selectedVersion }, function () {
-        initView();
+        initMainView();
     });
 }
 
@@ -223,19 +218,19 @@ function updateAllProjects() {
     if (fullload === false) {
         reload(true, () => {
             command('nugetpackagemanagergui.updateAllProjects', {}, function () {
-                initView();
+                initMainView();
             });
         });
     } else {
         command('nugetpackagemanagergui.updateAllProjects', {}, function () {
-            initView();
+            initMainView();
         });
     }
 }
 
 function removeAll(id, packageName) {
     command('nugetpackagemanagergui.removeAllPackage', { ID: id, PackageName: packageName }, function () {
-        initView();
+        initMainView();
     });
 }
 

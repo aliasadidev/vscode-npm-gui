@@ -1,10 +1,8 @@
 var loadingQueue = [];
-function toggle(mode, message) {
-    console.log("mode", mode, loadingQueue);
-    console.log("show", loadingQueue.length)
-    var loader = document.getElementById("loader-main");
+function loading(mode, message) {
+    var loader = document.getElementById("loading-main");
 
-    document.getElementById("loader-main-message").innerText = (mode == "show") ? message : "";
+    document.getElementById("loading-main-message").innerText = (mode == "show") ? message : "";
 
     if (mode == "show") {
         if (loadingQueue.length == 0)
@@ -13,7 +11,6 @@ function toggle(mode, message) {
     }
     else {
         loadingQueue.pop();
-        console.log("hide", loadingQueue.length)
         if (loadingQueue.length == 0)
             loader.style.display = "none";
     }

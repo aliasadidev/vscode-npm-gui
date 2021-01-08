@@ -19,18 +19,18 @@ export class packageManagerService {
     }
 
     private getProject(projectID: number): Project {
-        var project = this.projectList.find(d => d.ID === projectID);
+        let project = this.projectList.find(d => d.ID === projectID);
         if (project === undefined)
             throw "The project file does not exists";
         return project;
     }
     private getPackage(project: Project, packageName: string): PackageDetail {
-        var pkgIndex = this.getPackageIndex(project, packageName);
+        let pkgIndex = this.getPackageIndex(project, packageName);
         return project.Packages[pkgIndex];
     }
 
     private getPackageIndex(project: Project, packageName: string): number {
-        var pkgIndex = project.Packages.findIndex(e => e.PackageName === packageName);
+        let pkgIndex = project.Packages.findIndex(e => e.PackageName === packageName);
         if (pkgIndex === -1)
             throw `The selected package does not exists in '${project.ProjectName}' project`;
         return pkgIndex;
@@ -44,8 +44,8 @@ export class packageManagerService {
     }
 
     private checkAccess(project: Project, mode: number = fs.constants.O_RDWR): CommandResult {
-        var commandResult: CommandResult;
-        var hasAccess = hasFileAccess(project.ProjectPath, mode);
+        let commandResult: CommandResult;
+        let hasAccess = hasFileAccess(project.ProjectPath, mode);
         if (hasAccess.IsSuccessful) {
             commandResult = { IsSuccessful: true };
         } else {
@@ -70,7 +70,7 @@ export class packageManagerService {
         const project = this.getProject(projectID);
         const pkg = this.getPackage(project, packageName);
 
-        var commandResult = this.checkAccess(project);
+        let commandResult = this.checkAccess(project);
         if (commandResult.IsSuccessful) {
 
             this.updatePackageInProjectFile(project.ProjectPath, pkg.PackageName, selectedVersion);
@@ -92,7 +92,7 @@ export class packageManagerService {
         const project = this.getProject(projectID);
         const pkgIndex = this.getPackageIndex(project, packageName);
 
-        var commandResult = this.checkAccess(project);
+        let commandResult = this.checkAccess(project);
         if (commandResult.IsSuccessful) {
 
             const projectFileContent = readFile(project.ProjectPath);
@@ -113,9 +113,9 @@ export class packageManagerService {
 
 
     async install(projectID: number, packageName: string, selectedVersion: string): Promise<CommandResult> {
-        var commandResult: CommandResult;
+        let commandResult: CommandResult;
         const project = this.getProject(projectID);
-        var pkgIsInstalled: boolean = false;
+        let pkgIsInstalled: boolean = false;
 
         if (project.Packages && project.Packages.length > 0) {
             const pkgIndex = project.Packages.findIndex(e => e.PackageName === packageName);
@@ -130,14 +130,14 @@ export class packageManagerService {
                 const xml: string = addPackage(projectFileContent, packageName, selectedVersion);
                 writeToFile(project.ProjectPath, xml);
 
-                const pkgVersions = (await fetchPackageVersions(packageName, this.config.nugetPackageVersionsUrl, this.config.nugetRequestTimeout)).versions;
-                const newPackageVersion = pkgVersions[pkgVersions.length - 1];
-                const isUpdated = newPackageVersion == selectedVersion;
+                const pkgVersions = (await fetchPackageVersions(packageName, this.config.nugetPackageVersionsUrl, this.config.nugetRequestTimeout)).Versions;
+                const newerPackageVersion = findStableVersion(pkgVersions);
+                const isUpdated = newerPackageVersion == selectedVersion;
 
                 project.Packages.push({
                     VersionList: pkgVersions,
                     IsUpdated: isUpdated,
-                    NewerVersion: newPackageVersion,
+                    NewerVersion: newerPackageVersion,
                     PackageName: packageName,
                     PackageVersion: selectedVersion
                 });
@@ -152,12 +152,12 @@ export class packageManagerService {
 
 
     updateAllPackage(packageName: string, selectedVersion: string): Array<CommandResult> {
-        var commandResultList: Array<CommandResult> = [];
+        let commandResultList: Array<CommandResult> = [];
 
         this.projectList.forEach(project => {
-            var pkgIndex = project.Packages.findIndex(e => e.PackageName === packageName);
+            let pkgIndex = project.Packages.findIndex(e => e.PackageName === packageName);
             if (pkgIndex !== -1) {
-                var commandResult = this.update(project.ID, packageName, selectedVersion);
+                let commandResult = this.update(project.ID, packageName, selectedVersion);
                 if (commandResult.IsSuccessful) {
                     commandResultList.push({ IsSuccessful: true, Message: `${project.ProjectName}|${packageName}` });
                 } else {
@@ -170,12 +170,12 @@ export class packageManagerService {
 
 
     updateAllProjects(): Array<CommandResult> {
-        var commandResultList: Array<CommandResult> = [];
+        let commandResultList: Array<CommandResult> = [];
 
         this.projectList.forEach(project => {
             const packages = project.Packages.filter(x => x.IsUpdated == false);
             packages.forEach(pkg => {
-                var commandResult = this.update(project.ID, pkg.PackageName, pkg.NewerVersion);
+                let commandResult = this.update(project.ID, pkg.PackageName, pkg.NewerVersion);
                 if (commandResult.IsSuccessful) {
                     commandResultList.push({ IsSuccessful: true, Message: `${project.ProjectName}|${pkg.PackageName}` });
                 } else {
@@ -189,12 +189,12 @@ export class packageManagerService {
 
 
     removeAllPackage(packageName: string) {
-        var commandResultList: Array<CommandResult> = [];
+        let commandResultList: Array<CommandResult> = [];
 
         this.projectList.forEach(project => {
             const packages = project.Packages.filter(x => x.PackageName == packageName);
             packages.forEach(pkg => {
-                var commandResult = this.remove(project.ID, pkg.PackageName);
+                let commandResult = this.remove(project.ID, pkg.PackageName);
                 if (commandResult.IsSuccessful) {
                     commandResultList.push({ IsSuccessful: true, Message: `${project.ProjectName}|${pkg.PackageName}` });
                 } else {
@@ -208,8 +208,8 @@ export class packageManagerService {
 
 
     async reload(workspacePath: string, loadVersion?: boolean): Promise<CommandResult> {
-        var commandResult: CommandResult;
-        var projects = await this.loadProjects(workspacePath, loadVersion);
+        let commandResult: CommandResult;
+        let projects = await this.loadProjects(workspacePath, loadVersion);
         if (projects && projects.length === 0) {
             commandResult = { Message: "No project found in the selected workspace!", IsSuccessful: false };
         } else {
@@ -220,7 +220,7 @@ export class packageManagerService {
     }
 
     async searchPackage(query: string): Promise<SearchPackageResult | undefined> {
-        var searchResult: SearchPackageResult | undefined;
+        let searchResult: SearchPackageResult | undefined;
 
         searchResult = await searchPackage(query,
             this.config.nugetSearchPackageUrl,
@@ -234,20 +234,20 @@ export class packageManagerService {
 
 
     async setPackageVersions(projects: Array<Project>) {
-        var hasPackage = projects.some(r => r.Packages && r.Packages.length > 0);
+        let hasPackage = projects.some(r => r.Packages && r.Packages.length > 0);
         if (hasPackage) {
             const allUniquePackages: Array<string> = mergeList(projects.map(q => q.Packages.map(e => e.PackageName)));
 
-            var packageVersions: Array<PackageVersion> = (await fetchPackageVersionsBatch(allUniquePackages, this.config.nugetPackageVersionsUrl, this.config.nugetRequestTimeout));
+            let packageVersions: Array<PackageVersion> = (await fetchPackageVersionsBatch(allUniquePackages, this.config.nugetPackageVersionsUrl, this.config.nugetRequestTimeout));
 
-            var keyValuePackageVersions: Record<string, string[]> = {}
+            let keyValuePackageVersions: Record<string, string[]> = {}
             packageVersions.forEach(pkg => {
                 keyValuePackageVersions[pkg.PackageName] = pkg.Versions;
             });
 
             projects.forEach(project => {
                 project.Packages.forEach(pkg => {
-                    var versions = keyValuePackageVersions[pkg.PackageName];
+                    let versions = keyValuePackageVersions[pkg.PackageName];
 
                     pkg.NewerVersion = findStableVersion(versions);
                     pkg.IsUpdated = pkg.NewerVersion == pkg.PackageVersion;
@@ -261,8 +261,8 @@ export class packageManagerService {
     async loadProjects(workspacePath: string, loadVersion: boolean = false): Promise<Array<Project>> {
         const projectPathList: Array<string> = this.findProjects(workspacePath);
 
-        var projectID = 1;
-        var projectList: Array<Project> = [];
+        let projectID = 1;
+        let projectList: Array<Project> = [];
 
         for (const pathIndex in projectPathList) {
 
@@ -270,9 +270,9 @@ export class packageManagerService {
 
             const originalData: string = readFile(projectPath);
 
-            var packages: Array<Package> = getPackages(originalData);
+            let packages: Array<Package> = getPackages(originalData);
 
-            var projectName = path.basename(projectPath);
+            let projectName = path.basename(projectPath);
 
             projectList.push({
                 ID: projectID++,

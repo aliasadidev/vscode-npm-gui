@@ -23,7 +23,7 @@ export function jsonToQueryString(json: any) {
  */
 export function findStableVersion(versions: Array<string>): string {
     const regExp: RegExp = /^\d+\.\d+\.\d+$/m;
-    var version: string | undefined = versions.slice().reverse().find(x => regExp.test(x));
+    let version: string | undefined = versions.slice().reverse().find(x => regExp.test(x));
     return version ?? "Unknown";
 }
 
@@ -32,7 +32,7 @@ export function mergeList(arr: any) {
 }
 
 export async function tryCatch(action: any, successMessage: string | undefined = undefined, isListResult: boolean = false): Promise<any> {
-    var result: any;
+    let result: any;
     try {
         result = await action();
         if (isListResult)

@@ -22,7 +22,7 @@ export function jsonToQueryString(json: any) {
  * @returns {string} If the version wasn't found the result is `Unknown`
  */
 export function findStableVersion(versions: Array<string>): string {
-    const regExp: RegExp = /^\d+\.\d+\.\d+$/m;
+    const regExp: RegExp = /^\d+\.\d+\.\d+(\.\d+)?$/m;
     let version: string | undefined = versions.slice().reverse().find(x => regExp.test(x));
     return version ?? "Unknown";
 }

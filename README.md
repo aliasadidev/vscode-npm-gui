@@ -47,6 +47,11 @@
 # What's New
 
 
+## Version 1.1.4 - Jan 14, 2021
+#### Added
+* Add the proxy support
+
+
 ## Version 1.1.3 - Jan 08, 2021
 #### Changed
 * Improve UI/UX

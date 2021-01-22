@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as vscode from 'vscode';
 import { hasFileAccess, readFile, writeToFile } from "./fileHelper";
 import { CommandResult, ExtensionConfiguration, Package, PackageDetail, PackageVersion, Project, SearchPackageResult } from "./models";
 import { fetchPackageVersions, fetchPackageVersionsBatch, searchPackage } from "./nugetHelper";
@@ -7,6 +8,7 @@ import { addPackage, getPackages, removePackage, updatePackage } from "./xmlHelp
 import { findStableVersion, mergeList } from "./utils";
 import glob = require('glob');
 import { off } from 'process';
+import { VSCExpressCommandResponsePayload } from "vscode-express";
 
 export class packageManagerService {
 
@@ -36,11 +38,17 @@ export class packageManagerService {
         return pkgIndex;
     }
 
-    private findProjects(workspaceFolder: string): Array<string> {
-        let files = glob.sync(`${workspaceFolder}/**/*.+(csproj|fsproj)`, {
-            ignore: ['**/node_modules/**', '**/.git/**']
+    private findProjects(workspaceFolder: readonly vscode.WorkspaceFolder[]): Array<string> {
+        let result: string[] = [];
+
+        workspaceFolder.forEach(folder => {
+            let files = glob.sync(`${folder.uri.fsPath}/**/*.+(csproj|fsproj)`, {
+                ignore: ['**/node_modules/**', '**/.git/**']
+            });
+            result = result.concat(files);                
         });
-        return files;
+
+        return result;
     }
 
     private checkAccess(project: Project, mode: number = fs.constants.O_RDWR): CommandResult {
@@ -207,11 +215,11 @@ export class packageManagerService {
     }
 
 
-    async reload(workspacePath: string, loadVersion?: boolean): Promise<CommandResult> {
+    async reload(workspacePath: readonly vscode.WorkspaceFolder[], loadVersion?: boolean): Promise<CommandResult> {
         let commandResult: CommandResult;
         let projects = await this.loadProjects(workspacePath, loadVersion);
         if (projects && projects.length === 0) {
-            commandResult = { Message: "No project found in the selected workspace!", IsSuccessful: false };
+            commandResult = { Message: `No project found in the selected workspace!`, IsSuccessful: false };
         } else {
             this.projectList = projects;
             commandResult = { IsSuccessful: true };
@@ -258,7 +266,7 @@ export class packageManagerService {
 
     }
 
-    async loadProjects(workspacePath: string, loadVersion: boolean = false): Promise<Array<Project>> {
+    async loadProjects(workspacePath: readonly vscode.WorkspaceFolder[], loadVersion: boolean = false): Promise<Array<Project>> {
         const projectPathList: Array<string> = this.findProjects(workspacePath);
 
         let projectID = 1;

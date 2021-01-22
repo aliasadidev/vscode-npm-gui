@@ -45,7 +45,12 @@ export class packageManagerService {
             let files = glob.sync(`${folder.uri.fsPath}/**/*.+(csproj|fsproj)`, {
                 ignore: ['**/node_modules/**', '**/.git/**']
             });
-            result = result.concat(files);                
+
+            files.forEach(file => {
+                if (result.indexOf(file) === -1){
+                    result.push(file);  
+                }                  
+            });            
         });
 
         return result;

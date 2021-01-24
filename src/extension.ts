@@ -11,7 +11,7 @@ import { getConfiguration, tryCatch } from './utils'
 export function activate(context: vscode.ExtensionContext) {
 
 	const vscexpress = new VSCExpress(context, 'view');
-	const workspacePath = vscode.workspace.rootPath;
+	const workspacePath = vscode.workspace.workspaceFolders;
 	if (workspacePath === undefined) {
 		showErrorMessage("Workdirectory is empty!");
 		throw "Workdirectory is empty!";

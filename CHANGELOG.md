@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 1.1.5 - Jan 24, 2021
+#### Added
+* Log error detail in VSCode Developer Tools
+#### Fixed
+*  Find projects in all workspace folders ([#8](https://github.com/aliasadidev/vsocde-npm-gui/pull/8) by [@m4ss1m0g](https://github.com/m4ss1m0g))
+
 ## Version 1.1.4 - Jan 14, 2021
 #### Added
 * Add the proxy support

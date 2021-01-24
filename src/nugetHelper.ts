@@ -20,10 +20,20 @@ function getRequestOptions(nugetRequestTimeout: number): RequestOption {
 }
 
 
-async function fetchPackageVersionsBase(packageName: string, packageVersionsUrl: string, requestOption: RequestOption): Promise<any> {
-    const result = fetch(`${packageVersionsUrl}/${packageName}/index.json`, requestOption)
-        .then(response => {
-            return response.json();
+async function getPackageVersions(packageName: string, packageVersionsUrl: string, requestOption: RequestOption): Promise<any> {
+    const url = `${packageVersionsUrl}/${packageName}/index.json`;
+    const result = fetch(url, requestOption)
+        .then(async response => {
+            const rawResult = await response.text();
+            let jsonResponse;
+            try {
+                jsonResponse = JSON.parse(rawResult);
+            } catch (ex) {
+                console.log(`[Nuget Package Manager GUI => ERROR!!!]\n[Request to url:${url}]\n[timeout:${requestOption.timeout}]\n[proxy is active:${!!requestOption.agent}]\n[result:${rawResult}]\n`);
+                throw ex;
+            }
+
+            return jsonResponse;
         })
         .then(jsonResponse => {
             let result: PackageVersion = {
@@ -44,22 +54,19 @@ async function fetchPackageVersionsBase(packageName: string, packageVersionsUrl:
 export async function fetchPackageVersions(packageName: string, packageVersionsUrl: string, nugetRequestTimeout: number): Promise<any> {
     const requestOption = getRequestOptions(nugetRequestTimeout);
 
-    return fetchPackageVersionsBase(packageName, packageVersionsUrl, requestOption);
+    return getPackageVersions(packageName, packageVersionsUrl, requestOption);
 }
-
-
 
 
 export async function fetchPackageVersionsBatch(packages: Array<string>, packageVersionsUrl: string, nugetRequestTimeout: number): Promise<any> {
 
     const requestOption = getRequestOptions(nugetRequestTimeout);
 
-    let result = await Promise.all(packages.map(pkgName =>
-        fetchPackageVersionsBase(pkgName, packageVersionsUrl, requestOption)
-    ));
+    let result = await Promise.all(
+        packages.map(pkgName => getPackageVersions(pkgName, packageVersionsUrl, requestOption))
+    );
     return result;
 }
-
 
 export async function searchPackage(query: string, searchPackageUrl: string, preRelease: boolean, take: number, skip: number, nugetRequestTimeout: number): Promise<any> {
     const requestOption = getRequestOptions(nugetRequestTimeout);
@@ -72,11 +79,22 @@ export async function searchPackage(query: string, searchPackageUrl: string, pre
     });
 
     let url = `${searchPackageUrl}${queryString}`;
-    let result = await fetch(url, requestOption).then(response => {
-        return response.json();
-    }).catch(error => {
-        throw `[An error occurred in the searching package] ${error.message}`;
-    })
+    let result = await fetch(url, requestOption)
+        .then(async response => {
+            const rawResult = await response.text();
+            let jsonResponse;
+            try {
+                jsonResponse = JSON.parse(rawResult);
+            } catch (ex) {
+                console.log(`[Nuget Package Manager GUI => ERROR!!!]\n[Request to url:${url}]\n[timeout:${requestOption.timeout}]\n[proxy is active:${!!requestOption.agent}]\n[result:${rawResult}]\n`);
+                throw ex;
+            }
+
+            return jsonResponse;
+        })
+        .catch(error => {
+            throw `[An error occurred in the searching package] ${error.message}`;
+        })
 
     return result;
 }

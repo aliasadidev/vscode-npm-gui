@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { ExtensionConfiguration } from './models';
-import { showCommandResult, showCommandResults, showErrorMessage } from './vscodeNotify';
+import { resetStatusBarMessage, showCommandResult, showCommandResults, showErrorMessage } from './vscodeNotify';
 
 
 /**
@@ -40,6 +40,7 @@ export async function tryCatch(action: any, successMessage: string | undefined =
         else
             showCommandResult(result, successMessage);
     } catch (ex) {
+        resetStatusBarMessage();
         showErrorMessage(ex);
     }
     return result;

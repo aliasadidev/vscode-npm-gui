@@ -97,6 +97,7 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
     });
 
     let result;
+    let resultConsolided = undefined;
     let lastError;
     for (let index = 0; index < searchPackageUrl.length; index++) {
         try {
@@ -123,12 +124,18 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
         }
         if (result) {
             lastError = undefined;
-            break;
+            if (!resultConsolided){
+                resultConsolided = result;
+            }
+            else{
+                resultConsolided.data = resultConsolided.data.concat(result.data);
+            }
         }
-
     }
     if (lastError)
         throw lastError;
 
-    return result;
+    resultConsolided.totalHits = resultConsolided.data.length;
+
+    return resultConsolided;
 }

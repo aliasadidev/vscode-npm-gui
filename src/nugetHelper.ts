@@ -97,12 +97,11 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
     });
 
     let packages: any[] = [];
-    let lastError;
-    for (let index = 0; index < searchPackageUrl.length; index++) {
-        let result = undefined;
-        try {
-            let url = `${searchPackageUrl[index]}${queryString}`;
-            result = await fetch(url, requestOption)
+
+    const results = await Promise.all(
+        searchPackageUrl.map(async repoAddress => {
+            let url = `${repoAddress}${queryString}`;
+            return fetch(url, requestOption)
                 .then(async response => {
                     const rawResult = await response.text();
                     let jsonResponse;
@@ -118,15 +117,11 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
                 .catch(error => {
                     throw `[An error occurred in the searching package] ${error.message}`;
                 });
-        } catch (ex) {
-            lastError = ex;
-        }
-        if (result) {
-            packages = packages.concat(result.data);
-        }
-    }
-    if (lastError)
-        throw lastError;
+        }));
+
+    results.forEach(result => {
+        packages = packages.concat(result.data);
+    });
 
     const uniqBy = function (arr: any[], key: string) {
         let seen = new Set();

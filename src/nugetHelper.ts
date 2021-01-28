@@ -16,7 +16,7 @@ function getRequestOptions(nugetRequestTimeout: number): RequestOption {
         if (proxyOption.headers)
             requestOption.headers.push(proxyOption.headers);
     }
-    return requestOption
+    return requestOption;
 }
 
 
@@ -96,13 +96,12 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
         take: take
     });
 
-    let result;
-    let resultConsolided = undefined;
+    let packages: any[] = [];
     let lastError;
     for (let index = 0; index < searchPackageUrl.length; index++) {
+        let result = undefined;
         try {
             let url = `${searchPackageUrl[index]}${queryString}`;
-            result = undefined;
             result = await fetch(url, requestOption)
                 .then(async response => {
                     const rawResult = await response.text();
@@ -123,19 +122,39 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
             lastError = ex;
         }
         if (result) {
-            lastError = undefined;
-            if (!resultConsolided){
-                resultConsolided = result;
-            }
-            else{
-                resultConsolided.data = resultConsolided.data.concat(result.data);
-            }
+            packages = packages.concat(result.data);
         }
     }
     if (lastError)
         throw lastError;
 
-    resultConsolided.totalHits = resultConsolided.data.length;
+    const uniqBy = function (arr: any[], key: string) {
+        let seen = new Set();
 
-    return resultConsolided;
+        return arr.filter(it => {
+            let val = it[key];
+            if (seen.has(val)) {
+                return false;
+            } else {
+                seen.add(val);
+                return true;
+            }
+        });
+    };
+
+    const sortBy = (key: string) => {
+        return (a: any, b: any) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
+    };
+
+    const isBestMatch = (packageNuget: any, query: string) => {
+        return packageNuget.id.toLowerCase().startsWith(query.toLowerCase());
+    };
+
+    let packagesUniques = uniqBy(packages, "id");
+    let packagesBestMatch = packagesUniques.filter(o => isBestMatch(o, query));
+    packagesBestMatch = packagesBestMatch.concat().sort(sortBy("id"));
+    let packagesOthers = packagesUniques.filter(o => !isBestMatch(o, query));
+    packagesOthers = packagesOthers.concat().sort(sortBy("id"));
+
+    return { data: [...packagesBestMatch, ...packagesOthers], totalHits: packagesUniques.length };
 }

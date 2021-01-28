@@ -137,19 +137,8 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
         });
     };
 
-    const sortBy = (key: string) => {
-        return (a: any, b: any) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
-    };
-
-    const isBestMatch = (packageNuget: any, query: string) => {
-        return packageNuget.id.toLowerCase().startsWith(query.toLowerCase());
-    };
-
-    let packagesUniques = uniqBy(packages, "id");
-    let packagesBestMatch = packagesUniques.filter(o => isBestMatch(o, query));
-    packagesBestMatch = packagesBestMatch.concat().sort(sortBy("id"));
-    let packagesOthers = packagesUniques.filter(o => !isBestMatch(o, query));
-    packagesOthers = packagesOthers.concat().sort(sortBy("id"));
-
-    return { data: [...packagesBestMatch, ...packagesOthers], totalHits: packagesUniques.length };
+    const sortBy = () => { return (a: any, b: any) => b["totalDownloads"] - a["totalDownloads"] };
+    const packagesUniques = uniqBy(packages, "id");
+    const packagesBestMatch = packagesUniques.sort(sortBy())
+    return { data: packagesBestMatch, totalHits: packagesUniques.length };
 }

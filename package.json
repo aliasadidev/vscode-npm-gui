@@ -53,13 +53,23 @@
 					"description": "The maximum duration for completing a request from this extension"
 				},
 				"nugetpackagemanagergui.nuget.packageVersionsUrl": {
-					"type": "string",
-					"default": "https://api.nuget.org/v3-flatcontainer",
+					"type": [
+						"array",
+						"string"
+					],
+					"default": [
+						"https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
+					],
 					"description": "The Nuget endpoint address for getting package versions"
 				},
 				"nugetpackagemanagergui.nuget.searchPackage.url": {
-					"type": "string",
-					"default": "https://azuresearch-usnc.nuget.org/query",
+					"type": [
+						"array",
+						"string"
+					],
+					"default": [
+						"https://azuresearch-usnc.nuget.org/query"
+					],
 					"description": "The Nuget endpoint address for searching packages"
 				},
 				"nugetpackagemanagergui.nuget.searchPackage.preRelease": {

@@ -49,8 +49,8 @@ export async function tryCatch(action: any, successMessage: string | undefined =
 export function getConfiguration(): ExtensionConfiguration {
 
     const nugetRequestTimeout = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.requestTimeout") as number;
-    const nugetPackageVersionsUrl = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.packageVersionsUrl") as string;
-    const nugetSearchPackageUrl = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.searchPackage.url") as string;
+    const nugetPackageVersionsUrl = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.packageVersionsUrl") as string[];
+    const nugetSearchPackageUrl = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.searchPackage.url") as string[];
     const nugetSearchPackagePreRelease = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.searchPackage.preRelease") as boolean;
     const nugetSearchPackageDefaultTake = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.searchPackage.defaultTake") as number;
 

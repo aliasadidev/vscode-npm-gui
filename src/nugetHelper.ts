@@ -119,8 +119,12 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
                 });
         }));
 
+    let finalResult: any[] = [];
+    let totalHits = 0;
+
     results.forEach(result => {
         packages = packages.concat(result.data);
+        totalHits += result.totalHits;
     });
 
     const uniqBy = function (arr: any[], key: string) {
@@ -137,8 +141,29 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
         });
     };
 
-    const sortBy = () => { return (a: any, b: any) => b["totalDownloads"] - a["totalDownloads"] };
-    const packagesUniques = uniqBy(packages, "id");
-    const packagesBestMatch = packagesUniques.sort(sortBy())
-    return { data: packagesBestMatch, totalHits: packagesUniques.length };
+    if (results.length > 1) {
+        const queryLowerCase = query.toLowerCase();
+        const sortBy = () => {
+            return (a: any, b: any) => {
+                const r2 = a.id.toLowerCase().startsWith(queryLowerCase);
+                const r1 = b.id.toLowerCase().startsWith(queryLowerCase);
+
+                if (r1 && r2)
+                    return b.totalDownloads - a.totalDownloads // both start with queryLowerCase
+                else if (r1)
+                    return 1;
+                else if (r2)
+                    return -1;
+                else
+                    return b.totalDownloads - a.totalDownloads;// Both don't start with queryLowerCase
+            }
+        };
+        const packagesUniques = uniqBy(packages, "id");
+        finalResult = packagesUniques.sort(sortBy());
+        totalHits = packagesUniques.length;
+    }
+    else
+        finalResult = packages;
+
+    return { data: finalResult, totalHits: totalHits };
 }

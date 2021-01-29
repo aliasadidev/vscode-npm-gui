@@ -16,7 +16,7 @@ function getRequestOptions(nugetRequestTimeout: number): RequestOption {
         if (proxyOption.headers)
             requestOption.headers.push(proxyOption.headers);
     }
-    return requestOption
+    return requestOption;
 }
 
 
@@ -96,13 +96,12 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
         take: take
     });
 
-    let result;
-    let lastError;
-    for (let index = 0; index < searchPackageUrl.length; index++) {
-        try {
-            let url = `${searchPackageUrl[index]}${queryString}`;
-            result = undefined;
-            result = await fetch(url, requestOption)
+    let packages: any[] = [];
+
+    const results = await Promise.all(
+        searchPackageUrl.map(async repoAddress => {
+            let url = `${repoAddress}${queryString}`;
+            return fetch(url, requestOption)
                 .then(async response => {
                     const rawResult = await response.text();
                     let jsonResponse;
@@ -118,17 +117,53 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
                 .catch(error => {
                     throw `[An error occurred in the searching package] ${error.message}`;
                 });
-        } catch (ex) {
-            lastError = ex;
-        }
-        if (result) {
-            lastError = undefined;
-            break;
-        }
+        }));
 
+    let finalResult: any[] = [];
+    let totalHits = 0;
+
+    results.forEach(result => {
+        packages = packages.concat(result.data);
+        totalHits += result.totalHits;
+    });
+
+    const uniqBy = function (arr: any[], key: string) {
+        let seen = new Set();
+
+        return arr.filter(it => {
+            let val = it[key];
+            if (seen.has(val)) {
+                return false;
+            } else {
+                seen.add(val);
+                return true;
+            }
+        });
+    };
+
+    if (results.length > 1) {
+        const queryLowerCase = query.toLowerCase();
+        const sortBy = () => {
+            return (a: any, b: any) => {
+                const r2 = a.id.toLowerCase().startsWith(queryLowerCase);
+                const r1 = b.id.toLowerCase().startsWith(queryLowerCase);
+
+                if (r1 && r2)
+                    return b.totalDownloads - a.totalDownloads // both start with queryLowerCase
+                else if (r1)
+                    return 1;
+                else if (r2)
+                    return -1;
+                else
+                    return b.totalDownloads - a.totalDownloads;// Both don't start with queryLowerCase
+            }
+        };
+        const packagesUniques = uniqBy(packages, "id");
+        finalResult = packagesUniques.sort(sortBy());
+        totalHits = packagesUniques.length;
     }
-    if (lastError)
-        throw lastError;
+    else
+        finalResult = packages;
 
-    return result;
+    return { data: finalResult, totalHits: totalHits };
 }

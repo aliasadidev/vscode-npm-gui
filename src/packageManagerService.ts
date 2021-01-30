@@ -47,10 +47,10 @@ export class packageManagerService {
             });
 
             files.forEach(file => {
-                if (result.indexOf(file) === -1){
-                    result.push(file);  
-                }                  
-            });            
+                if (result.indexOf(file) === -1) {
+                    result.push(file);
+                }
+            });
         });
 
         return result;
@@ -143,7 +143,7 @@ export class packageManagerService {
                 const xml: string = addPackage(projectFileContent, packageName, selectedVersion);
                 writeToFile(project.ProjectPath, xml);
 
-                const pkgVersions = (await fetchPackageVersions(packageName, this.config.nugetPackageVersionsUrl, this.config.nugetRequestTimeout)).Versions;
+                const pkgVersions = (await fetchPackageVersions(packageName, this.config.nugetPackageVersionsUrls, this.config.nugetRequestTimeout)).Versions;
                 const newerPackageVersion = findStableVersion(pkgVersions);
                 const isUpdated = newerPackageVersion == selectedVersion;
 
@@ -236,7 +236,7 @@ export class packageManagerService {
         let searchResult: SearchPackageResult | undefined;
 
         searchResult = await searchPackage(query,
-            this.config.nugetSearchPackageUrl,
+            this.config.nugetSearchPackageUrls,
             this.config.nugetSearchPackagePreRelease,
             this.config.nugetSearchPackageDefaultTake,
             0,
@@ -251,7 +251,7 @@ export class packageManagerService {
         if (hasPackage) {
             const allUniquePackages: Array<string> = mergeList(projects.map(q => q.Packages.map(e => e.PackageName)));
 
-            let packageVersions: Array<PackageVersion> = (await fetchPackageVersionsBatch(allUniquePackages, this.config.nugetPackageVersionsUrl, this.config.nugetRequestTimeout));
+            let packageVersions: Array<PackageVersion> = (await fetchPackageVersionsBatch(allUniquePackages, this.config.nugetPackageVersionsUrls, this.config.nugetRequestTimeout));
 
             let keyValuePackageVersions: Record<string, string[]> = {}
             packageVersions.forEach(pkg => {

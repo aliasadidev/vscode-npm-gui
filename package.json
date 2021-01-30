@@ -52,7 +52,7 @@
 					"default": 9000,
 					"description": "The maximum duration for completing a request from this extension"
 				},
-				"nugetpackagemanagergui.nuget.packageVersionsUrl": {
+				"nugetpackagemanagergui.nuget.packageVersionsUrls": {
 					"type": [
 						"array",
 						"string"
@@ -60,9 +60,9 @@
 					"default": [
 						"https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
 					],
-					"description": "The Nuget endpoint address for getting package versions"
+					"description": "The Nuget endpoint addresses for getting package versions (The first address in the list has highest priority)\n The {{packageName}} property inject by extension"
 				},
-				"nugetpackagemanagergui.nuget.searchPackage.url": {
+				"nugetpackagemanagergui.nuget.searchPackage.urls": {
 					"type": [
 						"array",
 						"string"
@@ -70,7 +70,7 @@
 					"default": [
 						"https://azuresearch-usnc.nuget.org/query"
 					],
-					"description": "The Nuget endpoint address for searching packages"
+					"description": "The Nuget endpoint addresses for searching packages (The first address in the list has highest priority)"
 				},
 				"nugetpackagemanagergui.nuget.searchPackage.preRelease": {
 					"type": "boolean",

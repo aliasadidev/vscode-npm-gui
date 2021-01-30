@@ -86,8 +86,8 @@ export class CommandResult {
 
 export interface ExtensionConfiguration {
     nugetRequestTimeout: number;
-    nugetPackageVersionsUrl: string[];
-    nugetSearchPackageUrl: string[];
+    nugetPackageVersionsUrls: string[];
+    nugetSearchPackageUrls: string[];
     nugetSearchPackagePreRelease: boolean;
     nugetSearchPackageDefaultTake: number;
 }

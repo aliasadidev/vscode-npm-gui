@@ -86,7 +86,7 @@ export async function fetchPackageVersionsBatch(packages: Array<string>, package
     return result;
 }
 
-export async function searchPackage(query: string, searchPackageUrl: string[], preRelease: boolean, take: number, skip: number, nugetRequestTimeout: number): Promise<any> {
+export async function searchPackage(query: string, searchPackageUrls: string[], preRelease: boolean, take: number, skip: number, nugetRequestTimeout: number): Promise<any> {
     const requestOption = getRequestOptions(nugetRequestTimeout);
     const queryString = jsonToQueryString({
         q: query,
@@ -99,7 +99,7 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
     let packages: any[] = [];
 
     const results = await Promise.all(
-        searchPackageUrl.map(async repoAddress => {
+        searchPackageUrls.map(async repoAddress => {
             let url = `${repoAddress}${queryString}`;
             return fetch(url, requestOption)
                 .then(async response => {

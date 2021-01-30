@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 1.1.6 - Jan 30, 2021
+#### Added
+*  Support several nuget servers ([#10](https://github.com/aliasadidev/vsocde-npm-gui/pull/10) by [@TomyCesaille](https://github.com/TomyCesaille))
+#### Changed
+* Both ~~`nuget.packageVersionsUrl`~~ and ~~`nuget.searchPackage.url`~~ properties changed to `nuget.packageVersionsUrls` and `nuget.searchPackage.urls`
+
 ## Version 1.1.5 - Jan 24, 2021
 #### Added
 * Log error detail in VSCode Developer Tools

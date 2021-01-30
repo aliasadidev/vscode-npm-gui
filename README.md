@@ -29,11 +29,18 @@
 //The maximum duration for completing a request from this extension
 "nugetpackagemanagergui.nuget.requestTimeout": 9000,
 
-//The Nuget endpoint address for getting package versions
-"nugetpackagemanagergui.nuget.packageVersionsUrl": "https://api.nuget.org/v3-flatcontainer",    
+//The Nuget endpoint addresses for getting package versions
+//* The first address in the list has highest priority
+//* The {{packageName}} property inject by extension
+"nugetpackagemanagergui.nuget.packageVersionsUrls": [
+    "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
+],
 
-//The Nuget endpoint address for searching packages
-"nugetpackagemanagergui.nuget.searchPackage.url": "https://azuresearch-usnc.nuget.org/query",
+//The Nuget endpoint addresses for searching packages
+//* The first address in the list has highest priority
+"nugetpackagemanagergui.nuget.searchPackage.urls": [
+    "https://azuresearch-usnc.nuget.org/query"
+],
 
 //true or false determining whether to include pre-release packages in the result of the search
 "nugetpackagemanagergui.nuget.searchPackage.preRelease": false,
@@ -46,6 +53,12 @@
 
 # What's New
 
+
+## Version 1.1.6 - Jan 30, 2021
+#### Added
+*  Support several nuget servers ([#10](https://github.com/aliasadidev/vsocde-npm-gui/pull/10) by [@TomyCesaille](https://github.com/TomyCesaille))
+#### Changed
+* Both ~~`nuget.packageVersionsUrl`~~ and ~~`nuget.searchPackage.url`~~ properties changed to `nuget.packageVersionsUrls` and `nuget.searchPackage.urls`
 
 ## Version 1.1.5 - Jan 24, 2021
 #### Added

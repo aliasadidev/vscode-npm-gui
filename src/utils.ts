@@ -24,11 +24,29 @@ export function jsonToQueryString(json: any) {
 export function findStableVersion(versions: Array<string>): string {
     const regExp: RegExp = /^\d+\.\d+\.\d+(\.\d+)?$/m;
     let version: string | undefined = versions.slice().reverse().find(x => regExp.test(x));
+
+    if (version === undefined && versions && versions.length > 0)
+        version = versions[versions.length - 1];
+
     return version ?? "Unknown";
 }
 
 export function mergeList(arr: any) {
     return [...new Set([].concat(...arr))];
+}
+
+export function uniqBy(arr: any[], key: string) {
+    let seen = new Set();
+
+    return arr.filter(it => {
+        let val = it[key];
+        if (seen.has(val)) {
+            return false;
+        } else {
+            seen.add(val);
+            return true;
+        }
+    });
 }
 
 export async function tryCatch(action: any, successMessage: string | undefined = undefined, isListResult: boolean = false): Promise<any> {

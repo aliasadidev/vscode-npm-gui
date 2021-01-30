@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { PackageVersion, RequestOption } from './models';
 import { getProxyOption } from './proxyHelper';
-import { jsonToQueryString } from './utils';
+import { jsonToQueryString, uniqBy } from './utils';
 
 
 function getRequestOptions(nugetRequestTimeout: number): RequestOption {
@@ -127,19 +127,7 @@ export async function searchPackage(query: string, searchPackageUrl: string[], p
         totalHits += result.totalHits;
     });
 
-    const uniqBy = function (arr: any[], key: string) {
-        let seen = new Set();
 
-        return arr.filter(it => {
-            let val = it[key];
-            if (seen.has(val)) {
-                return false;
-            } else {
-                seen.add(val);
-                return true;
-            }
-        });
-    };
 
     if (results.length > 1) {
         const queryLowerCase = query.toLowerCase();

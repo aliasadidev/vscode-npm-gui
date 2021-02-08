@@ -9,6 +9,8 @@
 - Update all packages with one click
 - Remove a package from the projects
 - Search and install new packages from Nuget Server
+- Support several nuget servers
+- Compatible with Linux and Windows
 
 
 ### How it works

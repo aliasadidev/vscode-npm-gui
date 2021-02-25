@@ -19,12 +19,12 @@
 		"dotnet 5"
 	],
 	"bugs": {
-		"url": "https://github.com/aliasadidev/vsocde-npm-gui/issues"
+		"url": "https://github.com/aliasadidev/vscode-npm-gui/issues"
 	},
-	"homepage": "https://github.com/aliasadidev/vsocde-npm-gui/blob/master/README.md",
+	"homepage": "https://github.com/aliasadidev/vscode-npm-gui/blob/master/README.md",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/aliasadidev/vsocde-npm-gui.git"
+		"url": "https://github.com/aliasadidev/vscode-npm-gui.git"
 	},
 	"engines": {
 		"vscode": "^1.51.0"

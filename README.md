@@ -20,7 +20,7 @@
 
 
 
-![Update a Package](https://raw.githubusercontent.com/aliasadidev/vsocde-npm-gui/main/images/demo1.gif?v3)
+![Update a Package](https://raw.githubusercontent.com/aliasadidev/vscode-npm-gui/main/images/demo1.gif?v3)
 
 
 
@@ -58,7 +58,7 @@
 
 ## Version 1.1.6 - Jan 30, 2021
 #### Added
-*  Support several nuget servers ([#10](https://github.com/aliasadidev/vsocde-npm-gui/pull/10) by [@TomyCesaille](https://github.com/TomyCesaille))
+*  Support several nuget servers ([#10](https://github.com/aliasadidev/vscode-npm-gui/pull/10) by [@TomyCesaille](https://github.com/TomyCesaille))
 #### Changed
 * Both ~~`nuget.packageVersionsUrl`~~ and ~~`nuget.searchPackage.url`~~ properties changed to `nuget.packageVersionsUrls` and `nuget.searchPackage.urls`
 
@@ -66,7 +66,7 @@
 #### Added
 * Log error detail in VSCode Developer Tools
 #### Fixed
-*  Find projects in all workspace folders ([#8](https://github.com/aliasadidev/vsocde-npm-gui/pull/8) by [@m4ss1m0g](https://github.com/m4ss1m0g))
+*  Find projects in all workspace folders ([#8](https://github.com/aliasadidev/vscode-npm-gui/pull/8) by [@m4ss1m0g](https://github.com/m4ss1m0g))
 
 ## Version 1.1.4 - Jan 14, 2021
 #### Added

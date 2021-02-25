@@ -33,7 +33,7 @@
 
 //The Nuget endpoint addresses for getting package versions
 //* The first address in the list has highest priority
-//* The {{packageName}} property inject by extension
+//* The {{packageName}} property injecting by extension
 "nugetpackagemanagergui.nuget.packageVersionsUrls": [
     "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
 ],

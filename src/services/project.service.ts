@@ -2,14 +2,14 @@ import * as vscode from 'vscode';
 import glob = require('glob');
 import { Project } from '../models/project.model';
 import * as path from 'path';
-import { PackageVersion, Package } from '../models/nuget.model';
+import { PackageVersion, PackageDetail } from '../models/nuget.model';
 import { fetchPackageVersionsBatch } from '../modules/nuget.module';
 import { getPackages } from '../modules/xml.module';
 import { mergeList } from '../modules/utils';
 import { findStableVersion } from './common.service';
-import { readFile } from '../modules/file.module';
+import { readFileContent } from '../modules/file.module';
 import { ExtensionConfiguration } from '../models/option.model';
-import { CommandResult, FindProjectResult } from '../models/common.model';
+import { ServiceResult, FindProjectResult } from '../models/common.model';
 
 export function findProjects(workspaceFolder: readonly vscode.WorkspaceFolder[]): string[] {
     let result: string[] = [];
@@ -65,9 +65,9 @@ export async function loadProjects(workspacePath: readonly vscode.WorkspaceFolde
 
         const projectPath = projectPathList[pathIndex];
 
-        const originalData: string = readFile(projectPath);
+        const originalData: string = readFileContent(projectPath);
 
-        let packages: Package[] = getPackages(originalData);
+        let packages: PackageDetail[] = getPackages(originalData);
 
         let projectName = path.basename(projectPath);
 

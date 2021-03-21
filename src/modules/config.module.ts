@@ -1,6 +1,9 @@
 import { ExtensionConfiguration } from "../models/option.model";
 import * as vscode from 'vscode';
 
+/**
+ * Get the package configuration from VSCode
+ */
 export function getConfiguration(): ExtensionConfiguration {
 
     const nugetRequestTimeout = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.requestTimeout") as number;

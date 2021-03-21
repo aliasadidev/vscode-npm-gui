@@ -4,7 +4,7 @@ import { resetStatusBarMessage, showCommandResult, showCommandResults, showError
 /**
  * Convert Json to QueryString 
  * @param json The Json data
- * @returns {string} `?` character is in the first position of the result
+ * @returns query string with `?` character at the first position of the result
  */
 export function jsonToQueryString(json: any) {
     return '?' +
@@ -14,11 +14,21 @@ export function jsonToQueryString(json: any) {
         }).join('&');
 }
 
-
+/**
+ * 
+ * @param arr The list
+ * @returns  Remove the duplicate items from the list
+ */
 export function mergeList(arr: any) {
     return [...new Set([].concat(...arr))];
 }
 
+/**
+ * 
+ * @param arr The list
+ * @param key The property name in the object list
+ * @returns Remove the duplicate items from the list
+ */
 export function uniqBy(arr: any[], key: string) {
     let seen = new Set();
 

@@ -1,5 +1,5 @@
 import { PackageDetail, Project } from "../models/project.model";
-import { CommandResult } from "../models/common.model";
+import { ServiceResult } from "../models/common.model";
 import { hasFileAccess } from "../modules/file.module";
 import * as fs from 'fs';
 
@@ -21,8 +21,8 @@ export function getPackageIndex(project: Project, packageName: string): number {
     return pkgIndex;
 }
 
-export function checkAccess(project: Project, mode: number = fs.constants.O_RDWR): CommandResult {
-    let commandResult: CommandResult;
+export function checkAccess(project: Project, mode: number = fs.constants.O_RDWR): ServiceResult {
+    let commandResult: ServiceResult;
     let hasAccess = hasFileAccess(project.ProjectPath, mode);
     if (hasAccess.IsSuccessful) {
         commandResult = { IsSuccessful: true };

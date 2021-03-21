@@ -2,11 +2,14 @@ import * as vscode from 'vscode';
 import * as url from 'url';
 import * as HttpsProxyAgent from 'https-proxy-agent';
 import { ProxyOption } from '../models/option.model';
-
+/**
+ * Get the proxy settings
+ * @returns {ProxyOption}
+ */
 export function getProxyOption(): ProxyOption {
     // https://code.visualstudio.com/docs/setup/network
     // https://github.com/TooTallNate/node-https-proxy-agent/blob/master/src/agent.ts
-    // VSCode inject the proxyAuthorization property if the proxy need the auth
+    // VSCode injecting the proxyAuthorization property if the proxy has authorization
     let proxySetting: ProxyOption = { ProxyIsActive: false };
     var httpConfig = vscode.workspace.getConfiguration('http');
 
@@ -26,7 +29,7 @@ export function getProxyOption(): ProxyOption {
             secureProxy: secureProxy,
         });
 
-        // Inject the `Proxy-Authorization` header if necessary.
+        // Injecting the `Proxy-Authorization` header if the proxy has authorization
         if (httpConfig.proxyAuthorization) {
             proxySetting.headers = [];
             proxySetting.headers.push({

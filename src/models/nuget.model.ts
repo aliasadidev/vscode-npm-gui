@@ -1,15 +1,14 @@
-export interface SearchPackageResultPackageType {
-    name: string;
-}
-
-export interface SearchPackageResultVersion {
-    version: string;
-    downloads: number;
-}
-
+/**
+ * The package metadata
+ * 
+ * The docs: https://docs.microsoft.com/en-us/nuget/api/registration-base-url-resource
+ */
 export interface SearchPackageResult {
-    registration: string;
+    /**
+     * The package name
+     */
     id: string;
+    registration: string;
     version: string;
     description: string;
     summary: string;
@@ -24,12 +23,39 @@ export interface SearchPackageResult {
     packageTypes: SearchPackageResultPackageType[];
     versions: SearchPackageResultVersion[];
 }
+export interface SearchPackageResultPackageType {
+    name: string;
+}
 
+export interface SearchPackageResultVersion {
+    version: string;
+    downloads: number;
+}
+
+/**
+ * The package versions
+ */
 export interface PackageVersion {
+    /**
+     * The package name
+     */
     PackageName: string;
+    /**
+     * The package versions
+     */
     Versions: string[];
 }
-export interface Package {
+
+/**
+ * The package version
+ */
+export interface PackageDetail {
+    /**
+     * The package name
+     */
     PackageName: string;
+    /**
+    * The package version
+    */
     PackageVersion: string;
 }

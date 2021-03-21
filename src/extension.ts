@@ -24,7 +24,6 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     const configOptions = getConfiguration();
-    //const pmService = new pms.packageManagerService(configOptions);
     let projectList: Project[];
 
     vscode.commands.registerCommand('nugetpackagemanagergui.getdata', () => {

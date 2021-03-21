@@ -1,14 +1,14 @@
 import { ExtensionConfiguration } from "../models/option.model";
 import { Project } from "../models/project.model";
-import { CommandResult } from "../models/common.model";
-import { readFile, writeToFile } from "../modules/file.module";
+import { ServiceResult } from "../models/common.model";
+import { readFileContent, writeToFile } from "../modules/file.module";
 import { fetchPackageVersions } from "../modules/nuget.module";
 import { addPackage, updatePackage } from "../modules/xml.module";
 import { checkAccess, findStableVersion, getPackage, getProject } from "./common.service";
 
 
-export async function install(config: ExtensionConfiguration, projectList: Project[], projectID: number, packageName: string, selectedVersion: string): Promise<CommandResult> {
-    let commandResult: CommandResult;
+export async function install(config: ExtensionConfiguration, projectList: Project[], projectID: number, packageName: string, selectedVersion: string): Promise<ServiceResult> {
+    let commandResult: ServiceResult;
     const project = getProject(projectList, projectID);
     let pkgIsInstalled: boolean = false;
 
@@ -21,7 +21,7 @@ export async function install(config: ExtensionConfiguration, projectList: Proje
         commandResult = checkAccess(project);
         if (commandResult.IsSuccessful) {
 
-            const projectFileContent = readFile(project.ProjectPath);
+            const projectFileContent = readFileContent(project.ProjectPath);
             const xml: string = addPackage(projectFileContent, packageName, selectedVersion);
             writeToFile(project.ProjectPath, xml);
 

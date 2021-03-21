@@ -1,11 +1,11 @@
 import { Project } from "../models/project.model";
-import { CommandResult } from "../models/common.model";
-import { readFile, writeToFile } from "../modules/file.module";
+import { ServiceResult } from "../models/common.model";
+import { readFileContent, writeToFile } from "../modules/file.module";
 import { updatePackage } from "../modules/xml.module";
 import { checkAccess, getPackage, getProject } from "./common.service";
 
 
-export function update(projectList: Project[], projectID: number, packageName: string, selectedVersion: string): CommandResult {
+export function update(projectList: Project[], projectID: number, packageName: string, selectedVersion: string): ServiceResult {
     const project = getProject(projectList, projectID);
     const pkg = getPackage(project, packageName);
 
@@ -28,8 +28,8 @@ export function update(projectList: Project[], projectID: number, packageName: s
 
 
 
-export function updateAllPackage(projectList: Project[], packageName: string, selectedVersion: string): CommandResult[] {
-    let commandResultList: CommandResult[] = [];
+export function updateAllPackage(projectList: Project[], packageName: string, selectedVersion: string): ServiceResult[] {
+    let commandResultList: ServiceResult[] = [];
 
     projectList.forEach(project => {
         let pkgIndex = project.Packages.findIndex(e => e.PackageName === packageName);
@@ -46,8 +46,8 @@ export function updateAllPackage(projectList: Project[], packageName: string, se
 }
 
 
-export function updateAllProjects(projectList: Project[]): CommandResult[] {
-    let commandResultList: CommandResult[] = [];
+export function updateAllProjects(projectList: Project[]): ServiceResult[] {
+    let commandResultList: ServiceResult[] = [];
 
     projectList.forEach(project => {
         const packages = project.Packages.filter(x => x.IsUpdated == false);
@@ -65,7 +65,7 @@ export function updateAllProjects(projectList: Project[]): CommandResult[] {
 }
 
 function updatePackageInProjectFile(projectPath: string, packageName: string, selectedVersion: string) {
-    const projectFileContent = readFile(projectPath);
+    const projectFileContent = readFileContent(projectPath);
     const xmlContent: string = updatePackage(projectFileContent, packageName, selectedVersion);
     writeToFile(projectPath, xmlContent);
 }

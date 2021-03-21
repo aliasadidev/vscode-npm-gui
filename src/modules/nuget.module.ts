@@ -1,7 +1,6 @@
 import fetch from 'node-fetch';
 import { PackageVersion } from '../models/nuget.model';
 import { RequestOption } from '../models/option.model';
-
 import { getProxyOption } from './proxy.module';
 import { jsonToQueryString, uniqBy } from './utils';
 
@@ -20,7 +19,6 @@ function getRequestOptions(nugetRequestTimeout: number): RequestOption {
     }
     return requestOption;
 }
-
 
 async function getPackageVersions(packageName: string, packageVersionsUrls: string[], requestOption: RequestOption): Promise<any> {
 
@@ -69,14 +67,11 @@ async function getPackageVersions(packageName: string, packageVersionsUrls: stri
     return result;
 }
 
-
-
 export async function fetchPackageVersions(packageName: string, packageVersionsUrls: string[], nugetRequestTimeout: number): Promise<any> {
     const requestOption = getRequestOptions(nugetRequestTimeout);
 
     return getPackageVersions(packageName, packageVersionsUrls, requestOption);
 }
-
 
 export async function fetchPackageVersionsBatch(packages: string[], packageVersionsUrls: string[], nugetRequestTimeout: number): Promise<any> {
 

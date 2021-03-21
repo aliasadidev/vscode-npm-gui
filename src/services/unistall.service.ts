@@ -1,17 +1,17 @@
 import { Project } from "../models/project.model";
-import { CommandResult } from "../models/common.model";
-import { readFile, writeToFile } from "../modules/file.module";
+import { ServiceResult } from "../models/common.model";
+import { readFileContent, writeToFile } from "../modules/file.module";
 import { removePackage } from "../modules/xml.module";
 import { checkAccess, getPackageIndex, getProject } from "./common.service";
 
-export function remove(projectList: Project[], projectID: number, packageName: string): CommandResult {
+export function remove(projectList: Project[], projectID: number, packageName: string): ServiceResult {
     const project = getProject(projectList, projectID);
     const pkgIndex = getPackageIndex(project, packageName);
 
     let commandResult = checkAccess(project);
     if (commandResult.IsSuccessful) {
 
-        const projectFileContent = readFile(project.ProjectPath);
+        const projectFileContent = readFileContent(project.ProjectPath);
         const xmlContent: string = removePackage(projectFileContent, packageName);
         writeToFile(project.ProjectPath, xmlContent);
 
@@ -28,7 +28,7 @@ export function remove(projectList: Project[], projectID: number, packageName: s
 }
 
 export function removeAllPackage(projectList: Project[], packageName: string) {
-    let commandResultList: CommandResult[] = [];
+    let commandResultList: ServiceResult[] = [];
 
     projectList.forEach(project => {
         const packages = project.Packages.filter(x => x.PackageName == packageName);

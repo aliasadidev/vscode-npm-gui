@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CommandResult } from '../models/common.model';
+import { ServiceResult } from '../models/common.model';
 
 export function setStatusBarMessage(message: string | undefined, hideAfterTimeout?: number) {
     if (message)
@@ -21,7 +21,7 @@ export function showErrorMessage(message: any) {
     vscode.window.showErrorMessage(message);
 }
 
-export function showCommandResult(commandResult: CommandResult, successMessage: string | undefined = undefined) {
+export function showCommandResult(commandResult: ServiceResult, successMessage: string | undefined = undefined) {
     resetStatusBarMessage();
     if (commandResult.IsSuccessful && (successMessage || commandResult.Message)) {
         setStatusBarMessage(successMessage ? successMessage : commandResult.Message, 5000);
@@ -32,7 +32,7 @@ export function showCommandResult(commandResult: CommandResult, successMessage: 
     }
 }
 
-export function showCommandResults(commandResults: CommandResult[], successMessage: string | undefined = undefined) {
+export function showCommandResults(commandResults: ServiceResult[], successMessage: string | undefined = undefined) {
     commandResults.forEach(x => {
         showCommandResult(x, successMessage);
     });

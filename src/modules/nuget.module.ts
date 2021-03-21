@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
-import { PackageVersion } from './models/nuget.model';
-import { RequestOption } from './models/option.model';
+import { PackageVersion } from '../models/nuget.model';
+import { RequestOption } from '../models/option.model';
 
-import { getProxyOption } from './proxyHelper';
+import { getProxyOption } from './proxy.module';
 import { jsonToQueryString, uniqBy } from './utils';
 
 

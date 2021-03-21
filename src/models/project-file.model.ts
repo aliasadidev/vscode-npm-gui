@@ -1,18 +1,17 @@
-export interface element {
+export interface Element {
     name: string;
     type: string;
     attributes?: any;
-    elements: Array<element>;
+    elements: Array<Element>;
 }
 
-export interface attribute {
+export interface Attribute {
     Include: string;
     Version: string;
 }
 
-
-export interface itemgroup {
-    RootElement: element;
+export interface ItemGroup {
+    RootElement: Element;
     GroupItemIndex: number;
-    ProjectElement: element;
+    ProjectElement: Element;
 }

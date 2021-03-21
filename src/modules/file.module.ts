@@ -1,11 +1,11 @@
 import * as fs from 'fs';
-import { ValidationResult } from './models/wrapper.model';
+import { ValidationResult } from '../models/common.model';
 
 
 /**
  * Reads content of a file
  * @param filePath  The file path
- * @returns {string} The file content
+ * @returns {string} The file content ****DOTO:
  */
 export function readFile(filePath: string): string {
     let fileContent = fs.readFileSync(filePath, 'utf8');

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as url from 'url';
 import * as HttpsProxyAgent from 'https-proxy-agent';
-import { ProxyOption } from './models/option.model';
+import { ProxyOption } from '../models/option.model';
 
 export function getProxyOption(): ProxyOption {
     // https://code.visualstudio.com/docs/setup/network

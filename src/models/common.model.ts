@@ -1,3 +1,5 @@
+import { Project } from "./project.model";
+
 /**
  * If the validation result wasn't successful, IsSuccessful is equal to `false`.
  */
@@ -19,3 +21,6 @@ export class CommandResult {
     Exception?: any;
 }
 
+export class FindProjectResult extends CommandResult {
+    PorjectList: Project[] = [];
+}

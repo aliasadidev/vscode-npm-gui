@@ -1,6 +1,6 @@
 "use strict";
-import { Package } from './models/nuget.model';
-import { attribute, element, itemgroup } from './models/project-file.model';
+import { Package } from '../models/nuget.model';
+import { Attribute, Element, ItemGroup } from '../models/project-file.model';
 const convert = require('xml-js');
 
 export function getPackages(xml: string): Array<Package> {
@@ -9,10 +9,10 @@ export function getPackages(xml: string): Array<Package> {
 
     if (itemGroup.GroupItemIndex !== -1) {
         checkMoreThenOneItemGroup(itemGroup.ProjectElement);
-        let selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
-        let pacakges: Array<element> = getPackageReferences(selectedItemGroup);
+        let selectedItemGroup: Element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
+        let pacakges: Array<Element> = getPackageReferences(selectedItemGroup);
         packageList = pacakges.map(e => {
-            let attr = (<attribute>e.attributes);
+            let attr = (<Attribute>e.attributes);
             let result: Package = {
                 PackageName: attr.Include,
                 PackageVersion: attr.Version
@@ -27,7 +27,7 @@ export function removePackage(xml: string, packageName: string) {
     let xmlResult: string = xml;
     let itemGroup = getItemGroupIndexResult(xml);
     checkMoreThenOneItemGroup(itemGroup.ProjectElement);
-    let selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
+    let selectedItemGroup: Element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
     let delIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
     selectedItemGroup.elements.splice(delIndex, 1);
     if (selectedItemGroup.elements.length === 0) {
@@ -40,7 +40,7 @@ export function removePackage(xml: string, packageName: string) {
 export function updatePackage(xml: string, packageName: string, version: string) {
     let xmlResult: string = xml;
     let itemGroup = getItemGroupIndexResult(xml);
-    let selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
+    let selectedItemGroup: Element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
     let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
     selectedItemGroup.elements[packageIndex].attributes["Version"] = version;
     xmlResult = convert.js2xml(itemGroup.RootElement, { compact: false, spaces: 2 });
@@ -57,7 +57,7 @@ export function addPackage(xml: string, packageName: string, version: string) {
     }
     checkMoreThenOneItemGroup(itemGroup.ProjectElement);
 
-    let selectedItemGroup: element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
+    let selectedItemGroup: Element = itemGroup.ProjectElement.elements[itemGroup.GroupItemIndex];
     let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
     if (packageIndex === -1) {
 
@@ -80,10 +80,10 @@ export function addPackage(xml: string, packageName: string, version: string) {
 
 
 
-function getItemGroupIndexResult(xml: string): itemgroup {
-    let rootObj: element = getData(xml);
+function getItemGroupIndexResult(xml: string): ItemGroup {
+    let rootObj: Element = getData(xml);
     let projectIndex: number = getProjectIndex(rootObj);
-    let projectElement: element = rootObj.elements[projectIndex];
+    let projectElement: Element = rootObj.elements[projectIndex];
     let groupItemIndex: number = getItemGroupIndex(projectElement);
     return { RootElement: rootObj, GroupItemIndex: groupItemIndex, ProjectElement: projectElement };
 }
@@ -95,22 +95,22 @@ function getData(xml: string): any {
 }
 
 
-function getProjectIndex(elm: element): number {
+function getProjectIndex(elm: Element): number {
     let index: number = elm.elements.findIndex(x => x.name == "Project" && x.type == "element");
 
     return index;
 }
-function getPackageReferenceIndex(elm: element, pkgName: string): number {
-    let index: number = elm.elements.findIndex(x => x.name == "PackageReference" && x.type == "element" && (<attribute>x.attributes).Include === pkgName);
+function getPackageReferenceIndex(elm: Element, pkgName: string): number {
+    let index: number = elm.elements.findIndex(x => x.name == "PackageReference" && x.type == "element" && (<Attribute>x.attributes).Include === pkgName);
     return index;
 }
 
-function getPackageReferences(elm: element): Array<element> {
-    let index: Array<element> = elm.elements.filter(x => x.name == "PackageReference" && x.type == "element");
+function getPackageReferences(elm: Element): Array<Element> {
+    let index: Array<Element> = elm.elements.filter(x => x.name == "PackageReference" && x.type == "element");
     return index;
 }
 
-function getItemGroupIndex(elm: element): number {
+function getItemGroupIndex(elm: Element): number {
     let newElm: number = elm.elements.findIndex(
         x => x.name == "ItemGroup" &&
             x.type == "element" &&
@@ -122,8 +122,8 @@ function getItemGroupIndex(elm: element): number {
     return newElm;
 }
 
-function checkMoreThenOneItemGroup(elm: element): any {
-    let newElm: Array<element> = elm.elements.filter(
+function checkMoreThenOneItemGroup(elm: Element): any {
+    let newElm: Array<Element> = elm.elements.filter(
         x => x.name == "ItemGroup" &&
             x.type == "element" &&
             x.elements &&

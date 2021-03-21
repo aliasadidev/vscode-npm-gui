@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CommandResult } from './models';
+import { CommandResult } from './models/wrapper.model';
 
 export function setStatusBarMessage(message: string | undefined, hideAfterTimeout?: number) {
     if (message)

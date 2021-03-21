@@ -1,6 +1,7 @@
 "use strict";
-import { Package } from './models';
-let convert = require('xml-js');
+import { Package } from './models/nuget.model';
+import { attribute, element, itemgroup } from './models/project-file.model';
+const convert = require('xml-js');
 
 export function getPackages(xml: string): Array<Package> {
     let packageList: Array<Package> = [];
@@ -133,32 +134,4 @@ function checkMoreThenOneItemGroup(elm: element): any {
         throw "More than one <ItemGroup> find."
     }
     return newElm;
-}
-
-
-
-// function throwIfUndefined(index: number, err: string) {
-//     if (index === -1)
-//         throw err;
-// }
-
-
-
-interface element {
-    name: string;
-    type: string;
-    attributes?: any;
-    elements: Array<element>;
-}
-
-interface attribute {
-    Include: string;
-    Version: string;
-}
-
-
-interface itemgroup {
-    RootElement: element;
-    GroupItemIndex: number;
-    ProjectElement: element;
 }

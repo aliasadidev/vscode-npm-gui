@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ExtensionConfiguration } from './models';
+import { ExtensionConfiguration } from './models/option.model';
 import { resetStatusBarMessage, showCommandResult, showCommandResults, showErrorMessage } from './vscodeNotify';
 
 

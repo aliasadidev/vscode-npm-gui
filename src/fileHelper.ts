@@ -1,5 +1,6 @@
 import * as fs from 'fs';
-import { ValidationResult } from './models';
+import { ValidationResult } from './models/wrapper.model';
+
 
 /**
  * Reads content of a file

@@ -2,13 +2,15 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { hasFileAccess, readFile, writeToFile } from "./fileHelper";
-import { CommandResult, ExtensionConfiguration, Package, PackageDetail, PackageVersion, Project, SearchPackageResult } from "./models";
+import { ExtensionConfiguration } from './models/option.model';
+import { PackageDetail, Project } from './models/project.model';
+import { SearchPackageResult, PackageVersion, Package } from './models/nuget.model';
+import { CommandResult } from './models/wrapper.model';
 import { fetchPackageVersions, fetchPackageVersionsBatch, searchPackage } from "./nugetHelper";
 import { addPackage, getPackages, removePackage, updatePackage } from "./xmlHelper";
 import { findStableVersion, mergeList } from "./utils";
 import glob = require('glob');
-import { off } from 'process';
-import { VSCExpressCommandResponsePayload } from "vscode-express";
+
 
 export class packageManagerService {
 

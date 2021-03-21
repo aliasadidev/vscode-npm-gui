@@ -11,7 +11,7 @@ import { readFile } from '../modules/file.module';
 import { ExtensionConfiguration } from '../models/option.model';
 import { CommandResult, FindProjectResult } from '../models/common.model';
 
-export function findProjects(workspaceFolder: readonly vscode.WorkspaceFolder[]): Array<string> {
+export function findProjects(workspaceFolder: readonly vscode.WorkspaceFolder[]): string[] {
     let result: string[] = [];
 
     workspaceFolder.forEach(folder => {
@@ -30,12 +30,12 @@ export function findProjects(workspaceFolder: readonly vscode.WorkspaceFolder[])
 }
 
 
-async function setPackageVersions(config: ExtensionConfiguration, projects: Array<Project>) {
+async function setPackageVersions(config: ExtensionConfiguration, projects: Project[]) {
     let hasPackage = projects.some(r => r.Packages && r.Packages.length > 0);
     if (hasPackage) {
-        const allUniquePackages: Array<string> = mergeList(projects.map(q => q.Packages.map(e => e.PackageName)));
+        const allUniquePackages: string[] = mergeList(projects.map(q => q.Packages.map(e => e.PackageName)));
 
-        let packageVersions: Array<PackageVersion> = (await fetchPackageVersionsBatch(allUniquePackages, config.nugetPackageVersionsUrls, config.nugetRequestTimeout));
+        let packageVersions: PackageVersion[] = (await fetchPackageVersionsBatch(allUniquePackages, config.nugetPackageVersionsUrls, config.nugetRequestTimeout));
 
         let keyValuePackageVersions: Record<string, string[]> = {}
         packageVersions.forEach(pkg => {
@@ -55,11 +55,11 @@ async function setPackageVersions(config: ExtensionConfiguration, projects: Arra
 
 }
 
-export async function loadProjects(workspacePath: readonly vscode.WorkspaceFolder[], config: ExtensionConfiguration, loadVersion: boolean = false): Promise<Array<Project>> {
-    const projectPathList: Array<string> = findProjects(workspacePath);
+export async function loadProjects(workspacePath: readonly vscode.WorkspaceFolder[], config: ExtensionConfiguration, loadVersion: boolean = false): Promise<Project[]> {
+    const projectPathList: string[] = findProjects(workspacePath);
 
     let projectID = 1;
-    let projectList: Array<Project> = [];
+    let projectList: Project[] = [];
 
     for (const pathIndex in projectPathList) {
 
@@ -67,7 +67,7 @@ export async function loadProjects(workspacePath: readonly vscode.WorkspaceFolde
 
         const originalData: string = readFile(projectPath);
 
-        let packages: Array<Package> = getPackages(originalData);
+        let packages: Package[] = getPackages(originalData);
 
         let projectName = path.basename(projectPath);
 

@@ -41,7 +41,7 @@ export function checkAccess(project: Project, mode: number = fs.constants.O_RDWR
   * @param versions The list of the package versions
   * @returns {string} If the version wasn't found the result is `Unknown`
   */
-export function findStableVersion(versions: Array<string>): string {
+export function findStableVersion(versions: string[]): string {
     const regExp: RegExp = /^\d+\.\d+\.\d+(\.\d+)?$/m;
     let version: string | undefined = versions.slice().reverse().find(x => regExp.test(x));
 

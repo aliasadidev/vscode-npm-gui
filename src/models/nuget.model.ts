@@ -27,7 +27,7 @@ export interface SearchPackageResult {
 
 export interface PackageVersion {
     PackageName: string;
-    Versions: Array<string>;
+    Versions: string[];
 }
 export interface Package {
     PackageName: string;

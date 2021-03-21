@@ -32,7 +32,7 @@ export function showCommandResult(commandResult: CommandResult, successMessage: 
     }
 }
 
-export function showCommandResults(commandResults: Array<CommandResult>, successMessage: string | undefined = undefined) {
+export function showCommandResults(commandResults: CommandResult[], successMessage: string | undefined = undefined) {
     commandResults.forEach(x => {
         showCommandResult(x, successMessage);
     });

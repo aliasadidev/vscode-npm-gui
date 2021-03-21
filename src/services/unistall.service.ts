@@ -28,7 +28,7 @@ export function remove(projectList: Project[], projectID: number, packageName: s
 }
 
 export function removeAllPackage(projectList: Project[], packageName: string) {
-    let commandResultList: Array<CommandResult> = [];
+    let commandResultList: CommandResult[] = [];
 
     projectList.forEach(project => {
         const packages = project.Packages.filter(x => x.PackageName == packageName);

@@ -78,7 +78,7 @@ export async function fetchPackageVersions(packageName: string, packageVersionsU
 }
 
 
-export async function fetchPackageVersionsBatch(packages: Array<string>, packageVersionsUrls: string[], nugetRequestTimeout: number): Promise<any> {
+export async function fetchPackageVersionsBatch(packages: string[], packageVersionsUrls: string[], nugetRequestTimeout: number): Promise<any> {
 
     const requestOption = getRequestOptions(nugetRequestTimeout);
 

@@ -2,7 +2,7 @@ export interface Element {
     name: string;
     type: string;
     attributes?: any;
-    elements: Array<Element>;
+    elements: Element[];
 }
 
 export interface Attribute {

@@ -28,8 +28,8 @@ export function update(projectList: Project[], projectID: number, packageName: s
 
 
 
-export function updateAllPackage(projectList: Project[], packageName: string, selectedVersion: string): Array<CommandResult> {
-    let commandResultList: Array<CommandResult> = [];
+export function updateAllPackage(projectList: Project[], packageName: string, selectedVersion: string): CommandResult[] {
+    let commandResultList: CommandResult[] = [];
 
     projectList.forEach(project => {
         let pkgIndex = project.Packages.findIndex(e => e.PackageName === packageName);
@@ -46,8 +46,8 @@ export function updateAllPackage(projectList: Project[], packageName: string, se
 }
 
 
-export function updateAllProjects(projectList: Project[]): Array<CommandResult> {
-    let commandResultList: Array<CommandResult> = [];
+export function updateAllProjects(projectList: Project[]): CommandResult[] {
+    let commandResultList: CommandResult[] = [];
 
     projectList.forEach(project => {
         const packages = project.Packages.filter(x => x.IsUpdated == false);

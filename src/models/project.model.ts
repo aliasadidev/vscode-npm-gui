@@ -2,7 +2,7 @@ export interface Project {
     ID: number;
     ProjectName: string;
     ProjectPath: string;
-    Packages: Array<PackageDetail>
+    Packages: PackageDetail[]
 }
 
 export interface PackageDetail {
@@ -10,7 +10,7 @@ export interface PackageDetail {
     PackageVersion: string;
     NewerVersion: string;
     IsUpdated: boolean;
-    VersionList: Array<string>;
+    VersionList: string[];
 }
 
 

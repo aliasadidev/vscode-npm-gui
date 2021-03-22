@@ -3,11 +3,19 @@ import { Project } from "../models/project.model";
 import { ServiceResult } from "../models/common.model";
 import { readFileContent, writeToFile } from "../modules/file.module";
 import { fetchPackageVersions } from "../modules/nuget.module";
-import { addPackage, updatePackage } from "../modules/xml.module";
-import { checkAccess, findStableVersion, getPackage, getProject } from "./common.service";
+import { addPackage } from "../modules/xml.module";
+import { checkAccess, findStableVersion, getProject } from "./common.service";
 
-
-export async function install(config: ExtensionConfiguration, projectList: Project[], projectID: number, packageName: string, selectedVersion: string): Promise<ServiceResult> {
+/**
+ * Install a new package
+ * @param config The config options
+ * @param projectList The list of projects
+ * @param projectID Project ID
+ * @param packageName The package name
+ * @param selectedVersion The target version
+ * @returns 
+ */
+export async function install(projectList: Project[], config: ExtensionConfiguration, projectID: number, packageName: string, selectedVersion: string): Promise<ServiceResult> {
     let commandResult: ServiceResult;
     const project = getProject(projectList, projectID);
     let pkgIsInstalled: boolean = false;
@@ -24,13 +32,13 @@ export async function install(config: ExtensionConfiguration, projectList: Proje
             const projectFileContent = readFileContent(project.projectPath);
             const xml: string = addPackage(projectFileContent, packageName, selectedVersion);
             writeToFile(project.projectPath, xml);
+            const pkgVersions = await fetchPackageVersions(packageName, config.nugetPackageVersionsUrls, config.nugetRequestTimeout);
 
-            const pkgVersions = (await fetchPackageVersions(packageName, config.nugetPackageVersionsUrls, config.nugetRequestTimeout)).Versions;
-            const newerPackageVersion = findStableVersion(pkgVersions);
+            const newerPackageVersion = findStableVersion(pkgVersions.versions);
             const isUpdated = newerPackageVersion == selectedVersion;
 
             project.packages.push({
-                versionList: pkgVersions,
+                versionList: pkgVersions.versions,
                 isUpdated: isUpdated,
                 newerVersion: newerPackageVersion,
                 packageName: packageName,

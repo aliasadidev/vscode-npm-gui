@@ -15,7 +15,7 @@ export function jsonToQueryString(json: any) {
 }
 
 /**
- * 
+ * Distinct a list
  * @param arr The list
  * @returns  Remove the duplicate items from the list
  */
@@ -24,7 +24,7 @@ export function mergeList(arr: any) {
 }
 
 /**
- * 
+ * Distinct a list
  * @param arr The list
  * @param key The property name in the object list
  * @returns Remove the duplicate items from the list

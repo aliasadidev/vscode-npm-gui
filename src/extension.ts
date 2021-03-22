@@ -78,7 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 
     vscode.commands.registerCommand('nugetpackagemanagergui.installPackage', async (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
-        await tryCatch(async () => install(configOptions, projectList, data.ID, data.PackageName, data.SelectedVersion), undefined, false);
+        await tryCatch(async () => install(projectList, configOptions, data.ID, data.PackageName, data.SelectedVersion), undefined, false);
     });
 
 

@@ -9,8 +9,13 @@ import { mergeList } from '../modules/utils';
 import { findStableVersion } from './common.service';
 import { readFileContent } from '../modules/file.module';
 import { ExtensionConfiguration } from '../models/option.model';
-import { ServiceResult, FindProjectResult } from '../models/common.model';
+import { FindProjectResult } from '../models/common.model';
 
+/**
+ * Finding all projects within the workspace folder
+ * @param workspaceFolder The workspace folder
+ * @returns The list of csproj/fsproj path
+ */
 export function findProjects(workspaceFolder: readonly vscode.WorkspaceFolder[]): string[] {
     let result: string[] = [];
 
@@ -35,7 +40,7 @@ async function setPackageVersions(config: ExtensionConfiguration, projects: Proj
     if (hasPackage) {
         const allUniquePackages: string[] = mergeList(projects.map(q => q.packages.map(e => e.packageName)));
 
-        let packageVersions: PackageVersion[] = (await fetchPackageVersionsBatch(allUniquePackages, config.nugetPackageVersionsUrls, config.nugetRequestTimeout));
+        let packageVersions: PackageVersion[] = await fetchPackageVersionsBatch(allUniquePackages, config.nugetPackageVersionsUrls, config.nugetRequestTimeout);
 
         let keyValuePackageVersions: Record<string, string[]> = {}
         packageVersions.forEach(pkg => {

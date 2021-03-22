@@ -12,34 +12,34 @@ export async function install(config: ExtensionConfiguration, projectList: Proje
     const project = getProject(projectList, projectID);
     let pkgIsInstalled: boolean = false;
 
-    if (project.Packages && project.Packages.length > 0) {
-        const pkgIndex = project.Packages.findIndex(e => e.PackageName === packageName);
+    if (project.packages && project.packages.length > 0) {
+        const pkgIndex = project.packages.findIndex(e => e.packageName === packageName);
         pkgIsInstalled = pkgIndex !== -1;
     }
 
     if (pkgIsInstalled == false) {
         commandResult = checkAccess(project);
-        if (commandResult.IsSuccessful) {
+        if (commandResult.isSuccessful) {
 
-            const projectFileContent = readFileContent(project.ProjectPath);
+            const projectFileContent = readFileContent(project.projectPath);
             const xml: string = addPackage(projectFileContent, packageName, selectedVersion);
-            writeToFile(project.ProjectPath, xml);
+            writeToFile(project.projectPath, xml);
 
             const pkgVersions = (await fetchPackageVersions(packageName, config.nugetPackageVersionsUrls, config.nugetRequestTimeout)).Versions;
             const newerPackageVersion = findStableVersion(pkgVersions);
             const isUpdated = newerPackageVersion == selectedVersion;
 
-            project.Packages.push({
-                VersionList: pkgVersions,
-                IsUpdated: isUpdated,
-                NewerVersion: newerPackageVersion,
-                PackageName: packageName,
-                PackageVersion: selectedVersion
+            project.packages.push({
+                versionList: pkgVersions,
+                isUpdated: isUpdated,
+                newerVersion: newerPackageVersion,
+                packageName: packageName,
+                packageVersion: selectedVersion
             });
-            commandResult = { Message: `${packageName} installed in ${project.ProjectName}`, IsSuccessful: true };
+            commandResult = { message: `${packageName} installed in ${project.projectName}`, isSuccessful: true };
         }
     } else {
-        commandResult = { Message: `${packageName} is installed before in ${project.ProjectName}`, IsSuccessful: false };
+        commandResult = { message: `${packageName} is installed before in ${project.projectName}`, isSuccessful: false };
     }
     return commandResult;
 }

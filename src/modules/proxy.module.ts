@@ -10,12 +10,12 @@ export function getProxyOption(): ProxyOption {
     // https://code.visualstudio.com/docs/setup/network
     // https://github.com/TooTallNate/node-https-proxy-agent/blob/master/src/agent.ts
     // VSCode injecting the proxyAuthorization property if the proxy has authorization
-    let proxySetting: ProxyOption = { ProxyIsActive: false };
+    let proxySetting: ProxyOption = { proxyIsActive: false };
     var httpConfig = vscode.workspace.getConfiguration('http');
 
     if (httpConfig.proxy) {
         const parsedProxy = url.parse(httpConfig.proxy);
-        proxySetting.ProxyIsActive = true;
+        proxySetting.proxyIsActive = true;
         if (!parsedProxy.host || !parsedProxy.port)
             throw "Proxy address/port isn't valid!";
 
@@ -23,7 +23,7 @@ export function getProxyOption(): ProxyOption {
             port: string = parsedProxy.port!,
             secureProxy: boolean = httpConfig.proxyStrictSSL === true;
 
-        proxySetting.HttpsProxyAgent = new HttpsProxyAgent({
+        proxySetting.httpsProxyAgent = new HttpsProxyAgent({
             host: host,
             port: port,
             secureProxy: secureProxy,

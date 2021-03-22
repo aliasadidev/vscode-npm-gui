@@ -4,33 +4,33 @@ import { hasFileAccess } from "../modules/file.module";
 import * as fs from 'fs';
 
 export function getProject(projectList: Project[], projectID: number): Project {
-    let project = projectList.find(d => d.ID === projectID);
+    let project = projectList.find(d => d.id === projectID);
     if (project === undefined)
         throw "The project file does not exists";
     return project;
 }
 export function getPackage(project: Project, packageName: string): PackageDetail {
     let pkgIndex = getPackageIndex(project, packageName);
-    return project.Packages[pkgIndex];
+    return project.packages[pkgIndex];
 }
 
 export function getPackageIndex(project: Project, packageName: string): number {
-    let pkgIndex = project.Packages.findIndex(e => e.PackageName === packageName);
+    let pkgIndex = project.packages.findIndex(e => e.packageName === packageName);
     if (pkgIndex === -1)
-        throw `The selected package does not exists in '${project.ProjectName}' project`;
+        throw `The selected package does not exists in '${project.projectName}' project`;
     return pkgIndex;
 }
 
 export function checkAccess(project: Project, mode: number = fs.constants.O_RDWR): ServiceResult {
     let commandResult: ServiceResult;
-    let hasAccess = hasFileAccess(project.ProjectPath, mode);
-    if (hasAccess.IsSuccessful) {
-        commandResult = { IsSuccessful: true };
+    let hasAccess = hasFileAccess(project.projectPath, mode);
+    if (hasAccess.isSuccessful) {
+        commandResult = { isSuccessful: true };
     } else {
         commandResult = {
-            Message: hasAccess.ErrorMessage,
-            IsSuccessful: false,
-            Exception: hasAccess.Exception
+            message: hasAccess.errorMessage,
+            isSuccessful: false,
+            exception: hasAccess.exception
         };
     }
     return commandResult;

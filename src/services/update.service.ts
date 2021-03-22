@@ -10,16 +10,16 @@ export function update(projectList: Project[], projectID: number, packageName: s
     const pkg = getPackage(project, packageName);
 
     let commandResult = checkAccess(project);
-    if (commandResult.IsSuccessful) {
+    if (commandResult.isSuccessful) {
 
-        updatePackageInProjectFile(project.ProjectPath, pkg.PackageName, selectedVersion);
+        updatePackageInProjectFile(project.projectPath, pkg.packageName, selectedVersion);
 
-        pkg.IsUpdated = selectedVersion == pkg.NewerVersion;
-        pkg.PackageVersion = selectedVersion;
+        pkg.isUpdated = selectedVersion == pkg.newerVersion;
+        pkg.packageVersion = selectedVersion;
 
         commandResult = {
-            Message: `${pkg.PackageName} updated in ${project.ProjectName}`,
-            IsSuccessful: true
+            message: `${pkg.packageName} updated in ${project.projectName}`,
+            isSuccessful: true
         };
     }
 
@@ -32,11 +32,11 @@ export function updateAllPackage(projectList: Project[], packageName: string, se
     let commandResultList: ServiceResult[] = [];
 
     projectList.forEach(project => {
-        let pkgIndex = project.Packages.findIndex(e => e.PackageName === packageName);
+        let pkgIndex = project.packages.findIndex(e => e.packageName === packageName);
         if (pkgIndex !== -1) {
-            let commandResult = update(projectList, project.ID, packageName, selectedVersion);
-            if (commandResult.IsSuccessful) {
-                commandResultList.push({ IsSuccessful: true, Message: `${project.ProjectName}|${packageName}` });
+            let commandResult = update(projectList, project.id, packageName, selectedVersion);
+            if (commandResult.isSuccessful) {
+                commandResultList.push({ isSuccessful: true, message: `${project.projectName}|${packageName}` });
             } else {
                 commandResultList.push(commandResult);
             }
@@ -50,11 +50,11 @@ export function updateAllProjects(projectList: Project[]): ServiceResult[] {
     let commandResultList: ServiceResult[] = [];
 
     projectList.forEach(project => {
-        const packages = project.Packages.filter(x => x.IsUpdated == false);
+        const packages = project.packages.filter(x => x.isUpdated == false);
         packages.forEach(pkg => {
-            let commandResult = update(projectList, project.ID, pkg.PackageName, pkg.NewerVersion);
-            if (commandResult.IsSuccessful) {
-                commandResultList.push({ IsSuccessful: true, Message: `${project.ProjectName}|${pkg.PackageName}` });
+            let commandResult = update(projectList, project.id, pkg.packageName, pkg.newerVersion);
+            if (commandResult.isSuccessful) {
+                commandResultList.push({ isSuccessful: true, message: `${project.projectName}|${pkg.packageName}` });
             } else {
                 commandResultList.push(commandResult);
             }

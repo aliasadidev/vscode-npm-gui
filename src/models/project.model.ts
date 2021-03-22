@@ -5,19 +5,19 @@ export interface Project {
     /**
      * The unique id for each project
      */
-    ID: number;
+    id: number;
     /**
      * The project name is the same as `[project-name]`.csproj/fsproj
      */
-    ProjectName: string;
+    projectName: string;
     /**
      * The project path 
      */
-    ProjectPath: string;
+    projectPath: string;
     /**
      * The packages in the project
      */
-    Packages: PackageDetail[]
+    packages: PackageDetail[]
 }
 
 /**
@@ -27,23 +27,23 @@ export interface PackageDetail {
     /**
      * The package name
      */
-    PackageName: string;
+    packageName: string;
     /**
      * The installed package version
      */
-    PackageVersion: string;
+    packageVersion: string;
     /**
      * The newer version of the package
      */
-    NewerVersion: string;
+    newerVersion: string;
     /**
-     * PackageVersion is equal to NewerVersion ?
+     * packageVersion is equal to newerVersion ?
      */
-    IsUpdated: boolean;
+    isUpdated: boolean;
     /**
      * All versions of the package
      */
-    VersionList: string[];
+    versionList: string[];
 }
 
 

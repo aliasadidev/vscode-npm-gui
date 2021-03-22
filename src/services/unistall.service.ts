@@ -9,17 +9,17 @@ export function remove(projectList: Project[], projectID: number, packageName: s
     const pkgIndex = getPackageIndex(project, packageName);
 
     let commandResult = checkAccess(project);
-    if (commandResult.IsSuccessful) {
+    if (commandResult.isSuccessful) {
 
-        const projectFileContent = readFileContent(project.ProjectPath);
+        const projectFileContent = readFileContent(project.projectPath);
         const xmlContent: string = removePackage(projectFileContent, packageName);
-        writeToFile(project.ProjectPath, xmlContent);
+        writeToFile(project.projectPath, xmlContent);
 
-        project.Packages.splice(pkgIndex, 1);
+        project.packages.splice(pkgIndex, 1);
 
         commandResult = {
-            Message: `${packageName} removed from ${project.ProjectName}`,
-            IsSuccessful: true
+            message: `${packageName} removed from ${project.projectName}`,
+            isSuccessful: true
         };
 
     }
@@ -31,11 +31,11 @@ export function removeAllPackage(projectList: Project[], packageName: string) {
     let commandResultList: ServiceResult[] = [];
 
     projectList.forEach(project => {
-        const packages = project.Packages.filter(x => x.PackageName == packageName);
+        const packages = project.packages.filter(x => x.packageName == packageName);
         packages.forEach(pkg => {
-            let commandResult = remove(projectList, project.ID, pkg.PackageName);
-            if (commandResult.IsSuccessful) {
-                commandResultList.push({ IsSuccessful: true, Message: `${project.ProjectName}|${pkg.PackageName}` });
+            let commandResult = remove(projectList, project.id, pkg.packageName);
+            if (commandResult.isSuccessful) {
+                commandResultList.push({ isSuccessful: true, message: `${project.projectName}|${pkg.packageName}` });
             } else {
                 commandResultList.push(commandResult);
             }

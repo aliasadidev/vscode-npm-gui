@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
         await tryCatch(async () => {
             setStatusBarMessage(data.LoadVersion ? 'Loading packages...' : 'Loading projects...');
             const result = await reload(configOptions, workspacePath, data.LoadVersion);
-            projectList = result.PorjectList;
+            projectList = result.porjectList;
             return result;
         }, data.LoadVersion ? 'All packages loaded.' : 'All projects loaded.');
         return projectList;

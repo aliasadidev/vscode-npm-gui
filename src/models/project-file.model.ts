@@ -41,13 +41,13 @@ export interface ItemGroup {
     /**
      * The root xml
      */
-    RootElement: Element;
+    rootElement: Element;
     /**
      * The index of ItemGroup tag
      */
-    ItemGroupIndex: number;
+    itemGroupIndex: number;
     /**
      * The root elemet is <Project Sdk="Microsoft...">
      */
-    ProjectElement: Element;
+    projectElement: Element;
 }

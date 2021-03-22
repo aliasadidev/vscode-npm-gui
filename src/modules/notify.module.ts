@@ -23,12 +23,12 @@ export function showErrorMessage(message: any) {
 
 export function showCommandResult(commandResult: ServiceResult, successMessage: string | undefined = undefined) {
     resetStatusBarMessage();
-    if (commandResult.IsSuccessful && (successMessage || commandResult.Message)) {
-        setStatusBarMessage(successMessage ? successMessage : commandResult.Message, 5000);
+    if (commandResult.isSuccessful && (successMessage || commandResult.message)) {
+        setStatusBarMessage(successMessage ? successMessage : commandResult.message, 5000);
     } else {
-        if (commandResult.Message)
-            setStatusBarMessage(commandResult.Message, 5000);
-        showErrorMessage(commandResult.Exception)
+        if (commandResult.message)
+            setStatusBarMessage(commandResult.message, 5000);
+        showErrorMessage(commandResult.exception)
     }
 }
 

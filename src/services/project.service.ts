@@ -31,24 +31,24 @@ export function findProjects(workspaceFolder: readonly vscode.WorkspaceFolder[])
 
 
 async function setPackageVersions(config: ExtensionConfiguration, projects: Project[]) {
-    let hasPackage = projects.some(r => r.Packages && r.Packages.length > 0);
+    let hasPackage = projects.some(r => r.packages && r.packages.length > 0);
     if (hasPackage) {
-        const allUniquePackages: string[] = mergeList(projects.map(q => q.Packages.map(e => e.PackageName)));
+        const allUniquePackages: string[] = mergeList(projects.map(q => q.packages.map(e => e.packageName)));
 
         let packageVersions: PackageVersion[] = (await fetchPackageVersionsBatch(allUniquePackages, config.nugetPackageVersionsUrls, config.nugetRequestTimeout));
 
         let keyValuePackageVersions: Record<string, string[]> = {}
         packageVersions.forEach(pkg => {
-            keyValuePackageVersions[pkg.PackageName] = pkg.Versions;
+            keyValuePackageVersions[pkg.packageName] = pkg.versions;
         });
 
         projects.forEach(project => {
-            project.Packages.forEach(pkg => {
-                let versions = keyValuePackageVersions[pkg.PackageName];
+            project.packages.forEach(pkg => {
+                let versions = keyValuePackageVersions[pkg.packageName];
 
-                pkg.NewerVersion = findStableVersion(versions);
-                pkg.IsUpdated = pkg.NewerVersion == pkg.PackageVersion;
-                pkg.VersionList = versions;
+                pkg.newerVersion = findStableVersion(versions);
+                pkg.isUpdated = pkg.newerVersion == pkg.packageVersion;
+                pkg.versionList = versions;
             });
         });
     }
@@ -72,16 +72,16 @@ export async function loadProjects(workspacePath: readonly vscode.WorkspaceFolde
         let projectName = path.basename(projectPath);
 
         projectList.push({
-            ID: projectID++,
-            ProjectName: projectName,
-            ProjectPath: projectPath,
-            Packages: packages.map((pkg) => {
+            id: projectID++,
+            projectName: projectName,
+            projectPath: projectPath,
+            packages: packages.map((pkg) => {
                 return {
-                    PackageName: pkg.PackageName,
-                    PackageVersion: pkg.PackageVersion,
-                    VersionList: [pkg.PackageVersion],
-                    IsUpdated: false,
-                    NewerVersion: "Unknown"
+                    packageName: pkg.packageName,
+                    packageVersion: pkg.packageVersion,
+                    versionList: [pkg.packageVersion],
+                    isUpdated: false,
+                    newerVersion: "Unknown"
                 };
             })
         });
@@ -99,9 +99,9 @@ export async function reload(config: ExtensionConfiguration, workspacePath: read
     let commandResult: FindProjectResult;
     let projects = await loadProjects(workspacePath, config, loadVersion);
     if (projects && projects.length === 0) {
-        commandResult = { Message: `No project found in the selected workspace!`, IsSuccessful: false, PorjectList: [] };
+        commandResult = { message: `No project found in the selected workspace!`, isSuccessful: false, porjectList: [] };
     } else {
-        commandResult = { IsSuccessful: true, PorjectList: projects };
+        commandResult = { isSuccessful: true, porjectList: projects };
     }
     return commandResult;
 }

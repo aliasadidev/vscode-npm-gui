@@ -41,11 +41,11 @@ export interface ProxyOption {
     /**
      * Is `true` when the proxy is active in vscode
      */
-    ProxyIsActive: boolean;
+    proxyIsActive: boolean;
     /**
      * The HTTP/HTTPS proxy settings
      */
-    HttpsProxyAgent?: any;
+    httpsProxyAgent?: any;
     /**
      * The auth headers
      */

@@ -26,7 +26,7 @@ export function writeToFile(filePath: string, content: string): void {
  */
 export function checkFileExists(filePath: string): ValidationResult {
     let isExists: boolean = fs.existsSync(filePath);
-    return { IsSuccessful: isExists, ErrorMessage: `File "${filePath}" does not exists` };
+    return { isSuccessful: isExists, errorMessage: `File "${filePath}" does not exists` };
 }
 /**
  * Checks access mode of a file 
@@ -43,7 +43,7 @@ export function checkFileAccess(filePath: string, accessMode: number): Validatio
         exception = ex;
         message = `Access to the file is denied: This extension hasn't the read/write access to the project file ${filePath}`;
     }
-    return { IsSuccessful: hasAccess, ErrorMessage: message, Exception: exception };
+    return { isSuccessful: hasAccess, errorMessage: message, exception: exception };
 }
 /**
  * Checks whether a file exists, or has the right access
@@ -51,15 +51,15 @@ export function checkFileAccess(filePath: string, accessMode: number): Validatio
  * @param accessMode The access mode of a file (e.g. fs.constants.R_OK | fs.constants.W_OK)
  */
 export function hasFileAccess(filePath: string, accessMode: number): ValidationResult {
-    let result: ValidationResult = { IsSuccessful: true };
+    let result: ValidationResult = { isSuccessful: true };
     const isExists = checkFileExists(filePath);
 
-    if (isExists.IsSuccessful) {
+    if (isExists.isSuccessful) {
         let hasAccess = checkFileAccess(filePath, accessMode);
-        if (!hasAccess.IsSuccessful)
-            result = { ErrorMessage: hasAccess.ErrorMessage, IsSuccessful: false, Exception: hasAccess.Exception };
+        if (!hasAccess.isSuccessful)
+            result = { errorMessage: hasAccess.errorMessage, isSuccessful: false, exception: hasAccess.exception };
     } else
-        result = { ErrorMessage: isExists.ErrorMessage, IsSuccessful: false, Exception: isExists.Exception };
+        result = { errorMessage: isExists.errorMessage, isSuccessful: false, exception: isExists.exception };
 
     return result;
 }

@@ -19,9 +19,9 @@ function onInit() {
                 const project = projects[key];
                 const projectListItem = `
                         <a class="dropdown-item" href="#" onClick="$('.item-select').text(this.innerHTML)
-                                            .attr('project-id','${project.ID}')
+                                            .attr('project-id','${project.id}')
                                             .removeClass('text-danger');
-                        ">${project.ProjectName}</a>
+                        ">${project.projectName}</a>
                     `;
                 $("#project-list").append(projectListItem);
             }
@@ -58,9 +58,9 @@ function createProjectTable(projects) {
     for (let projIndex = 0; projIndex < projects.length; projIndex++) {
         let colIndex = 0;
         let currnetProj = projects[projIndex];
-        let packages = currnetProj.Packages;
+        let packages = currnetProj.packages;
 
-        const tableName = `table-${currnetProj.ID}`;
+        const tableName = `table-${currnetProj.id}`;
         $("#project-container-tables").append(`<table id="${tableName}"></table>`);
 
         const colSpan = columns.length - 1;
@@ -68,11 +68,11 @@ function createProjectTable(projects) {
         <thead>
         <tr>
             <th colspan="1">Project Name</th>
-            <th colspan="${colSpan}" style="text-align: left;">${currnetProj.ProjectName}</th>
+            <th colspan="${colSpan}" style="text-align: left;">${currnetProj.projectName}</th>
         </tr>
         <tr>
             <th colspan="1">Project Path</th>
-            <th colspan="${colSpan}" style="text-align: left;">${currnetProj.ProjectPath}</th>
+            <th colspan="${colSpan}" style="text-align: left;">${currnetProj.projectPath}</th>
         </tr>
         <tr>
             <th style="width:30%;">${columns[colIndex++]}</th>
@@ -90,31 +90,31 @@ function createProjectTable(projects) {
         if (packages.length > 0) {
             for (let i = 0; i < packages.length; i++) {
                 const pkg = packages[i];
-                let versions = pkg.VersionList;
+                let versions = pkg.versionList;
 
                 let optionVersions = "";
                 for (let index = 0; index < versions.length; index++) {
                     const element = versions[index];
-                    optionVersions += `<option value="${element}"  ${element == pkg.NewerVersion ? "selected" : ""}>${element}</option>`;
+                    optionVersions += `<option value="${element}"  ${element == pkg.newerVersion ? "selected" : ""}>${element}</option>`;
                 }
 
-                const knownVersion = pkg.NewerVersion !== "Unknown";
-                const updateStatus = pkg.IsUpdated && knownVersion ? "Yes" : knownVersion ? "No" : "Unknown";
-                const updateStatusStyle = pkg.IsUpdated && knownVersion ? "success" : knownVersion ? "danger" : "secondary";
+                const knownVersion = pkg.newerVersion !== "Unknown";
+                const updateStatus = pkg.isUpdated && knownVersion ? "Yes" : knownVersion ? "No" : "Unknown";
+                const updateStatusStyle = pkg.isUpdated && knownVersion ? "success" : knownVersion ? "danger" : "secondary";
                 const rowID = `${tableName}_Row${i}`;
 
                 let packageRow = `
                 <tr id="${rowID}" class="tr-package">
-                    <td>${pkg.PackageName}</td>
-                    <td>${pkg.PackageVersion}</td>
+                    <td>${pkg.packageName}</td>
+                    <td>${pkg.packageVersion}</td>
                     <td><select name="versionList" class="versions-option">${optionVersions}</select></td>
                     <td><span class="badge badge-${updateStatusStyle}">${updateStatus}</span></td>
-                    <td>${pkg.NewerVersion}</td>
+                    <td>${pkg.newerVersion}</td>
                     <td>
-                    <button type="button" onclick='update(${currnetProj.ID},"${pkg.PackageName}","${rowID}")' class='btn btn-default-sm btn-sm'>Update</button>
-                    <button type="button" onclick='updateAll(${currnetProj.ID},"${pkg.PackageName}","${rowID}")' class='btn btn-default-sm btn-sm'>Update All</button>
-                    <button type="button" onclick='remove(${currnetProj.ID},"${pkg.PackageName}","${rowID}")' class='btn btn-default-sm btn-sm'>Remove</button>
-                    <button type="button" onclick='removeAll(${currnetProj.ID},"${pkg.PackageName}")' class='btn btn-default-sm btn-sm'>Remove All</button>
+                    <button type="button" onclick='update(${currnetProj.id},"${pkg.packageName}","${rowID}")' class='btn btn-default-sm btn-sm'>Update</button>
+                    <button type="button" onclick='updateAll(${currnetProj.id},"${pkg.packageName}","${rowID}")' class='btn btn-default-sm btn-sm'>Update All</button>
+                    <button type="button" onclick='remove(${currnetProj.id},"${pkg.packageName}","${rowID}")' class='btn btn-default-sm btn-sm'>Remove</button>
+                    <button type="button" onclick='removeAll(${currnetProj.id},"${pkg.packageName}")' class='btn btn-default-sm btn-sm'>Remove All</button>
                     </td>
                 </tr>
                 `;

@@ -39,23 +39,23 @@ export interface PackageVersion {
     /**
      * The package name
      */
-    PackageName: string;
+    packageName: string;
     /**
      * The package versions
      */
-    Versions: string[];
+    versions: string[];
 }
 
 /**
- * The package version
+ * The installed package version
  */
 export interface PackageDetail {
     /**
      * The package name
      */
-    PackageName: string;
+    packageName: string;
     /**
     * The package version
     */
-    PackageVersion: string;
+    packageVersion: string;
 }

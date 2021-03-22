@@ -1,21 +1,21 @@
 import { Project } from "./project.model";
 
 /**
- * If the validation result was successful, IsSuccessful is equal to `true`.
+ * If the validation result was successfully, `isSuccessful` is equal to `true`
  */
 export interface ValidationResult {
     /**
      * The validation result
      */
-    IsSuccessful: boolean;
+    isSuccessful: boolean;
     /**
      * The validation error
      */
-    ErrorMessage?: string;
+    errorMessage?: string;
     /**
      * The system exception
      */
-    Exception?: any;
+    exception?: any;
 }
 
 /**
@@ -25,15 +25,15 @@ export interface ServiceResult {
     /**
     * The service result
     */
-    IsSuccessful: boolean;
+    isSuccessful: boolean;
     /**
      * The service message
      */
-    Message?: string;
+    message?: string;
     /**
      * The system exception
      */
-    Exception?: any;
+    exception?: any;
 }
 
 /**
@@ -43,5 +43,5 @@ export interface FindProjectResult extends ServiceResult {
     /**
      * The list of projects
      */
-    PorjectList: Project[];
+    porjectList: Project[];
 }

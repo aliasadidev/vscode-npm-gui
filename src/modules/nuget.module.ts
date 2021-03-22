@@ -12,8 +12,8 @@ function getRequestOptions(nugetRequestTimeout: number): RequestOption {
         headers: []
     };
 
-    if (proxyOption.ProxyIsActive) {
-        requestOption.agent = proxyOption.HttpsProxyAgent;
+    if (proxyOption.proxyIsActive) {
+        requestOption.agent = proxyOption.httpsProxyAgent;
         if (proxyOption.headers)
             requestOption.headers.push(proxyOption.headers);
     }
@@ -43,8 +43,8 @@ async function getPackageVersions(packageName: string, packageVersionsUrls: stri
                 })
                 .then(jsonResponse => {
                     let result: PackageVersion = {
-                        PackageName: packageName,
-                        Versions: jsonResponse.versions
+                        packageName: packageName,
+                        versions: jsonResponse.versions
                     };
                     return result;
                 })

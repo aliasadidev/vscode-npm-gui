@@ -32,6 +32,10 @@ export interface ExtensionConfiguration {
      * The number of packages to return in the search result
      */
     nugetSearchPackageDefaultTake: number;
+    /**  
+     * The number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted
+    */
+    indentType: string;
 }
 
 /**

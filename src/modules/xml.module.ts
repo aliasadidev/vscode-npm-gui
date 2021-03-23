@@ -21,7 +21,7 @@ export function getPackages(xml: string): PackageDetail[] {
     return packageList;
 }
 
-export function removePackage(xml: string, packageName: string) {
+export function removePackage(xml: string, packageName: string, indentType: string) {
     let xmlResult: string = xml;
     let itemGroup = getItemGroupIndexResult(xml);
     checkMoreThenOneItemGroup(itemGroup.projectElement);
@@ -31,21 +31,21 @@ export function removePackage(xml: string, packageName: string) {
     if (selectedItemGroup.elements.length === 0) {
         itemGroup.projectElement.elements.splice(itemGroup.itemGroupIndex, 1);
     }
-    xmlResult = convert.js2xml(itemGroup.rootElement, { compact: false, spaces: 2 });
+    xmlResult = convert.js2xml(itemGroup.rootElement, { compact: false, spaces: indentType });
     return xmlResult;
 }
 
-export function updatePackage(xml: string, packageName: string, version: string) {
+export function updatePackage(xml: string, packageName: string, version: string, indentType: string) {
     let xmlResult: string = xml;
     let itemGroup = getItemGroupIndexResult(xml);
     let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
     let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
     selectedItemGroup.elements[packageIndex].attributes["Version"] = version;
-    xmlResult = convert.js2xml(itemGroup.rootElement, { compact: false, spaces: 2 });
+    xmlResult = convert.js2xml(itemGroup.rootElement, { compact: false, spaces: indentType });
     return xmlResult;
 }
 
-export function addPackage(xml: string, packageName: string, version: string) {
+export function addPackage(xml: string, packageName: string, version: string, indentType: string) {
     let xmlResult: string = xml;
     let itemGroup = getItemGroupIndexResult(xml);
 
@@ -68,7 +68,7 @@ export function addPackage(xml: string, packageName: string, version: string) {
             }
         }
         selectedItemGroup.elements.push(newElement);
-        xmlResult = convert.js2xml(itemGroup.rootElement, { compact: false, spaces: 2 });
+        xmlResult = convert.js2xml(itemGroup.rootElement, { compact: false, spaces: indentType });
 
     } else {
         throw "package already exists in project!"
@@ -79,7 +79,7 @@ export function addPackage(xml: string, packageName: string, version: string) {
 
 
 function getItemGroupIndexResult(xml: string): ItemGroup {
-    let rootObj: Element = getData(xml);
+    let rootObj: Element = xmlToObject(xml);
     let projectIndex: number = getProjectIndex(rootObj);
     let projectElement: Element = rootObj.elements[projectIndex];
     let groupItemIndex: number = getItemGroupIndex(projectElement);
@@ -88,8 +88,8 @@ function getItemGroupIndexResult(xml: string): ItemGroup {
 
 
 
-function getData(xml: string): any {
-    return convert.xml2js(xml, { compact: false, spaces: 2 });
+function xmlToObject(xml: string): any {
+    return convert.xml2js(xml);
 }
 
 

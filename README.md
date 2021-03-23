@@ -49,6 +49,9 @@
 
 //The number of packages to return in the search result
 "nugetpackagemanagergui.nuget.searchPackage.defaultTake":  10		
+
+//The number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted
+"nugetpackagemanagergui.indentType":  "2"		
 }
 
 ```

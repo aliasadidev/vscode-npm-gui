@@ -15,7 +15,7 @@ import { checkAccess, findStableVersion, getProject } from "./common.service";
  * @param selectedVersion The target version
  * @returns 
  */
-export async function install(projectList: Project[], config: ExtensionConfiguration, projectID: number, packageName: string, selectedVersion: string): Promise<ServiceResult> {
+export async function install(projectList: Project[], projectID: number, packageName: string, selectedVersion: string, config: ExtensionConfiguration): Promise<ServiceResult> {
     let commandResult: ServiceResult;
     const project = getProject(projectList, projectID);
     let pkgIsInstalled: boolean = false;
@@ -30,7 +30,7 @@ export async function install(projectList: Project[], config: ExtensionConfigura
         if (commandResult.isSuccessful) {
 
             const projectFileContent = readFileContent(project.projectPath);
-            const xml: string = addPackage(projectFileContent, packageName, selectedVersion);
+            const xml: string = addPackage(projectFileContent, packageName, selectedVersion, config.indentType);
             writeToFile(project.projectPath, xml);
             const pkgVersions = await fetchPackageVersions(packageName, config.nugetPackageVersionsUrls, config.nugetRequestTimeout);
 

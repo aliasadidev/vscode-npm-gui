@@ -11,6 +11,7 @@ export function getConfiguration(): ExtensionConfiguration {
     const nugetSearchPackageUrls = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.searchPackage.urls") as string[];
     const nugetSearchPackagePreRelease = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.searchPackage.preRelease") as boolean;
     const nugetSearchPackageDefaultTake = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.searchPackage.defaultTake") as number;
+    const indentType = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("indentType") as string;
 
     return {
         nugetRequestTimeout,
@@ -18,5 +19,6 @@ export function getConfiguration(): ExtensionConfiguration {
         nugetSearchPackageUrls: nugetSearchPackageUrls,
         nugetSearchPackagePreRelease,
         nugetSearchPackageDefaultTake,
+        indentType
     };
 }

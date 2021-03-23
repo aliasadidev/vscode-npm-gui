@@ -26,7 +26,7 @@ export function writeToFile(filePath: string, content: string): void {
  */
 export function checkFileExists(filePath: string): ValidationResult {
     let isExists: boolean = fs.existsSync(filePath);
-    return { isSuccessful: isExists, errorMessage: `File "${filePath}" does not exists` };
+    return { isSuccessful: isExists, errorMessage: (isExists ? undefined : `File "${filePath}" does not exists`) };
 }
 /**
  * Checks access mode of a file 

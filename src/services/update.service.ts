@@ -3,16 +3,17 @@ import { ServiceResult } from "../models/common.model";
 import { readFileContent, writeToFile } from "../modules/file.module";
 import { updatePackage } from "../modules/xml.module";
 import { checkAccess, getPackage, getProject } from "./common.service";
+import { ExtensionConfiguration } from "../models/option.model";
 
 
-export function update(projectList: Project[], projectID: number, packageName: string, selectedVersion: string): ServiceResult {
+export function update(projectList: Project[], projectID: number, packageName: string, selectedVersion: string, config: ExtensionConfiguration): ServiceResult {
     const project = getProject(projectList, projectID);
     const pkg = getPackage(project, packageName);
 
     let commandResult = checkAccess(project);
     if (commandResult.isSuccessful) {
 
-        updatePackageInProjectFile(project.projectPath, pkg.packageName, selectedVersion);
+        updatePackageInProjectFile(project.projectPath, pkg.packageName, selectedVersion, config);
 
         pkg.isUpdated = selectedVersion == pkg.newerVersion;
         pkg.packageVersion = selectedVersion;
@@ -28,13 +29,13 @@ export function update(projectList: Project[], projectID: number, packageName: s
 
 
 
-export function updateAllPackage(projectList: Project[], packageName: string, selectedVersion: string): ServiceResult[] {
+export function updateAllPackage(projectList: Project[], packageName: string, selectedVersion: string, config: ExtensionConfiguration): ServiceResult[] {
     let commandResultList: ServiceResult[] = [];
 
     projectList.forEach(project => {
         let pkgIndex = project.packages.findIndex(e => e.packageName === packageName);
         if (pkgIndex !== -1) {
-            let commandResult = update(projectList, project.id, packageName, selectedVersion);
+            let commandResult = update(projectList, project.id, packageName, selectedVersion, config);
             if (commandResult.isSuccessful) {
                 commandResultList.push({ isSuccessful: true, message: `${project.projectName}|${packageName}` });
             } else {
@@ -46,13 +47,13 @@ export function updateAllPackage(projectList: Project[], packageName: string, se
 }
 
 
-export function updateAllProjects(projectList: Project[]): ServiceResult[] {
+export function updateAllProjects(projectList: Project[], config: ExtensionConfiguration): ServiceResult[] {
     let commandResultList: ServiceResult[] = [];
 
     projectList.forEach(project => {
         const packages = project.packages.filter(x => x.isUpdated == false);
         packages.forEach(pkg => {
-            let commandResult = update(projectList, project.id, pkg.packageName, pkg.newerVersion);
+            let commandResult = update(projectList, project.id, pkg.packageName, pkg.newerVersion, config);
             if (commandResult.isSuccessful) {
                 commandResultList.push({ isSuccessful: true, message: `${project.projectName}|${pkg.packageName}` });
             } else {
@@ -64,8 +65,8 @@ export function updateAllProjects(projectList: Project[]): ServiceResult[] {
     return commandResultList;
 }
 
-function updatePackageInProjectFile(projectPath: string, packageName: string, selectedVersion: string) {
+function updatePackageInProjectFile(projectPath: string, packageName: string, selectedVersion: string, config: ExtensionConfiguration) {
     const projectFileContent = readFileContent(projectPath);
-    const xmlContent: string = updatePackage(projectFileContent, packageName, selectedVersion);
+    const xmlContent: string = updatePackage(projectFileContent, packageName, selectedVersion, config.indentType);
     writeToFile(projectPath, xmlContent);
 }

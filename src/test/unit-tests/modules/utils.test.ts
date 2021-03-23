@@ -3,8 +3,7 @@ import * as vscode from 'vscode';
 import { jsonToQueryString, uniqBy } from '../../../modules/utils';
 
 
-suite('Utils.ts tests', () => {
-    vscode.window.showInformationMessage('Start all tests.');
+suite('utils.ts tests', () => {
 
     test('uniqBy test', () => {
         const list: any[] = [

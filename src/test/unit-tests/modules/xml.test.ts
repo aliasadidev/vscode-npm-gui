@@ -1,10 +1,14 @@
 import * as assert from 'assert';
 import { PackageDetail } from '../../../models/nuget.model';
+import { getConfiguration } from '../../../modules/config.module';
 import { addPackage, getPackages, removePackage, updatePackage } from '../../../modules/xml.module';
 // const privateNugetModule = require('rewire')('../../../modules/xml.module');
 
 
 suite('xml.module.ts tests', () => {
+    const configOptions = getConfiguration();
+    const indentType = !isNaN(parseFloat(configOptions.indentType)) ? ' '.repeat(parseFloat(configOptions.indentType)) : configOptions.indentType;
+
 
     test('getPackages test', () => {
         const xml = `<Project Sdk="Microsoft.NET.Sdk">
@@ -30,8 +34,8 @@ suite('xml.module.ts tests', () => {
                            <PackageReference Include="xunit" Version="2.4.1" />
                          </ItemGroup>
                      </Project>`;
-        const expected = `<Project Sdk="Microsoft.NET.Sdk">\n  <ItemGroup>\n    <PackageReference Include="xunit" Version="2.4.1"/>\n  </ItemGroup>\n</Project>`;
-        const newXml = removePackage(xml, 'Microsoft.NET.Test.Sdk');
+        const expected = `<Project Sdk="Microsoft.NET.Sdk">\n${indentType.repeat(1)}<ItemGroup>\n${indentType.repeat(2)}<PackageReference Include="xunit" Version="2.4.1"/>\n${indentType.repeat(1)}</ItemGroup>\n</Project>`;
+        const newXml = removePackage(xml, 'Microsoft.NET.Test.Sdk', indentType);
         assert.deepStrictEqual(newXml, expected);
     });
 
@@ -43,8 +47,8 @@ suite('xml.module.ts tests', () => {
                          </ItemGroup>
                      </Project>`;
 
-        const expected = '<Project Sdk="Microsoft.NET.Sdk">\n  <ItemGroup>\n    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.2"/>\n    <PackageReference Include="xunit" Version="2.4.1"/>\n  </ItemGroup>\n</Project>';
-        const newXml = updatePackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.2');
+        const expected = `<Project Sdk="Microsoft.NET.Sdk">\n${indentType.repeat(1)}<ItemGroup>\n${indentType.repeat(2)}<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.2"/>\n${indentType.repeat(2)}<PackageReference Include="xunit" Version="2.4.1"/>\n${indentType.repeat(1)}</ItemGroup>\n</Project>`;
+        const newXml = updatePackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.2', indentType);
         assert.deepStrictEqual(newXml, expected);
     });
 
@@ -55,8 +59,8 @@ suite('xml.module.ts tests', () => {
                          </ItemGroup>
                      </Project>`;
 
-        const expected = '<Project Sdk="Microsoft.NET.Sdk">\n  <ItemGroup>\n    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1"/>\n    <PackageReference Include="xunit" Version="2.4.1"/>\n  </ItemGroup>\n</Project>';
-        const newXml = addPackage(xml, 'xunit', '2.4.1');
+        const expected = `<Project Sdk="Microsoft.NET.Sdk">\n${indentType.repeat(1)}<ItemGroup>\n${indentType.repeat(2)}<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1"/>\n${indentType.repeat(2)}<PackageReference Include="xunit" Version="2.4.1"/>\n${indentType.repeat(1)}</ItemGroup>\n</Project>`;
+        const newXml = addPackage(xml, 'xunit', '2.4.1', indentType);
         assert.deepStrictEqual(newXml, expected);
     });
 
@@ -67,7 +71,7 @@ suite('xml.module.ts tests', () => {
                          </ItemGroup>
                      </Project>`;
 
-        const func = () => addPackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.1');
+        const func = () => addPackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.1', indentType);
         assert.throws(func, /package already exists in project!/)
     });
 

@@ -3,7 +3,7 @@
  * 
  * The docs: https://docs.microsoft.com/en-us/nuget/api/registration-base-url-resource
  */
-export interface SearchPackageResult {
+export interface PackageMetadata {
     /**
      * The package name
      */
@@ -32,6 +32,11 @@ export interface SearchPackageResultVersion {
     downloads: number;
 }
 
+
+export interface SearchPackageResult {
+    data: PackageMetadata[];
+    totalHits?: number
+}
 /**
  * The package versions
  */

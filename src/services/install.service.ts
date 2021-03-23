@@ -5,6 +5,7 @@ import { readFileContent, writeToFile } from "../modules/file.module";
 import { fetchPackageVersions } from "../modules/nuget.module";
 import { addPackage } from "../modules/xml.module";
 import { checkAccess, findStableVersion, getProject } from "./common.service";
+import { PackageVersion } from "../models/nuget.model";
 
 /**
  * Install a new package
@@ -32,7 +33,7 @@ export async function install(projectList: Project[], projectID: number, package
             const projectFileContent = readFileContent(project.projectPath);
             const xml: string = addPackage(projectFileContent, packageName, selectedVersion, config.indentType);
             writeToFile(project.projectPath, xml);
-            const pkgVersions = await fetchPackageVersions(packageName, config.nugetPackageVersionsUrls, config.nugetRequestTimeout);
+            const pkgVersions: PackageVersion = await fetchPackageVersions(packageName, config.nugetPackageVersionsUrls, config.nugetRequestTimeout);
 
             const newerPackageVersion = findStableVersion(pkgVersions.versions);
             const isUpdated = newerPackageVersion == selectedVersion;

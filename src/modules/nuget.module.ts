@@ -1,9 +1,14 @@
 import fetch from 'node-fetch';
-import { PackageVersion, RequestOption } from './models';
-import { getProxyOption } from './proxyHelper';
+import { PackageMetadata, PackageVersion, SearchPackageResult } from '../models/nuget.model';
+import { RequestOption } from '../models/option.model';
+import { getProxyOption } from './proxy.module';
 import { jsonToQueryString, uniqBy } from './utils';
 
-
+/**
+ * Get the request options(proxy,timeout,...)
+ * @param nugetRequestTimeout request timeout
+ * @returns 
+ */
 function getRequestOptions(nugetRequestTimeout: number): RequestOption {
     const proxyOption = getProxyOption();
     const requestOption: RequestOption = {
@@ -11,19 +16,23 @@ function getRequestOptions(nugetRequestTimeout: number): RequestOption {
         headers: []
     };
 
-    if (proxyOption.ProxyIsActive) {
-        requestOption.agent = proxyOption.HttpsProxyAgent;
+    if (proxyOption.proxyIsActive) {
+        requestOption.agent = proxyOption.httpsProxyAgent;
         if (proxyOption.headers)
             requestOption.headers.push(proxyOption.headers);
     }
     return requestOption;
 }
-
-
-async function getPackageVersions(packageName: string, packageVersionsUrls: string[], requestOption: RequestOption): Promise<any> {
-
-    let result;
-    let lastError;
+/**
+ * Get The package versions
+ * @param packageName The package name
+ * @param packageVersionsUrls The nuget server url
+ * @param requestOption The request options
+ * @returns `PackageVersion`
+ */
+async function getPackageVersions(packageName: string, packageVersionsUrls: string[], requestOption: RequestOption): Promise<PackageVersion> {
+    let result: PackageVersion | undefined | null;
+    let hasError;
     for (let index = 0; index < packageVersionsUrls.length; index++) {
         try {
             let url = packageVersionsUrls[index].replace("{{packageName}}", packageName);
@@ -42,41 +51,52 @@ async function getPackageVersions(packageName: string, packageVersionsUrls: stri
                     return jsonResponse;
                 })
                 .then(jsonResponse => {
-                    let result: PackageVersion = {
-                        PackageName: packageName,
-                        Versions: jsonResponse.versions
+                    let json: PackageVersion = {
+                        packageName: packageName,
+                        versions: jsonResponse.versions
                     };
-                    return result;
+                    return json;
                 })
                 .catch(error => {
                     throw `[An error occurred in the loading package versions (package:${packageName})] ${error.message}`;
                 });
 
         } catch (ex) {
-            lastError = ex;
+            hasError = ex;
         }
         if (result) {
-            lastError = undefined;
+            hasError = undefined;
             break;
         }
 
     }
-    if (lastError)
-        throw lastError;
+    if (hasError)
+        throw hasError;
 
-    return result;
+    return <PackageVersion>result;
 }
 
-
-
-export async function fetchPackageVersions(packageName: string, packageVersionsUrls: string[], nugetRequestTimeout: number): Promise<any> {
+/**
+ * Get The package versions
+ * @param packageName The package name
+ * @param packageVersionsUrls The nuget server url
+ * @param requestOption The request options
+ * @returns `PackageVersion`
+ */
+export async function fetchPackageVersions(packageName: string, packageVersionsUrls: string[], nugetRequestTimeout: number): Promise<PackageVersion> {
     const requestOption = getRequestOptions(nugetRequestTimeout);
 
     return getPackageVersions(packageName, packageVersionsUrls, requestOption);
 }
 
-
-export async function fetchPackageVersionsBatch(packages: Array<string>, packageVersionsUrls: string[], nugetRequestTimeout: number): Promise<any> {
+/**
+ * Get array of the `package versions`
+ * @param packageName The package name
+ * @param packageVersionsUrls The nuget server url
+ * @param requestOption The request options
+ * @returns `PackageVersion[]`
+ */
+export async function fetchPackageVersionsBatch(packages: string[], packageVersionsUrls: string[], nugetRequestTimeout: number): Promise<PackageVersion[]> {
 
     const requestOption = getRequestOptions(nugetRequestTimeout);
 
@@ -85,8 +105,17 @@ export async function fetchPackageVersionsBatch(packages: Array<string>, package
     );
     return result;
 }
-
-export async function searchPackage(query: string, searchPackageUrls: string[], preRelease: boolean, take: number, skip: number, nugetRequestTimeout: number): Promise<any> {
+/**
+ * Search for packages
+ * @param query query
+ * @param searchPackageUrls server address
+ * @param preRelease true/false
+ * @param take take items
+ * @param skip skip items
+ * @param nugetRequestTimeout request timeout
+ * @returns list of packages
+ */
+export async function searchPackage(query: string, searchPackageUrls: string[], preRelease: boolean, take: number, skip: number, nugetRequestTimeout: number): Promise<SearchPackageResult> {
     const requestOption = getRequestOptions(nugetRequestTimeout);
     const queryString = jsonToQueryString({
         q: query,
@@ -119,7 +148,7 @@ export async function searchPackage(query: string, searchPackageUrls: string[], 
                 });
         }));
 
-    let finalResult: any[] = [];
+    let finalResult: PackageMetadata[] = [];
     let totalHits = 0;
 
     results.forEach(result => {

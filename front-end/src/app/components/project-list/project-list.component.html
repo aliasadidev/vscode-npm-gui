@@ -1,0 +1,76 @@
+<!-- Update / Remove Packages -->
+<div id="project-container" class="tab-pane container">
+  <div class="row">
+    <div class="btn-box col-md-12">
+      <button mat-raised-button color="primary" onclick="reload(true)">Load Package Versions</button>
+      <button mat-raised-button color="primary" onclick="updateAllProjects()" style="margin-right: 3px;">Update All Packages</button>
+    </div>
+
+    <div id="project-container" class="tab-pane container active">
+      <div *ngFor="let project of projects" id="project-container-tables">
+        <div class="row">
+
+          <div id="project-container-tables">
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="1">Project Name</th>
+                  <th colspan="5" style="text-align: left;">{{project.projectName}}</th>
+                </tr>
+                <tr>
+                  <th colspan="1">Project Path</th>
+                  <th colspan="5" style="text-align: left;">{{project.projectPath}}</th>
+                </tr>
+                <tr>
+                  <th style="width:30%;">Package Name</th>
+                  <th style="width:10%;">Installed Version</th>
+                  <th style="width:10%;">Versions</th>
+                  <th style="width:10%;">Is Updated</th>
+                  <th style="width:10%;">Newer Version</th>
+                  <th style="width:30%;">Actions</th>
+                </tr>
+              </thead>
+
+              <tr class="tr-package" *ngFor="let package of project.packages">
+                <td>{{package.packageName}}</td>
+                <td>{{package.packageVersion}}</td>
+                <td>
+                  <!-- <select class="versions-option">
+                    <option *ngFor="let version of package.versionList" [attr.value]="version">{{version}}</option>
+                  </select> -->
+                  <mat-form-field>
+                    <!-- <mat-label>Favorite food</mat-label> -->
+                    {{change(project.id,package.packageName,package.newerVersion)}}
+                    <mat-select [value]="package.newerVersion" (valueChange)='change(project.id,package.packageName,package.newerVersion)'>
+                      <mat-option *ngFor="let version of package.versionList" [value]="version">
+                        {{version}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td><span [attr.class]='getVersionStyle(package)'>{{getVersion(package)}}</span></td>
+                <td>{{package.newerVersion}}</td>
+                <td>
+                  <button type="button" (click)="update(project.id,package.packageName)" class="btn btn-default-sm btn-sm">Update</button>
+                  <button type="button" (click)="updateAll(project.id,package.packageName)" class="btn btn-default-sm btn-sm">Update All</button>
+                  <button type="button" (click)="remove(project.id,package.packageName)" class="btn btn-default-sm btn-sm">Remove</button>
+                  <button type="button" (click)="removeAll(project.id,package.packageName)" class="btn btn-default-sm btn-sm">Remove All</button>
+                </td>
+              </tr>
+
+              <tr class='tr-package' *ngIf="!(project.packages && project.packages.length>0)">
+                <td colspan='6' class='empty-table'>This project hasn't any package</td>
+              </tr>
+
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+  </div>
+</div>

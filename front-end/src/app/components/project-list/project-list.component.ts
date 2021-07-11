@@ -1,4 +1,6 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit } from '@angular/core';
+import { Observable, Observer } from 'rxjs';
+import { LoadingScreenService } from 'src/app/services/loading-screen/loading-screen.service';
 import { PackageDetail, Project } from '../../../../../src/models/project.model'
 
 
@@ -11,9 +13,13 @@ declare var command: any;
   styleUrls: ['./project-list.component.scss']
 })
 
-export class ProjectListComponent implements OnInit {
+export class ProjectListComponent implements OnInit, AfterViewInit {
   projects: Project[] = [];
-  constructor(private elm: ElementRef) { }
+  constructor(private loading: LoadingScreenService, private cd: ChangeDetectorRef) { }
+  ngAfterViewInit(): void {
+
+  }
+
   displayedColumns: string[] = [
     "PackageName",
     "InstalledVersion",
@@ -23,35 +29,60 @@ export class ProjectListComponent implements OnInit {
     "Actions"
   ];
   colSpan: number = 0;
+
   ngOnInit(): void {
 
+    this.loadPackageVersion(true)
     this.colSpan = this.displayedColumns.length;
-
-
-
   }
+
 
   loadProjectList() {
-    this.projects.push({
-      id: 1,
-      packages: [{
-        isUpdated: true,
-        newerVersion: '10.0.0',
-        packageName: 'Nuget',
-        packageVersion: '10.0.0',
-        versionList: ["10.0.0", '9.0.0']
-      },
-      {
-        isUpdated: false,
-        newerVersion: '2.0.0',
-        packageName: 'Nuget2',
-        packageVersion: '1.0.0',
-        versionList: ["1.0.0", '2.0.0']
-      }],
-      projectName: 'App.csproj',
-      projectPath: '/home/ali/App.csproj'
+    // this.projects.push({
+    //   id: 1,
+    //   packages: [{
+    //     isUpdated: true,
+    //     newerVersion: '10.0.0',
+    //     packageName: 'Nuget',
+    //     packageVersion: '10.0.0',
+    //     versionList: ["10.0.0", '9.0.0']
+    //   },
+    //   {
+    //     isUpdated: false,
+    //     newerVersion: '2.0.0',
+    //     packageName: 'Nuget2',
+    //     packageVersion: '1.0.0',
+    //     versionList: ["1.0.0", '2.0.0']
+    //   }],
+    //   projectName: 'App.csproj',
+    //   projectPath: '/home/ali/App.csproj'
+    // });
+  }
+
+
+  getData() {
+    this.loading.startLoading();
+    command('nugetpackagemanagergui.getdata', (res: any) => {
+      this.projects = res.result;
+      console.log(this.projects);
+      this.loading.stopLoading();
+      this.cd.detectChanges();
     });
   }
+
+  loadPackageVersion(loadVersion: boolean) {
+    this.loading.startLoading();
+    command('nugetpackagemanagergui.reload', { LoadVersion: loadVersion }, (res: any) => {
+      this.projects = res.result;
+      console.log(this.projects);
+      this.loading.stopLoading();
+      this.cd.detectChanges();
+    });
+  }
+  setda(res: any) {
+    this.projects = res.result;
+  }
+
 
   getVersion(pkg: PackageDetail) {
     const knownVersion = pkg.newerVersion !== "Unknown";
@@ -68,49 +99,42 @@ export class ProjectListComponent implements OnInit {
   }
 
 
-  // selectLastVersion(versions: string[], newerVersion: string): string {
-  //   const newser = versions.find(e => e == newerVersion);
-  //   return newser ? newser : versions[versions.length - 1];
-  // }
+
   mx: Record<string, string> = {};
-  getSelectedVersion(packageSelectId: string) {
-    //var e = this.elm.nativeElement.getAttribute('someattribute');
-    //const row =
-    //const versionOptions = row.querySelector('[name="versionList"]');
-    //const selectedVersion = versionOptions.value;
-    //return selectedVersion;
-  }
+
   update(projectId: number, packageName: string) {
     const selectedVersion = this.getMx(projectId, packageName);
-    const that = this;
-    command('nugetpackagemanagergui.updatePackage', { ID: projectId, PackageName: packageName, SelectedVersion: selectedVersion }, function () {
-      that.loadProjectList();
+
+    command('nugetpackagemanagergui.updatePackage', { ID: projectId, PackageName: packageName, SelectedVersion: selectedVersion }, () => {
+      this.getData();
     });
   }
   updateAll(projectId: number, packageName: string) {
     const selectedVersion = this.getMx(projectId, packageName);
-    const that = this;
-    command('nugetpackagemanagergui.updateAllPackage', { ID: projectId, PackageName: packageName, SelectedVersion: selectedVersion }, function () {
-      that.loadProjectList();
+
+    command('nugetpackagemanagergui.updateAllPackage', { ID: projectId, PackageName: packageName, SelectedVersion: selectedVersion }, () => {
+      this.getData();
     });
   }
   remove(projectId: number, packageName: string) {
     const selectedVersion = this.getMx(projectId, packageName);
-    const that = this;
-    command('nugetpackagemanagergui.removePackage', { ID: projectId, PackageName: packageName, SelectedVersion: selectedVersion }, function () {
-      that.loadProjectList();
+
+    command('nugetpackagemanagergui.removePackage', { ID: projectId, PackageName: packageName, SelectedVersion: selectedVersion }, () => {
+      this.getData();
     });
   }
   removeAll(projectId: number, packageName: string) {
-    const that = this;
-    command('nugetpackagemanagergui.removeAllPackage', { ID: projectId, PackageName: packageName }, function () {
-      that.loadProjectList();
+
+    command('nugetpackagemanagergui.removeAllPackage', { ID: projectId, PackageName: packageName }, () => {
+      this.getData();
     });
   }
 
-  change(id: number, packageName: string, value: string) {
+  change(id: number, packageName: string, value: any) {
     this.mx[(id + '.' + packageName)] = value;
+    console.log("XX", this.mx);
   }
+
   getMx(projectId: number, packageName: string) {
     return this.mx[`${projectId}.${packageName}`];
   }

@@ -11,20 +11,44 @@
 </ul> -->
 
 
+<!-- <mat-tab-group [backgroundColor]="'primary'" [color]="'warn'" [selectedIndex]="0">
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Update / Remove Packages
+    </ng-template>
+    <ng-template matTabContent>
+      <app-project-list></app-project-list>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Install New Package
+    </ng-template>
+    <ng-template matTabContent>
+      <app-install-package></app-install-package>
+    </ng-template>
+  </mat-tab>
+
+
+</mat-tab-group> -->
+
+
 <mat-tab-group [backgroundColor]="'primary'" [color]="'warn'">
-  <mat-tab label="Update / Remove Packages" style="color: #fff;" style="">
+  <mat-tab label="Update / Remove Packages">
     <app-project-list></app-project-list>
   </mat-tab>
   <mat-tab label="Install New Package">
     <app-install-package></app-install-package>
   </mat-tab>
-
 </mat-tab-group>
 
 
-<div class="tab-content">
+
+<!-- <div class="tab-content">
   <router-outlet></router-outlet>
-</div>
+</div> -->
 
 
 

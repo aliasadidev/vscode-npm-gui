@@ -17,10 +17,10 @@ const config = {
         libraryTarget: 'commonjs2',
         devtoolModuleFilenameTemplate: '../[resource-path]'
     },
-    // cache: {
-    //     type: 'filesystem',
-    //     cacheDirectory: path.resolve(__dirname, '.temp_cache'),
-    // },
+    cache: {
+        type: 'filesystem',
+        cacheDirectory: path.resolve(__dirname, '.temp_cache'),
+    },
     devtool: 'source-map',
     externals: {
         vscode: 'commonjs vscode' // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/

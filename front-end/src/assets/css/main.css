@@ -1,43 +1,43 @@
 /* cyrillic-ext */
-@font-face {
+/* @font-face {
   font-family: "Ubuntu";
   font-style: normal;
   font-weight: 400;
   src: url(../fonts/ubuntu/4iCs6KVjbNBYlgoKcg72j00.woff2) format("woff2");
   unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-}
+} */
 /* cyrillic */
-@font-face {
+/* @font-face {
   font-family: "Ubuntu";
   font-style: normal;
   font-weight: 400;
   src: url(../fonts/ubuntu/4iCs6KVjbNBYlgoKew72j00.woff2) format("woff2");
   unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
+} */
 /* greek-ext */
-@font-face {
+/* @font-face {
   font-family: "Ubuntu";
   font-style: normal;
   font-weight: 400;
   src: url(../fonts/ubuntu/4iCs6KVjbNBYlgoKcw72j00.woff2) format("woff2");
   unicode-range: U+1F00-1FFF;
-}
+} */
 /* greek */
-@font-face {
+/* @font-face {
   font-family: "Ubuntu";
   font-style: normal;
   font-weight: 400;
   src: url(../fonts/ubuntu/4iCs6KVjbNBYlgoKfA72j00.woff2) format("woff2");
   unicode-range: U+0370-03FF;
-}
+} */
 /* latin-ext */
-@font-face {
+/* @font-face {
   font-family: "Ubuntu";
   font-style: normal;
   font-weight: 400;
   src: url(../fonts/ubuntu/4iCs6KVjbNBYlgoKcQ72j00.woff2) format("woff2");
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
+} */
 /* latin */
 @font-face {
   font-family: "Ubuntu";
@@ -200,29 +200,6 @@ tr {
 .versions-option {
   width: 79px;
   height: 25px;
-}
-
-#search-result .table td {
-  padding-bottom: 0px;
-}
-
-#installer-container .table th {
-  font-size: 13px !important;
-  font-weight: 500 !important;
-}
-
-#projectDropdown {
-  border-radius: unset;
-  /* background-color: #e1e1e1; */
-  /* border-color: #b1a7a7; */
-  color: rgba(248, 248, 8, 0.795);
-}
-
-.empty-table {
-  text-align: center;
-  vertical-align: middle;
-  font-size: 14px;
-  color: #5f5f5f;
 }
 
 select {

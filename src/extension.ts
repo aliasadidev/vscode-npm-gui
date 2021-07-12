@@ -40,10 +40,10 @@ export function activate(context: vscode.ExtensionContext) {
         return projectList;
     });
 
-    vscode.commands.registerCommand('nugetpackagemanagergui.searchPackage', async (data: { Query: string }) => {
+    vscode.commands.registerCommand('nugetpackagemanagergui.searchPackage', async (data: { Query: string, Skip: number, Take: number }) => {
         let searchResult: SearchPackageResult | undefined;
         try {
-            searchResult = await searchPackage(data.Query, configOptions);
+            searchResult = await searchPackage(data.Query, data.Skip, data.Take, configOptions);
         } catch (ex) {
             resetStatusBarMessage();
             showErrorMessage(ex);

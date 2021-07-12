@@ -35,6 +35,7 @@ const config = {
                 test: /\.ts$/,
                 exclude: /node_modules/,
 
+
                 use: [
                     {
                         loader: 'ts-loader'

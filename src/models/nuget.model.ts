@@ -35,7 +35,7 @@ export interface SearchPackageResultVersion {
 
 export interface SearchPackageResult {
     data: PackageMetadata[];
-    totalHits?: number
+    totalHits?: number;
 }
 /**
  * The package versions

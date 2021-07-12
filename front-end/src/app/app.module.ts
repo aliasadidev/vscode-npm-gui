@@ -14,6 +14,7 @@ import { ProjectListComponent } from './components/project-list/project-list.com
 import { InstallPackageComponent } from './components/install-package/install-package.component';
 import { FormsModule } from '@angular/forms';
 import { OnCreateDirective } from './directives/on-create.directive';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -30,8 +31,8 @@ import { OnCreateDirective } from './directives/on-create.directive';
     MatTabsModule,
     MatButtonModule,
     // MatSelectModule,
-    FormsModule
-
+    FormsModule,
+    NgxPaginationModule
   ],
   providers: [LoadingScreenService],
   bootstrap: [AppComponent]

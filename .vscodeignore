@@ -2,11 +2,17 @@
 .vscode-test/**
 out/**
 src/**
+build/**
 
 images/demo1.gif
 
 front-end/node_modules/**
 front-end/src/**
+front-end/karma.conf.js
+front-end/package-lock.json
+front-end/package.json
+front-end/README.md
+front-end/.browserslistrc
 front-end/*.json
 
 

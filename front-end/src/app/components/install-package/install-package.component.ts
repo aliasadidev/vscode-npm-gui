@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LoadingScreenService } from 'src/app/services/loading-screen/loading-screen.service';
 import { Project } from '../../../../../src/models/project.model';
 import { SearchPackageResult } from '../../../../../src/models/nuget.model';
@@ -8,18 +8,21 @@ declare var command: any;
   templateUrl: './install-package.component.html',
   styleUrls: ['./install-package.component.scss']
 })
-export class InstallPackageComponent implements OnInit {
+export class InstallPackageComponent implements OnInit, AfterViewInit {
   projects: Project[] = [];
   constructor(private loading: LoadingScreenService, private cd: ChangeDetectorRef) { }
+
   // Pagination parameters.
   pageNumber: number = 1;
   totalHits: number = 0;
   itemsPerPage: number = 10;
 
   ngOnInit(): void {
+
+  }
+  ngAfterViewInit(): void {
     this.getData();
   }
-
 
   getData() {
     this.loading.startLoading();

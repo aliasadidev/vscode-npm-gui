@@ -17,7 +17,8 @@ export class ProjectListComponent implements OnInit, AfterViewInit {
   projects: Project[] = [];
   constructor(private loading: LoadingScreenService, private cd: ChangeDetectorRef) { }
   ngAfterViewInit(): void {
-
+    this.loadPackageVersion(false);
+    this.colSpan = this.displayedColumns.length;
   }
 
   displayedColumns: string[] = [
@@ -32,8 +33,7 @@ export class ProjectListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-    this.loadPackageVersion(true)
-    this.colSpan = this.displayedColumns.length;
+
   }
 
 

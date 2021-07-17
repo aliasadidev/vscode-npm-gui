@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "experimentalDecorators": true,
         "module": "commonjs",
         "target": "es6",
         "outDir": "out",
@@ -17,6 +18,7 @@
     },
     "exclude": [
         "node_modules",
-        ".vscode-test"
-    ]
+        ".vscode-test",
+        "front-end"
+    ],
 }

@@ -16,7 +16,7 @@ import { install } from './services/install.service';
 
 export function activate(context: vscode.ExtensionContext) {
 
-    const vscexpress = new VSCExpress(context, 'view');
+    const vscexpress = new VSCExpress(context, 'front-end');
     const workspacePath = vscode.workspace.workspaceFolders;
     if (workspacePath === undefined) {
         showErrorMessage("Workdirectory is empty!");
@@ -40,10 +40,10 @@ export function activate(context: vscode.ExtensionContext) {
         return projectList;
     });
 
-    vscode.commands.registerCommand('nugetpackagemanagergui.searchPackage', async (data: { Query: string }) => {
+    vscode.commands.registerCommand('nugetpackagemanagergui.searchPackage', async (data: { Query: string, Skip: number, Take: number }) => {
         let searchResult: SearchPackageResult | undefined;
         try {
-            searchResult = await searchPackage(data.Query, configOptions);
+            searchResult = await searchPackage(data.Query, data.Skip, data.Take, configOptions);
         } catch (ex) {
             resetStatusBarMessage();
             showErrorMessage(ex);
@@ -104,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(vscode.commands.registerCommand('nugetpackagemanagergui.view', () =>
-        vscexpress.open('index.html', 'Nuget Package Manager GUI', vscode.ViewColumn.One))
+        vscexpress.open('dist/nuget-ui/index.html', 'Nuget Package Manager GUI', vscode.ViewColumn.One))
     );
     context.subscriptions.push(vscode.commands.registerCommand('nugetpackagemanagergui.close', () => vscexpress.close('index.html')));
 }

@@ -1,0 +1,187 @@
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/ubuntu/4iCs6KVjbNBYlgoKfw72.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+* {
+  font-family: "Ubuntu", sans-serif !important;
+  font-size: 13px !important;
+}
+
+#main-container {
+  max-width: 1350px !important;
+}
+
+body,
+html {
+  padding: 0;
+  margin: 0;
+  /* width: 99%; */
+}
+
+#project-container-tables,
+#project-container-tables table {
+  width: 100%;
+}
+
+#project-container-tables table,
+#project-container-tables th,
+#project-container-tables td {
+  border-collapse: collapse;
+  padding: 2px 3px;
+  text-align: center;
+}
+
+#project-container-tables table,
+#project-container-tables th,
+#installer-container table,
+#installer-container th {
+  border: solid 1px #00000073;
+}
+
+td {
+  border: solid 1px #ddd;
+}
+
+th {
+  background-color: rgba(197, 197, 197, 0.521);
+}
+
+table {
+  margin: 0 auto;
+  width: 90%;
+  margin-top: 20px;
+}
+.btn-box {
+  padding-right: 0 !important;
+}
+.btn-box > button {
+  float: right;
+  text-align: center;
+  font-size: 12px;
+}
+
+.tr-package:nth-child(even) {
+  background-color: #daecce77;
+}
+
+.tr-package:hover {
+  background-color: #727272c5;
+}
+
+select {
+  width: 100%;
+}
+
+#project-container,
+#installer-container {
+  padding-top: 20px;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  margin-bottom: 40px;
+}
+.container {
+  padding-top: 10px;
+  max-width: 98% !important;
+}
+
+.nav-tabs {
+  background-color: #5f5f5f;
+  color: #f1f1f1;
+}
+.nav-link {
+  color: #f1f1f1;
+}
+.nav-tabs .nav-link {
+  border: none !important;
+  border-top-left-radius: unset;
+  border-top-right-radius: unset;
+  font-size: 14.5px;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.nav-item a.active {
+  background-color: #4caf50 !important;
+  color: #ffffff !important;
+}
+.nav-item a {
+  font-size: 16px !important;
+}
+
+.nav-tabs {
+  border-color: #6e707375;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgb(95 95 95);
+}
+
+td,
+th {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.btn-sm {
+  font-size: 0.735rem !important;
+  line-height: 1.1 !important;
+}
+
+tr {
+  height: 20px !important;
+}
+
+#project-container-tables .badge {
+  font-size: 13px;
+  font-weight: 500;
+  width: 66.09px;
+}
+
+#project-container-tables {
+  /* display: block; */
+  /* overflow-x: auto; */
+  white-space: nowrap;
+}
+
+.btn-default-sm {
+  color: #000;
+  background-color: #e1e1e1;
+  border-color: #565454;
+}
+
+.versions-option {
+  width: 79px;
+  height: 25px;
+}
+
+select {
+  text-align: center;
+  text-align-last: center;
+  -moz-text-align-last: center;
+}
+
+.mat-tab-label-content {
+  font-size: 16px !important;
+}
+
+.mat-tab-label:hover .mat-tab-label:focus {
+  background: rgba(0, 0, 0, 0.4);
+  color: #f48fb1 !important;
+}
+
+.mat-tab-label {
+  opacity: 0.85 !important;
+}
+
+.btn-default-sm {
+  color: #000 !important;
+  background-color: #e1e1e1 !important;
+  border-color: #565454 !important;
+}

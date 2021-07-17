@@ -1,0 +1,22 @@
+// .mat-form-field-infix {
+//   width: auto !important;
+// }
+::ng-deep .mat-form-field-type-mat-select {
+  width: 80% !important;
+}
+
+::ng-deep .mat-select-value,
+::ng-deep .mat-option-text {
+  text-align: center !important;
+}
+
+::ng-deep .mat-form-field-infix {
+  width: auto !important;
+  padding-top: 0px !important;
+  border-top: 0px !important;
+  // margin-top: 4px !important;
+}
+
+::ng-deep .mat-form-field-type-mat-select {
+  max-height: 22px !important;
+}

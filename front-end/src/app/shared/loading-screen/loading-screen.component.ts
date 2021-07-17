@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LoadingScreenService } from 'src/app/services/loading-screen/loading-screen.service';
 
@@ -7,7 +7,7 @@ import { LoadingScreenService } from 'src/app/services/loading-screen/loading-sc
   templateUrl: './loading-screen.component.html',
   styleUrls: ['./loading-screen.component.scss']
 })
-export class LoadingScreenComponent implements OnInit {
+export class LoadingScreenComponent implements OnDestroy {
   counter: number = 0;
   loadingSubscription: Subscription;
 
@@ -18,11 +18,7 @@ export class LoadingScreenComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
-
   ngOnDestroy(): void {
     this.loadingSubscription.unsubscribe();
   }
-
-
 }

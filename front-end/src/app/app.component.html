@@ -1,41 +1,4 @@
-<!-- <ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a data-target="#project-container" href="#" title="Update / Remove Packages" class="nav-link" id="project-container-tab" data-toggle="tab">Update / Remove Packages</a>
-  </li>
-  <li class="nav-item">
-    <a data-target="#installer-container" href="#" title="Install New Package" class="nav-link" id="installer-container-tab" data-toggle="tab">Install New Package</a>
-  </li>
-  <li class="nav-item">
-    <a onclick="closeTab()" class="nav-link" href="#" title="Close">Close</a>
-  </li>
-</ul> -->
-
-
-<!-- <mat-tab-group [backgroundColor]="'primary'" [color]="'warn'" [selectedIndex]="0">
-
-  <mat-tab>
-    <ng-template mat-tab-label>
-      Update / Remove Packages
-    </ng-template>
-    <ng-template matTabContent>
-      <app-project-list></app-project-list>
-    </ng-template>
-  </mat-tab>
-
-  <mat-tab>
-    <ng-template mat-tab-label>
-      Install New Package
-    </ng-template>
-    <ng-template matTabContent>
-      <app-install-package></app-install-package>
-    </ng-template>
-  </mat-tab>
-
-
-</mat-tab-group> -->
-
-
-<mat-tab-group [backgroundColor]="'primary'" [color]="'warn'">
+<mat-tab-group [backgroundColor]="'primary'" [color]="'warn'" [selectedIndex]='0'>
   <mat-tab label="Update / Remove Packages">
     <app-project-list></app-project-list>
   </mat-tab>
@@ -43,14 +6,5 @@
     <app-install-package></app-install-package>
   </mat-tab>
 </mat-tab-group>
-
-
-
-<!-- <div class="tab-content">
-  <router-outlet></router-outlet>
-</div> -->
-
-
-
 
 <app-loading-screen></app-loading-screen>

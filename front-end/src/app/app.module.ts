@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
+import { NgxPaginationModule } from 'ngx-pagination';
 
+import { AppComponent } from './app.component';
 import { LoadingScreenComponent } from './shared/loading-screen/loading-screen.component';
 import { LoadingScreenService } from './services/loading-screen/loading-screen.service';
 import { ProjectListComponent } from './components/project-list/project-list.component';
 import { InstallPackageComponent } from './components/install-package/install-package.component';
-import { FormsModule } from '@angular/forms';
 import { OnCreateDirective } from './directives/on-create.directive';
-import { NgxPaginationModule } from 'ngx-pagination';
+import { DropDownComponent } from './shared/drop-down/drop-down.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +23,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     ProjectListComponent,
     InstallPackageComponent,
     OnCreateDirective,
+    DropDownComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +31,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatProgressBarModule,
     MatTabsModule,
     MatButtonModule,
-    // MatSelectModule,
+    ReactiveFormsModule,
     FormsModule,
     NgxPaginationModule
   ],

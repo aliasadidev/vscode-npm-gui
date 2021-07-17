@@ -1,0 +1,11 @@
+<div class="select">
+  <select id="mounth" class="select-hidden">
+    <option value="hide" *ngIf="label">{{label}}</option>
+    <option [value]="option.Key" *ngFor="let option of dataSource">{{option.Value}}</option>
+  </select>
+  this.isStyledSelect = !this.isStyledSelect;
+  <div class="select-styled" (click)='onStyledSelect()' [ngClass]="isStyledSelect?'active':''">{{label}}</div>
+  <ul class="select-options" [ngClass]="isStyledSelect?'active':''" [hidden]="!isStyledSelect">
+    <li *ngFor="let option of dataSource" (click)="onListItem(option.Key)">{{option.Value}}</li>
+  </ul>
+</div>

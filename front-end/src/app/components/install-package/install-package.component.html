@@ -1,23 +1,21 @@
 <div style="margin-top: 10px;">
   <div class="col-md-12 row-item">
     <div class="input-group">
+
       <input id="search-input" [(ngModel)]="searchValue" type="text" class="form-control" placeholder="Search for..." aria-describedby="search-box-group">
+
       <div class="input-group-append" id="search-box-group">
+
         <button class="btn btn-primary" type="button" (click)="onSearch()">Search</button>
+
         <div class="input-group-btn">
-          <div class="dropdown">
-            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="projectDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="#">
-              <span class="item-select">Select a project(*)</span>
-            </a>
-            <div id="project-list" class="dropdown-menu" aria-labelledby="projectDropdown">
-              <a *ngFor="let project of projects" class="dropdown-item" href="#" onclick="$('.item-select').text(this.innerHTML)
-                                      .attr('project-id','1')
-                                      .removeClass('text-danger');
-                  ">{{project.projectName}}</a>
-            </div>
-          </div>
+          <form [formGroup]='installForm'>
+            <app-drop-down formControlName="ProjectIndex" [dataSource]="projectList"> </app-drop-down>
+          </form>
         </div>
+
       </div>
+
     </div>
   </div>
   <div class="col-md-12 row-item table-box">
@@ -41,12 +39,7 @@
           <td>
             <img [src]="package.iconUrl || 'assets/images/default-package-icon.svg'" width="42px" height="42" style="margin-right: 10px;"
               onerror="this.src='assets/images/default-package-icon.svg'; this.onerror = null;">
-            <strong>{{package.id }} <a [attr.href]="'https://www.nuget.org/packages/'+package.id">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-up-right" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M6.364 13.5a.5.5 0 0 0 .5.5H13.5a1.5 1.5 0 0 0 1.5-1.5v-10A1.5 1.5 0 0 0 13.5 1h-10A1.5 1.5 0 0 0 2 2.5v6.636a.5.5 0 1 0 1 0V2.5a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-.5.5H6.864a.5.5 0 0 0-.5.5z" />
-                  <path fill-rule="evenodd" d="M11 5.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793l-8.147 8.146a.5.5 0 0 0 .708.708L10 6.707V10.5a.5.5 0 0 0 1 0v-5z" />
-                </svg>
-              </a></strong>
+
             <strong style="float: right;">Total Downloads: {{ package.totalDownloads | number: '0.'}}</strong>
             <p>
               {{package.description}}
@@ -58,7 +51,8 @@
             </p>
           </td>
           <td class="text-center">
-            <select>
+            <select #t (change)='change(package.id,t.value)'
+              (onCreate)="change(package.id,package.version)">
               <option *ngFor="let version of package.versions" [attr.value]="version.version">{{version.version}}</option>
             </select>
             <button style="margin-top: 5px;" type="button" onclick="install('')" class="btn btn-default-sm btn-sm">Install</button>
@@ -67,9 +61,10 @@
 
       </tbody>
     </table>
-    <!--Including the pagination control.-->
+
     <div class="text-right">
       <pagination-controls id='ltd' (pageChange)="pageNumber = $event" (pageChange)="pageChanged($event)"></pagination-controls>
     </div>
+
   </div>
 </div>

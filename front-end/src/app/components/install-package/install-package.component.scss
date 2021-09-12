@@ -23,3 +23,16 @@
 #search-input {
   height: auto;
 }
+
+.center-v-h {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.detail-eclips {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* after 2 line show ... */
+  -webkit-box-orient: vertical;
+}

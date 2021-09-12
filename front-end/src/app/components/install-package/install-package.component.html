@@ -23,8 +23,8 @@
       <thead>
         <tr>
           <th style="width: 5px;" class="text-center">#</th>
-          <th style="width: 90%;" class="text-center">Package Details</th>
-          <th style="width: 50px;" class="text-center">Action</th>
+          <th style="width: 85%;" class="text-center">Package Details</th>
+          <th style="width: 70px;" class="text-center">Action</th>
         </tr>
       </thead>
       <tbody id="search-result">
@@ -35,13 +35,13 @@
           totalItems:totalHits
 
           };let i= index;">
-          <td style="vertical-align: middle;">{{i + 1 + ((pageNumber-1) * itemsPerPage)}}</td>
+          <td class="center-v-h">{{i + 1 + ((pageNumber-1) * itemsPerPage)}}</td>
           <td>
             <img [src]="package.iconUrl || 'assets/images/default-package-icon.svg'" width="42px" height="42" style="margin-right: 10px;"
               onerror="this.src='assets/images/default-package-icon.svg'; this.onerror = null;">
 
             <strong style="float: right;">Total Downloads: {{ package.totalDownloads | number: '0.'}}</strong>
-            <p>
+            <p class="detail-eclips">
               {{package.description}}
             </p>
             <p>
@@ -50,12 +50,12 @@
               <span *ngIf="package.tags && package.tags.length>0">|&nbsp;&nbsp;Tags: {{package.tags.join(', ')}}&nbsp;&nbsp;</span>
             </p>
           </td>
-          <td class="text-center">
+          <td class="center-v-h">
             <select #t (change)='change(package.id,t.value)'
               (onCreate)="change(package.id,package.version)">
-              <option *ngFor="let version of package.versions" [attr.value]="version.version">{{version.version}}</option>
+              <option *ngFor="let version of package.versions;let i= index" [attr.value]="version.version" [attr.selected]="i+1==package.versions.length?'selected':''">{{version.version}}</option>
             </select>
-            <button style="margin-top: 5px;" type="button" onclick="install('')" class="btn btn-default-sm btn-sm">Install</button>
+            <button style="margin-top: 5px;" type="button" (click)="install(package.id)" class="btn btn-default-sm btn-sm">Install</button>
           </td>
         </tr>
 

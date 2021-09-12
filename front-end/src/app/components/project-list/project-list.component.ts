@@ -1,11 +1,9 @@
 import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
 
 import { CommandResult } from 'src/app/models/command-result';
+import { CommandService } from 'src/app/services/command-service/command.service';
 import { LoadingScreenService } from 'src/app/services/loading-screen/loading-screen.service';
 import { PackageDetail, Project } from '../../../../../src/models/project.model'
-
-
-declare var command: any;
 
 
 @Component({
@@ -27,7 +25,16 @@ export class ProjectListComponent implements AfterViewInit {
   ];
   colSpan: number = 0;
 
-  constructor(private loading: LoadingScreenService, private cd: ChangeDetectorRef) { }
+  constructor(
+    private loading: LoadingScreenService,
+    private commandSrv: CommandService,
+    private cd: ChangeDetectorRef) {
+    this.commandSrv.changeProjects.subscribe(res => {
+      if (res === "getData")
+        this.getData();
+    })
+
+  }
 
   ngAfterViewInit(): void {
     this.loadPackageVersion(false);
@@ -36,22 +43,44 @@ export class ProjectListComponent implements AfterViewInit {
 
   getData() {
     this.loading.startLoading();
-    command('nugetpackagemanagergui.getdata', (res: CommandResult<Project[]>) => {
+    this.commandSrv.getdata().subscribe((res) => {
+
       this.projects = res.result;
       this.loading.stopLoading();
 
       this.cd.detectChanges();
     });
   }
-
+  versionIsLoad: boolean = false;
   loadPackageVersion(loadVersion: boolean) {
+    this.versionIsLoad = this.versionIsLoad || loadVersion;
+
     this.loading.startLoading();
-    command('nugetpackagemanagergui.reload', { LoadVersion: loadVersion }, (res: CommandResult<Project[]>) => {
+    this.commandSrv.reload(loadVersion).subscribe(res => {
       this.projects = res.result;
 
       this.loading.stopLoading();
       this.cd.detectChanges();
     });
+  }
+
+  updateAllProjects() {
+    this.loading.startLoading();
+    if (this.versionIsLoad == false) {
+      this.commandSrv.reload(true).subscribe(() => {
+        this.versionIsLoad = true;
+        this.commandSrv.updateAllProjects().subscribe(() => {
+          this.loading.stopLoading();
+          this.getData();
+        });
+      });
+    } else {
+      this.commandSrv.updateAllProjects().subscribe(res => {
+        this.loading.stopLoading();
+        this.getData();
+      });
+    }
+
   }
 
   getVersion(pkg: PackageDetail) {
@@ -70,7 +99,7 @@ export class ProjectListComponent implements AfterViewInit {
   update(projectId: number, packageName: string) {
     const selectedVersion = this.getSelectedVersion(projectId, packageName);
 
-    command('nugetpackagemanagergui.updatePackage', { ID: projectId, PackageName: packageName, SelectedVersion: selectedVersion }, () => {
+    this.commandSrv.updatePackage(projectId, packageName, selectedVersion).subscribe(res => {
       this.getData();
     });
   }
@@ -78,7 +107,7 @@ export class ProjectListComponent implements AfterViewInit {
   updateAll(projectId: number, packageName: string) {
     const selectedVersion = this.getSelectedVersion(projectId, packageName);
 
-    command('nugetpackagemanagergui.updateAllPackage', { ID: projectId, PackageName: packageName, SelectedVersion: selectedVersion }, () => {
+    this.commandSrv.updateAllPackage(projectId, packageName, selectedVersion).subscribe(res => {
       this.getData();
     });
   }
@@ -86,14 +115,14 @@ export class ProjectListComponent implements AfterViewInit {
   remove(projectId: number, packageName: string) {
     const selectedVersion = this.getSelectedVersion(projectId, packageName);
 
-    command('nugetpackagemanagergui.removePackage', { ID: projectId, PackageName: packageName, SelectedVersion: selectedVersion }, () => {
+    this.commandSrv.removePackage(projectId, packageName, selectedVersion).subscribe(res => {
       this.getData();
     });
   }
 
   removeAll(projectId: number, packageName: string) {
 
-    command('nugetpackagemanagergui.removeAllPackage', { ID: projectId, PackageName: packageName }, () => {
+    this.commandSrv.removeAllPackage(projectId, packageName).subscribe(res => {
       this.getData();
     });
   }

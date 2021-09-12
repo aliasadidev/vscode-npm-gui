@@ -7,6 +7,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { LoadingScreenComponent } from './shared/loading-screen/loading-screen.component';
@@ -16,6 +17,7 @@ import { InstallPackageComponent } from './components/install-package/install-pa
 import { OnCreateDirective } from './directives/on-create.directive';
 import { DropDownComponent } from './shared/drop-down/drop-down.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +25,7 @@ import { DropDownComponent } from './shared/drop-down/drop-down.component';
     ProjectListComponent,
     InstallPackageComponent,
     OnCreateDirective,
-    DropDownComponent,
+    DropDownComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,17 @@ import { DropDownComponent } from './shared/drop-down/drop-down.component';
     MatButtonModule,
     ReactiveFormsModule,
     FormsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-left',
+      preventDuplicates: false,
+      progressBar: true,
+      newestOnTop: true,
+      closeButton: false,
+      enableHtml: true,
+      maxOpened: 3,
+      timeOut: 5000
+    }),
   ],
   providers: [LoadingScreenService],
   bootstrap: [AppComponent]

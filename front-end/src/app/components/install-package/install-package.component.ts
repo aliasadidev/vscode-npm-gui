@@ -2,12 +2,11 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/co
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { LoadingScreenService } from 'src/app/services/loading-screen/loading-screen.service';
-import { Project } from '../../../../../src/models/project.model';
 import { SearchPackageResult } from '../../../../../src/models/nuget.model';
 import { DropDownKeyValue } from 'src/app/models/drop-down-key-value';
-import { CommandResult } from 'src/app/models/command-result';
+import { CommandService } from 'src/app/services/command-service/command.service';
+import { AlertService } from 'src/app/services/alert-service/alert.service';
 
-declare var command: any;
 
 @Component({
   selector: 'app-install-package',
@@ -16,7 +15,14 @@ declare var command: any;
 })
 export class InstallPackageComponent implements AfterViewInit {
 
-  constructor(private loading: LoadingScreenService, private cd: ChangeDetectorRef) { }
+  constructor(
+    private loading: LoadingScreenService,
+    private cd: ChangeDetectorRef,
+    private commandSrv: CommandService,
+    private alert: AlertService) {
+
+
+  }
 
   installForm: FormGroup = new FormGroup({
     ProjectIndex: new FormControl('', [])
@@ -28,11 +34,12 @@ export class InstallPackageComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.getData();
+
   }
 
   getData() {
     this.loading.startLoading();
-    command('nugetpackagemanagergui.reload', { LoadVersion: false }, (res: CommandResult<Project[]>) => {
+    this.commandSrv.reload().subscribe(res => {
 
       this.projectList = res.result.map(proj => ({
         Key: proj.id.toString(),
@@ -50,13 +57,9 @@ export class InstallPackageComponent implements AfterViewInit {
     const skip = (this.pageNumber - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
 
-    command('nugetpackagemanagergui.searchPackage', {
-      Query: this.searchValue.trim(),
-      Skip: skip,
-      Take: take
-    }, (response: CommandResult<SearchPackageResult>) => {
+    this.commandSrv.searchPackage(this.searchValue.trim(), skip, take).subscribe(res => {
       this.loading.stopLoading();
-      this.packages = response.result;
+      this.packages = res.result;
       this.totalHits = this.packages.totalHits!;
       if (this.searchValue.trim() == "") {
         this.totalHits = this.packages.totalHits = 20000;
@@ -84,13 +87,17 @@ export class InstallPackageComponent implements AfterViewInit {
   }
 
   install(packageName: string) {
+    this.loading.startLoading();
     const selectedVersion = this.packageListVersion[packageName];
     const projectID = this.installForm.controls["ProjectIndex"].value;
     if (projectID) {
-      command('nugetpackagemanagergui.installPackage', { ID: parseInt(projectID), PackageName: packageName, SelectedVersion: selectedVersion }, function () {
+      this.commandSrv.installPackage(parseInt(projectID), packageName, selectedVersion).subscribe(res => {
+        this.commandSrv.syncViews("getData");
+        this.loading.stopLoading();
       });
     } else {
-      command('nugetpackagemanagergui.showMessage', { Message: "The target project isn't selected, select your target project from the drop-down beside the 'search' button.", Type: "error" }, function () { })
+      this.loading.stopLoading();
+      this.alert.error(`The target project isn't selected, select your target project from the drop-down beside the 'search' button.`);
     }
   }
 

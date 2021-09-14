@@ -1,6 +1,6 @@
-# Nuget Package Manager GUI For VSCode
+# NuGet Package Manager GUI For VSCode
 
-#### An extension for Visual Studio Code that lets you easily __`update/remove/install`__ packages from Nuget server for __`.NET Core/.Net 5`__ projects
+#### An extension for Visual Studio Code that lets you easily __`update/remove/install`__ packages from NuGet server for __`.NET Core/.Net 5`__ projects
 
 ## Features
 
@@ -8,15 +8,15 @@
 - Handles workspaces with multiple `.csproj` or `.fsproj` files
 - Update all packages with one click
 - Remove a package from the projects
-- Search and install new packages from Nuget Server
-- Support several nuget servers
+- Search and install new packages from NuGet Server
+- Support several NuGet servers
 - Compatible with Linux and Windows
 
 
 ### How it works
 1. Open your project workspace in VSCode
 2. Open the Command Palette (Ctrl+Shift+P) 
-3. Select **`> Nuget Package Manager GUI`**
+3. Select **`> NuGet Package Manager GUI`**
 
 
 
@@ -31,14 +31,14 @@
 //The maximum duration for completing a request from this extension
 "nugetpackagemanagergui.nuget.requestTimeout": 9000,
 
-//The Nuget endpoint addresses for getting package versions
+//The NuGet endpoint addresses for getting package versions
 //* The first address in the list has highest priority
 //* The {{packageName}} property injecting by extension
 "nugetpackagemanagergui.nuget.packageVersionsUrls": [
     "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
 ],
 
-//The Nuget endpoint addresses for searching packages
+//The NuGet endpoint addresses for searching packages
 //* The first address in the list has highest priority
 "nugetpackagemanagergui.nuget.searchPackage.urls": [
     "https://azuresearch-usnc.nuget.org/query"
@@ -85,7 +85,7 @@
 
 ## Version 1.1.2 - Dec 25, 2020
 #### Changed
-* Improve the speed of loading package versions from Nuget server(**`4x faster than the older versions`**)
+* Improve the speed of loading package versions from NuGet server(**`4x faster than the older versions`**)
 
 ### Added
 * Some variables overridable in `settings.json`

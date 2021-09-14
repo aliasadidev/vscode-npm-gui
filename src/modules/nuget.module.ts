@@ -45,7 +45,7 @@ async function getPackageVersions(packageName: string, packageVersionsUrls: stri
                     try {
                         jsonResponse = JSON.parse(rawResult);
                     } catch (ex) {
-                        console.log(`[Nuget Package Manager GUI => ERROR!!!]\n[Request to url:${url}]\n[timeout:${requestOption.timeout}]\n[proxy is active:${!!requestOption.agent}]\n[result:${rawResult}]\n`);
+                        console.log(`[NuGet Package Manager GUI => ERROR!!!]\n[Request to url:${url}]\n[timeout:${requestOption.timeout}]\n[proxy is active:${!!requestOption.agent}]\n[result:${rawResult}]\n`);
                         throw ex;
                     }
 
@@ -138,7 +138,7 @@ export async function searchPackage(query: string, searchPackageUrls: string[], 
                     try {
                         jsonResponse = JSON.parse(rawResult);
                     } catch (ex) {
-                        console.log(`[Nuget Package Manager GUI => ERROR!!!]\n[Request to url:${url}]\n[timeout:${requestOption.timeout}]\n[proxy is active:${!!requestOption.agent}]\n[result:${rawResult}]\n`);
+                        console.log(`[NuGet Package Manager GUI => ERROR!!!]\n[Request to url:${url}]\n[timeout:${requestOption.timeout}]\n[proxy is active:${!!requestOption.agent}]\n[result:${rawResult}]\n`);
                         throw ex;
                     }
 

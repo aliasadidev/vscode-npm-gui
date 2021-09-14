@@ -104,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(vscode.commands.registerCommand('nugetpackagemanagergui.view', () =>
-        vscexpress.open('index.html', 'Nuget Package Manager GUI', vscode.ViewColumn.One))
+        vscexpress.open('index.html', 'NuGet Package Manager GUI', vscode.ViewColumn.One))
     );
     context.subscriptions.push(vscode.commands.registerCommand('nugetpackagemanagergui.close', () => vscexpress.close('index.html')));
 }

@@ -1,7 +1,7 @@
 {
     "name": "nugetpackagemanagergui",
-    "displayName": "Nuget Package Manager GUI",
-    "description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from Nuget server for .NET Core 1.1+/.Net5+ projects",
+    "displayName": "NuGet Package Manager GUI",
+    "description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from NuGet server for .NET Core 1.1+/.Net5+ projects",
     "author": "Ali Asadi (ali.asadi.dev@gmail.com)",
     "publisher": "aliasadidev",
     "version": "1.1.6",
@@ -40,12 +40,12 @@
         "commands": [
             {
                 "command": "nugetpackagemanagergui.view",
-                "title": "Nuget Package Manager GUI"
+                "title": "NuGet Package Manager GUI"
             }
         ],
         "configuration": {
             "type": "object",
-            "title": "Nuget Package Manager GUI configuration",
+            "title": "NuGet Package Manager GUI configuration",
             "properties": {
                 "nugetpackagemanagergui.nuget.requestTimeout": {
                     "type": "number",
@@ -60,7 +60,7 @@
                     "default": [
                         "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
                     ],
-                    "description": "The Nuget endpoint addresses for getting package versions (The first address in the list has highest priority)\n The {{packageName}} property inject by extension"
+                    "description": "The NuGet endpoint addresses for getting package versions (The first address in the list has highest priority)\n The {{packageName}} property inject by extension"
                 },
                 "nugetpackagemanagergui.nuget.searchPackage.urls": {
                     "type": [
@@ -70,7 +70,7 @@
                     "default": [
                         "https://azuresearch-usnc.nuget.org/query"
                     ],
-                    "description": "The Nuget endpoint addresses for searching packages (The first address in the list has highest priority)"
+                    "description": "The NuGet endpoint addresses for searching packages (The first address in the list has highest priority)"
                 },
                 "nugetpackagemanagergui.nuget.searchPackage.preRelease": {
                     "type": "boolean",

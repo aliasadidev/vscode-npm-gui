@@ -24,13 +24,13 @@
 
 ## Version 1.1.2 - Dec 25, 2020
 #### Changed
-* Improve the speed of loading package versions from Nuget server(**`4x faster than the older versions`**)
+* Improve the speed of loading package versions from NuGet server(**`4x faster than the older versions`**)
 ### Added
 * Some variables overridable in `settings.json`
 
 ## Version 1.1.1 - Dec 12, 2020
 #### Changed
-* Update `Command Title` from ~~`Nuget Package Manager GUI: Update Packages`~~ to **`Nuget Package Manager GUI`**
+* Update `Command Title` from ~~`NuGet Package Manager GUI: Update Packages`~~ to **`NuGet Package Manager GUI`**
 * Update `Changelog` file
 
 ## Version 1.1.0 - Dec 11, 2020
@@ -55,7 +55,7 @@
 
 ## Version 1.0.0 -  Dec 10, 2020
 #### Added
-* Add `search form` feature for install the new packages from Nuget server
+* Add `search form` feature for install the new packages from NuGet server
 * Add `remove` & `remove all` functionality to the project table
 #### Changed
 * Change ui completely

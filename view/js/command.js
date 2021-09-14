@@ -128,7 +128,7 @@ function createProjectTable(projects) {
 }
 
 function reload(loadVersion, callback) {
-    const msg = loadVersion ? "Loading package versions from Nuget server..." : "Loading projects...";
+    const msg = loadVersion ? "Loading package versions from NuGet server..." : "Loading projects...";
     loading("show", msg);
     $("#project-container-tables").html("");
 

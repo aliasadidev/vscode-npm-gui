@@ -9,7 +9,7 @@ export interface ExtensionConfiguration {
     /**
      * `https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json`
      * 
-     * The Nuget endpoint addresses for getting package versions
+     * The NuGet endpoint addresses for getting package versions
      * 
      * The first address in the list has highest priority
      * 
@@ -19,7 +19,7 @@ export interface ExtensionConfiguration {
     /**
      * `https://azuresearch-usnc.nuget.org/query`
      * 
-     * The Nuget endpoint addresses for searching packages
+     * The NuGet endpoint addresses for searching packages
      * 
      * The first address in the list has highest priority
      */

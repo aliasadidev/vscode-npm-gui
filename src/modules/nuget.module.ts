@@ -35,7 +35,8 @@ async function getPackageVersions(packageName: string, packageVersionsUrls: stri
     let hasError;
     for (let index = 0; index < packageVersionsUrls.length; index++) {
         try {
-            let url = packageVersionsUrls[index].replace("{{packageName}}", packageName);
+            //https://docs.microsoft.com/en-us/nuget/api/package-base-address-resource
+            let url = packageVersionsUrls[index].replace("{{packageName}}", packageName.toLowerCase());
             result = undefined;
             result = await fetch(url, requestOption)
                 .then(async response => {

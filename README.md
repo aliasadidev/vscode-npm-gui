@@ -22,7 +22,7 @@
 
 
 
-![Update a Package](https://raw.githubusercontent.com/aliasadidev/vscode-npm-gui/main/images/demo1.gif?v3)
+![Update a Package](https://raw.githubusercontent.com/aliasadidev/vscode-npm-gui/main/images/demo2-v1.1.7.gif)
 
 
 

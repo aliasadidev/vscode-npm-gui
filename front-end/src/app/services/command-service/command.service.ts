@@ -85,7 +85,7 @@ export class CommandService {
   updateAllPackage(projectId: number, packageName: string, selectedVersion: string): Observable<CommandResult<any>> {
 
     var obs = new Observable<CommandResult<any>>((sub) => {
-      command('nugetpackagemanagergui.updatePackage',
+      command('nugetpackagemanagergui.updateAllPackage',
         {
           ID: projectId,
           PackageName: packageName,

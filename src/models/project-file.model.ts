@@ -20,19 +20,6 @@ export interface Element {
     elements: Element[];
 }
 
-/**
- * The attribute of an element
- */
-export interface Attribute {
-    /**
-    * The `include` attribute 
-    */
-    Include: string;
-    /**
-    * The `version` attribute 
-    */
-    Version: string;
-}
 
 /**
  * The item group element

@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
 
 import { CommandResult } from 'src/app/models/command-result';
+import { FilterSearchTypes } from 'src/app/models/filter-search-type';
 import { CommandService } from 'src/app/services/command-service/command.service';
 import { LoadingScreenService } from 'src/app/services/loading-screen/loading-screen.service';
 import { PackageDetail, Project } from '../../../../../src/models/project.model'
@@ -33,11 +34,136 @@ export class ProjectListComponent implements AfterViewInit {
       if (res === "getData")
         this.getData();
     })
-
   }
 
   ngAfterViewInit(): void {
     this.loadPackageVersion(false);
+    // this.projects = [
+    //   {
+    //     "id": 1,
+    //     "projectName": "six.core.csproj",
+    //     "projectPath": "/home/ali/Documents/six.core/six.core.csproj",
+    //     "packages": [
+    //       {
+    //         "packageName": "Serilog",
+    //         "packageVersion": "2.10.0",
+    //         "versionList": [
+    //           "2.11.0",
+    //           "2.10.0"
+    //         ],
+    //         "isUpdated": true,
+    //         "newerVersion": "2.10.0"
+    //       },
+    //       {
+    //         "packageName": "Serilog.AspNetCore",
+    //         "packageVersion": "4.1.0",
+    //         "versionList": [
+    //           "4.1.0"
+    //         ],
+    //         "isUpdated": false,
+    //         "newerVersion": "Unknown"
+    //       },
+    //       {
+    //         "packageName": "Swashbuckle.AspNetCore",
+    //         "packageVersion": "6.1.1",
+    //         "versionList": [
+    //           "6.1.1"
+    //         ],
+    //         "isUpdated": false,
+    //         "newerVersion": "Unknown"
+    //       },
+    //       {
+    //         "packageName": "Microsoft.EntityFrameworkCore",
+    //         "packageVersion": "5.0.8",
+    //         "versionList": [
+    //           "5.0.8"
+    //         ],
+    //         "isUpdated": false,
+    //         "newerVersion": "Unknown"
+    //       },
+    //       {
+    //         "packageName": "Microsoft.EntityFrameworkCore.SqlServer",
+    //         "packageVersion": "5.0.8",
+    //         "versionList": [
+    //           "5.0.8"
+    //         ],
+    //         "isUpdated": false,
+    //         "newerVersion": "Unknown"
+    //       },
+    //       {
+    //         "packageName": "Microsoft.EntityFrameworkCore.Design",
+    //         "packageVersion": "5.0.8",
+    //         "versionList": [
+    //           "5.0.8"
+    //         ],
+    //         "isUpdated": false,
+    //         "newerVersion": "Unknown"
+    //       }
+    //     ]
+    //   },
+    //   {
+    //     "id": 2,
+    //     "projectName": "six.core.csproj",
+    //     "projectPath": "/home/ali/Documents/six.core/six.core.csproj",
+    //     "packages": [
+    //       {
+    //         "packageName": "Serilog",
+    //         "packageVersion": "2.10.0",
+    //         "versionList": [
+    //           "2.11.0",
+    //           "2.10.0"
+    //         ],
+    //         "isUpdated": true,
+    //         "newerVersion": "2.10.0"
+    //       },
+    //       {
+    //         "packageName": "Serilog.AspNetCore",
+    //         "packageVersion": "4.1.0",
+    //         "versionList": [
+    //           "4.1.0"
+    //         ],
+    //         "isUpdated": false,
+    //         "newerVersion": "4.1.0"
+    //       },
+    //       {
+    //         "packageName": "Swashbuckle.AspNetCore",
+    //         "packageVersion": "6.1.1",
+    //         "versionList": [
+    //           "6.1.1"
+    //         ],
+    //         "isUpdated": false,
+    //         "newerVersion": "Unknown"
+    //       },
+    //       {
+    //         "packageName": "Microsoft.EntityFrameworkCore",
+    //         "packageVersion": "5.0.8",
+    //         "versionList": [
+    //           "5.0.8"
+    //         ],
+    //         "isUpdated": false,
+    //         "newerVersion": "Unknown"
+    //       },
+    //       {
+    //         "packageName": "Microsoft.EntityFrameworkCore.SqlServer",
+    //         "packageVersion": "5.0.8",
+    //         "versionList": [
+    //           "5.0.8"
+    //         ],
+    //         "isUpdated": false,
+    //         "newerVersion": "Unknown"
+    //       },
+    //       {
+    //         "packageName": "Microsoft.EntityFrameworkCore.Design",
+    //         "packageVersion": "5.0.8",
+    //         "versionList": [
+    //           "5.0.8"
+    //         ],
+    //         "isUpdated": false,
+    //         "newerVersion": "Unknown"
+    //       }
+    //     ]
+    //   }
+    // ]
     this.colSpan = this.displayedColumns.length;
   }
 
@@ -134,5 +260,27 @@ export class ProjectListComponent implements AfterViewInit {
   getSelectedVersion(projectId: number, packageName: string) {
     return this.packageListVersion[`${projectId}.${packageName}`];
   }
+
+  // ---------------- start search box ------------------------------
+  searchValue: string = '';
+  filterSearchTypes = FilterSearchTypes;
+  filterType = FilterSearchTypes.Contains;
+  seatchFilter(packageName: string) {
+    let result: boolean = true;
+    if (this.searchValue) {
+      if (this.filterType == FilterSearchTypes.StartsWith)
+        result = packageName.toLocaleLowerCase().startsWith(this.searchValue.toLocaleLowerCase());
+      else
+        result = packageName.toLocaleLowerCase().includes(this.searchValue.toLocaleLowerCase());
+    }
+    return result;
+  }
+
+  onSwitchFilterType() {
+    if (this.searchValue)
+      this.cd.detectChanges();
+  }
+
+  // ---------------- end search box ------------------------------
 
 }

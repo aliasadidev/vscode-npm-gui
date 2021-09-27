@@ -1,5 +1,5 @@
 import { PackageDetail } from '../models/nuget.model';
-import { Attribute, Element, ItemGroup } from '../models/project-file.model';
+import { Element, ItemGroup } from '../models/project-file.model';
 const convert = require('xml-js');
 
 export function getPackages(xml: string): PackageDetail[] {
@@ -10,10 +10,10 @@ export function getPackages(xml: string): PackageDetail[] {
         let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
         let pacakges: Element[] = getPackageReferences(selectedItemGroup);
         packageList = pacakges.map(e => {
-            let attr = (<Attribute>e.attributes);
+            let attr = e.attributes;
             let result: PackageDetail = {
-                packageName: attr.Include,
-                packageVersion: attr.Version
+                packageName: attr["Include"],
+                packageVersion: attr["Version"]
             }
             return result;
         });
@@ -99,7 +99,7 @@ function getProjectIndex(elm: Element): number {
     return index;
 }
 function getPackageReferenceIndex(elm: Element, pkgName: string): number {
-    let index: number = elm.elements.findIndex(x => x.name == "PackageReference" && x.type == "element" && (<Attribute>x.attributes).Include === pkgName);
+    let index: number = elm.elements.findIndex(x => x.name == "PackageReference" && x.type == "element" && x.attributes["Include"] === pkgName);
     return index;
 }
 

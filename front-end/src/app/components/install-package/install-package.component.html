@@ -1,69 +1,74 @@
-<div style="margin-top: 10px;">
-  <div class="col-md-12 row-item">
-    <div class="input-group">
+<!-- Update / Remove Packages -->
+<div class="container-fluid" style="max-width: 1400px;">
 
-      <input id="search-input" [(ngModel)]="searchValue" type="text" class="form-control" placeholder="Search for..." aria-describedby="search-box-group">
+  <div class="row">
+    <div class="col-md-12 mt-3 pr-0 pl-0">
+      <div class="input-group">
 
-      <div class="input-group-append" id="search-box-group">
+        <input id="search-input" [(ngModel)]="searchValue" type="text" class="form-control" placeholder="Search for..." aria-describedby="search-box-group">
 
-        <button class="btn btn-primary" type="button" (click)="onSearch()">Search</button>
+        <div class="input-group-append" id="search-box-group">
 
-        <div class="input-group-btn">
-          <form [formGroup]='installForm'>
-            <app-drop-down formControlName="ProjectIndex" [dataSource]="projectList"> </app-drop-down>
-          </form>
+          <button class="btn btn-primary" type="button" (click)="onSearch()">Search</button>
+
+          <div class="input-group-btn">
+            <form [formGroup]='installForm'>
+              <app-drop-down formControlName="ProjectIndex" [dataSource]="projectList"> </app-drop-down>
+            </form>
+          </div>
+
         </div>
 
       </div>
-
     </div>
-  </div>
-  <div class="col-md-12 row-item table-box">
-    <table class="table">
-      <thead>
-        <tr>
-          <th style="width: 5px;" class="text-center">#</th>
-          <th style="width: 85%;" class="text-center">Package Details</th>
-          <th style="width: 70px;" class="text-center">Action</th>
-        </tr>
-      </thead>
-      <tbody id="search-result">
-        <tr class="tr-package" *ngFor="let package of packages.data | paginate: {
+    <div class="col-md-12  search-result-box mt-3">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 5px;" class="text-center">#</th>
+            <th style="width: 85%;" class="text-center">Package Details</th>
+            <th style="width: 70px;" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tr-package" *ngFor="let package of packages.data | paginate: {
           id: 'ltd',
           itemsPerPage: 10,
           currentPage: pageNumber,
           totalItems:totalHits
 
           };let i= index;">
-          <td class="center-v-h">{{i + 1 + ((pageNumber-1) * itemsPerPage)}}</td>
-          <td>
-            <img [src]="package.iconUrl || 'assets/images/default-package-icon.svg'" width="42px" height="42" style="margin-right: 10px;"
-              onerror="this.src='assets/images/default-package-icon.svg'; this.onerror = null;">
+            <td class="center-v-h">{{i + 1 + ((pageNumber-1) * itemsPerPage)}}</td>
+            <td>
+              <img [src]="package.iconUrl || 'assets/images/default-package-icon.svg'" width="42px" height="42" style="margin-right: 10px;"
+                onerror="this.src='assets/images/default-package-icon.svg'; this.onerror = null;">
 
-            <strong style="float: right;">Total Downloads: {{ package.totalDownloads | number: '0.'}}</strong>
-            <p class="detail-eclips">
-              {{package.description}}
-            </p>
-            <p>
-              <span *ngIf="package.authors && package.authors.length>0">Authors: {{package.authors.join(', ')}}&nbsp;&nbsp;</span>
+              <strong style="float: right;">Total Downloads: {{ package.totalDownloads | number: '0.'}}</strong>
+              <p class="detail-eclips">
+                {{package.description}}
+              </p>
+              <p>
+                <span *ngIf="package.authors && package.authors.length>0">Authors: {{package.authors.join(', ')}}&nbsp;&nbsp;</span>
 
-              <span *ngIf="package.tags && package.tags.length>0">|&nbsp;&nbsp;Tags: {{package.tags.join(', ')}}&nbsp;&nbsp;</span>
-            </p>
-          </td>
-          <td class="center-v-h">
-            <select #t (change)='change(package.id,t.value)'
-              (onCreate)="change(package.id,package.version)">
-              <option *ngFor="let version of package.versions;let i= index" [attr.value]="version.version" [attr.selected]="i+1==package.versions.length?'selected':''">{{version.version}}</option>
-            </select>
-            <button style="margin-top: 5px;" type="button" (click)="install(package.id)" class="btn btn-default-sm btn-sm">Install</button>
-          </td>
-        </tr>
+                <span *ngIf="package.tags && package.tags.length>0">|&nbsp;&nbsp;Tags: {{package.tags.join(', ')}}&nbsp;&nbsp;</span>
+              </p>
+            </td>
+            <td class="center-v-h">
+              <select #t (change)='change(package.id,t.value)'
+                (onCreate)="change(package.id,package.version)">
+                <option *ngFor="let version of package.versions;let i= index" [attr.value]="version.version" [attr.selected]="i+1==package.versions.length?'selected':''">{{version.version}}</option>
+              </select>
+              <button style="margin-top: 5px;" type="button" (click)="install(package.id)" class="btn btn-default-sm btn-sm">Install</button>
+            </td>
+          </tr>
 
-      </tbody>
-    </table>
+        </tbody>
+      </table>
 
-    <div class="text-right">
-      <pagination-controls id='ltd' (pageChange)="pageNumber = $event" (pageChange)="pageChanged($event)"></pagination-controls>
+      <div class="text-right">
+        <pagination-controls id='ltd' (pageChange)="pageNumber = $event" (pageChange)="pageChanged($event)"></pagination-controls>
+      </div>
+
     </div>
 
   </div>

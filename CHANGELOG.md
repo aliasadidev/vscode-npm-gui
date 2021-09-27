@@ -1,6 +1,6 @@
 # Change Log
 
-## Version 1.1.7-beta1 - Sep 27, 2021
+## Version 1.1.7 - Sep 27, 2021
 #### Added
 *  Add pagination to the package search results 
 *  Add search box in the project list

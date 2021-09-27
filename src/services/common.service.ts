@@ -10,10 +10,10 @@ import * as fs from 'fs';
  * @returns {Project}
  */
 export function getProject(projectList: Project[], projectID: number): Project {
-    let project = projectList.find(d => d.id === projectID);
-    if (project === undefined)
-        throw "The project file does not exists";
-    return project;
+  let project = projectList.find(d => d.id === projectID);
+  if (project === undefined)
+    throw "The project file does not exists";
+  return project;
 }
 
 /**
@@ -23,8 +23,8 @@ export function getProject(projectList: Project[], projectID: number): Project {
  * @returns {PackageDetail}
  */
 export function getPackage(project: Project, packageName: string): PackageDetail {
-    let pkgIndex = getPackageIndex(project, packageName);
-    return project.packages[pkgIndex];
+  let pkgIndex = getPackageIndex(project, packageName);
+  return project.packages[pkgIndex];
 }
 /**
  * Get the package index from the project
@@ -33,44 +33,44 @@ export function getPackage(project: Project, packageName: string): PackageDetail
  * @returns return the index of package
  */
 export function getPackageIndex(project: Project, packageName: string): number {
-    let pkgIndex = project.packages.findIndex(e => e.packageName === packageName);
-    if (pkgIndex === -1)
-        throw `The selected package does not exists in '${project.projectName}' project`;
-    return pkgIndex;
+  let pkgIndex = project.packages.findIndex(e => e.packageName === packageName);
+  if (pkgIndex === -1)
+    throw `The selected package does not exists in '${project.projectName}' project`;
+  return pkgIndex;
 }
 
 /**
  * Check the file access
  * @param project The target project
  * @param mode Check a file for read-write access
- * @returns {ServiceResult} 
+ * @returns {ServiceResult}
  */
 export function checkAccess(project: Project, mode: number = fs.constants.O_RDWR): ServiceResult {
-    let commandResult: ServiceResult;
-    let hasAccess = hasFileAccess(project.projectPath, mode);
-    if (hasAccess.isSuccessful) {
-        commandResult = { isSuccessful: true };
-    } else {
-        commandResult = {
-            message: hasAccess.errorMessage,
-            isSuccessful: false,
-            exception: hasAccess.exception
-        };
-    }
-    return commandResult;
+  let commandResult: ServiceResult;
+  let hasAccess = hasFileAccess(project.projectPath, mode);
+  if (hasAccess.isSuccessful) {
+    commandResult = { isSuccessful: true };
+  } else {
+    commandResult = {
+      message: hasAccess.errorMessage,
+      isSuccessful: false,
+      exception: hasAccess.exception
+    };
+  }
+  return commandResult;
 }
 
 /**
-  * Find the latest stable version of a nuget package
+  * Find the latest stable version of a NuGet package
   * @param versions The list of the package versions
   * @returns {string} If the version wasn't found the result is `Unknown`
   */
 export function findStableVersion(versions: string[]): string {
-    const regExp: RegExp = /^\d+\.\d+\.\d+(\.\d+)?$/m;
-    let version: string | undefined = versions.slice().reverse().find(x => regExp.test(x));
+  const regExp: RegExp = /^\d+\.\d+\.\d+(\.\d+)?$/m;
+  let version: string | undefined = versions.slice().reverse().find(x => regExp.test(x));
 
-    if (version === undefined && versions && versions.length > 0)
-        version = versions[versions.length - 1];
+  if (version === undefined && versions && versions.length > 0)
+    version = versions[versions.length - 1];
 
-    return version ?? "Unknown";
+  return version ?? "Unknown";
 }

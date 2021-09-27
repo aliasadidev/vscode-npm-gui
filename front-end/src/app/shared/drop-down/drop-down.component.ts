@@ -15,20 +15,41 @@ import { DropDownKeyValue } from 'src/app/models/drop-down-key-value';
   ]
 })
 export class DropDownComponent implements ControlValueAccessor {
-  @Input() dataSource: DropDownKeyValue[] = [];
+
+  private _dataSource: DropDownKeyValue[] = [];
+  @Input() set dataSource(value: DropDownKeyValue[]) { this._dataSource = value; }
+  get dataSource(): DropDownKeyValue[] { return this._dataSource; }
+
+
+
+
   label: string | undefined = "Select a item";
   private readonly contrllName: string = "";
 
-  constructor(private eRef: ElementRef,
-    private parent: FormGroupDirective
-  ) {
+  constructor(private eRef: ElementRef, private parent: FormGroupDirective) {
     this.contrllName = eRef.nativeElement.getAttribute("formControlName")
   }
+
+
+
   writeValue(obj: any): void {
     this.selectedIndex = obj;
+    if (this.selectedIndex) {
+      const title = this._dataSource.find(x => x.Key == this.selectedIndex)?.Value;
+      this.label = title;
+    }
   }
-  registerOnChange(fn: any): void { }
-  registerOnTouched(fn: any): void { }
+
+
+  onChange: any = () => { }
+  onTouch: any = () => { }
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: any): void {
+    this.onTouch = fn;
+  }
+
   ngOnInit(): void { }
 
   isStyledSelect: boolean = false;
@@ -52,5 +73,6 @@ export class DropDownComponent implements ControlValueAccessor {
       this.isShowList = this.isStyledSelect = false;
     }
   }
+
 
 }

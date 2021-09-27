@@ -11,7 +11,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* after 2 line show ... */
+  -webkit-line-clamp: 1; /* after 1 line show ... */
   -webkit-box-orient: vertical;
 }
 
@@ -21,7 +21,11 @@
   margin-bottom: 20px;
   border-spacing: 0;
   padding: 2px 3px;
-  text-align: center;
+  text-align: left;
+
+  table {
+    width: 100%;
+  }
 
   thead {
     th {
@@ -54,11 +58,11 @@
 .btn-sm {
   line-height: 1.3 !important;
   margin-top: 1px;
-  font-size: 0.77rem !important;
+  font-size: 0.88rem !important;
 }
 
 .versions-option {
-  width: 79px;
+  width: 100%;
   height: 23px;
 }
 

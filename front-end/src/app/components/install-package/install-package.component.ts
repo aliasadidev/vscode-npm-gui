@@ -71,7 +71,7 @@ export class InstallPackageComponent implements AfterViewInit {
         e.stableVersion = this.findStableVersion(e.versions);
       })
       this.totalHits = this.packages.totalHits!;
-      if (this.searchValue.trim() == "") {
+      if (this.searchValue.trim() == "" && (this.packages.totalHits && this.packages.totalHits > 200)) {
         this.totalHits = this.packages.totalHits = 200;
       }
       this.itemsPerPage = this.packages.data.length == 0 ? 10 : this.packages.data.length;

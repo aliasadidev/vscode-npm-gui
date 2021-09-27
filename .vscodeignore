@@ -5,6 +5,7 @@ src/**
 build/**
 
 images/demo1.gif
+images/demo2-v1.1.7.gif
 
 front-end/node_modules/**
 front-end/src/**

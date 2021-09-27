@@ -1,0 +1,98 @@
+<!-- Update / Remove Packages -->
+<div class="container-fluid" style="max-width: 1400px;">
+
+  <div class="row">
+    <div class="col-md-12 mt-3 pr-0 pl-0">
+      <div class="input-group">
+
+        <input id="search-input" [(ngModel)]="searchValue" type="text" class="form-control" placeholder="Search for..." aria-describedby="search-box-group">
+
+        <div class="input-group-append" id="search-box-group">
+
+          <button class="btn btn-primary" type="button" (click)="onSearch()">Search</button>
+
+          <div class="input-group-btn">
+            <form [formGroup]='installForm'>
+              <app-drop-down formControlName="projectIndex" [dataSource]="projectList"> </app-drop-down>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-12  search-result-box mt-3">
+      <table>
+        <thead>
+          <tr style="height: 50px;">
+            <th style="width: 5px;" class="text-center">#</th>
+            <th style="width: 85%;" class="text-center">Package Details</th>
+            <th style="width: 70px;" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tr-package" *ngFor="let package of packages.data |
+                    paginate: {id: 'ltd',itemsPerPage: 10, currentPage: pageNumber, totalItems:totalHits };let i= index;">
+            <td class="center-v-h">{{i + 1 + ((pageNumber-1) * itemsPerPage)}}</td>
+            <td>
+              <div class="m-2 d-flex">
+
+
+
+                <div class="d-flex" style="min-width: 50px;">
+                  <img [src]="package.iconUrl || 'assets/images/default-package-icon.svg'"
+                    width="42px" height="42" class="mr-2"
+                    onerror="this.src='assets/images/default-package-icon.svg'; this.onerror = null;">
+
+                </div>
+
+                <div class="d-flex flex-column" style="flex: auto;">
+
+                  <div class="mr-2 d-flex">
+                    <strong class="mr-1">{{package.id}}</strong>
+                    <p class="detail-eclips mb-0">
+                      {{package.description}}
+                    </p>
+                  </div>
+
+                  <div class="d-flex">
+                    <span *ngIf="package.authors && package.authors.length>0">Authors: {{package.authors.join(', ')}}</span>
+                  </div>
+
+                </div>
+                <div class="d-flex flex-column d-flex">
+                  <span style="white-space: pre;">
+                    Total Downloads: {{ package.totalDownloads | number: '0.'}}
+                  </span>
+                  <a style="text-align: right;" [attr.href]="'https://www.nuget.org/packages/'+package.id" target="_blank">Open NuGet</a>
+                </div>
+
+              </div>
+            </td>
+            <td class="center-v-h">
+              <select #t (change)='change(package.id,t.value)'
+                class="versions-option"
+                (onCreate)="change(package.id,package.version)">
+
+                <option *ngFor="let version of package.versions"
+                  [attr.value]="version.version"
+                  [attr.selected]='package.stableVersion==version.version?true:null'>{{version.version}}</option>
+              </select>
+              <button class="mt-2" type="button" (click)="install(package.id)" class="btn btn-default-sm btn-sm">Install</button>
+            </td>
+          </tr>
+
+          <tr class='tr-package' *ngIf="!(packages.data && packages.data.length>0)">
+            <td colspan='6' class='empty-table'>Empty!</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="text-right mt-3">
+        <pagination-controls id='ltd' (pageChange)="pageNumber = $event" (pageChange)="pageChanged($event)"></pagination-controls>
+      </div>
+
+    </div>
+
+  </div>
+</div>

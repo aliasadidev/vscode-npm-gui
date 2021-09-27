@@ -1,128 +1,128 @@
 {
-    "name": "nugetpackagemanagergui",
-    "displayName": "NuGet Package Manager GUI",
-    "description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from NuGet server for .NET Core 1.1+/.Net5+ projects",
-    "author": "Ali Asadi (ali.asadi.dev@gmail.com)",
-    "publisher": "aliasadidev",
-    "version": "1.1.6",
-    "preview": true,
-    "icon": "images/icon.png",
-    "license": "MIT",
-    "keywords": [
-        "nuget",
-        "nuget package manager",
-        ".net core",
-        ".net 5",
-        "dotnet core",
-        "nuget package manager gui",
-        "nuget package",
-        "dotnet 5"
+  "name": "nugetpackagemanagergui",
+  "displayName": "NuGet Package Manager GUI",
+  "description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from NuGet server for .NET Core 1.1+/.Net5+ projects",
+  "author": "Ali Asadi (ali.asadi.dev@gmail.com)",
+  "publisher": "aliasadidev",
+  "version": "1.1.7-beta1",
+  "preview": true,
+  "icon": "images/icon.png",
+  "license": "MIT",
+  "keywords": [
+    "nuget",
+    "nuget package manager",
+    ".net core",
+    ".net 5",
+    "dotnet core",
+    "nuget package manager gui",
+    "nuget package",
+    "dotnet 5"
+  ],
+  "bugs": {
+    "url": "https://github.com/aliasadidev/vscode-npm-gui/issues"
+  },
+  "homepage": "https://github.com/aliasadidev/vscode-npm-gui/blob/master/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aliasadidev/vscode-npm-gui.git"
+  },
+  "engines": {
+    "vscode": "^1.51.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:nugetpackagemanagergui.view"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "nugetpackagemanagergui.view",
+        "title": "NuGet Package Manager GUI"
+      }
     ],
-    "bugs": {
-        "url": "https://github.com/aliasadidev/vscode-npm-gui/issues"
-    },
-    "homepage": "https://github.com/aliasadidev/vscode-npm-gui/blob/master/README.md",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/aliasadidev/vscode-npm-gui.git"
-    },
-    "engines": {
-        "vscode": "^1.51.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "onCommand:nugetpackagemanagergui.view"
-    ],
-    "main": "./dist/extension.js",
-    "contributes": {
-        "commands": [
-            {
-                "command": "nugetpackagemanagergui.view",
-                "title": "NuGet Package Manager GUI"
-            }
-        ],
-        "configuration": {
-            "type": "object",
-            "title": "NuGet Package Manager GUI configuration",
-            "properties": {
-                "nugetpackagemanagergui.nuget.requestTimeout": {
-                    "type": "number",
-                    "default": 9000,
-                    "description": "The maximum duration for completing a request from this extension"
-                },
-                "nugetpackagemanagergui.nuget.packageVersionsUrls": {
-                    "type": [
-                        "array",
-                        "string"
-                    ],
-                    "default": [
-                        "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
-                    ],
-                    "description": "The NuGet endpoint addresses for getting package versions (The first address in the list has highest priority)\n The {{packageName}} property inject by extension"
-                },
-                "nugetpackagemanagergui.nuget.searchPackage.urls": {
-                    "type": [
-                        "array",
-                        "string"
-                    ],
-                    "default": [
-                        "https://azuresearch-usnc.nuget.org/query"
-                    ],
-                    "description": "The NuGet endpoint addresses for searching packages (The first address in the list has highest priority)"
-                },
-                "nugetpackagemanagergui.nuget.searchPackage.preRelease": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "true or false determining whether to include pre-release packages in the result of the search"
-                },
-                "nugetpackagemanagergui.nuget.searchPackage.defaultTake": {
-                    "type": "number",
-                    "default": 10,
-                    "description": "The number of packages to return in the search result"
-                },
-                "nugetpackagemanagergui.indentType": {
-                    "type": "string",
-                    "default": "\t",
-                    "description": "Number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted"
-                }
-            }
+    "configuration": {
+      "type": "object",
+      "title": "NuGet Package Manager GUI configuration",
+      "properties": {
+        "nugetpackagemanagergui.nuget.requestTimeout": {
+          "type": "number",
+          "default": 9000,
+          "description": "The maximum duration for completing a request from this extension"
+        },
+        "nugetpackagemanagergui.nuget.packageVersionsUrls": {
+          "type": [
+            "array",
+            "string"
+          ],
+          "default": [
+            "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
+          ],
+          "description": "The NuGet endpoint addresses for getting package versions (The first address in the list has highest priority)\n The {{packageName}} property inject by extension"
+        },
+        "nugetpackagemanagergui.nuget.searchPackage.urls": {
+          "type": [
+            "array",
+            "string"
+          ],
+          "default": [
+            "https://azuresearch-usnc.nuget.org/query"
+          ],
+          "description": "The NuGet endpoint addresses for searching packages (The first address in the list has highest priority)"
+        },
+        "nugetpackagemanagergui.nuget.searchPackage.preRelease": {
+          "type": "boolean",
+          "default": false,
+          "description": "true or false determining whether to include pre-release packages in the result of the search"
+        },
+        "nugetpackagemanagergui.nuget.searchPackage.defaultTake": {
+          "type": "number",
+          "default": 10,
+          "description": "The number of packages to return in the search result"
+        },
+        "nugetpackagemanagergui.indentType": {
+          "type": "string",
+          "default": "\t",
+          "description": "Number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted"
         }
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run package",
-        "compile": "webpack --devtool nosources-source-map --config ./build/node-extension.webpack.config.js",
-        "watch": "webpack --watch --devtool nosources-source-map --info-verbosity verbose --config ./build/node-extension.webpack.config.js",
-        "package": "webpack --mode production --config ./build/node-extension.webpack.config.js",
-        "test-compile": "tsc -p ./",
-        "test-watch": "tsc -watch -p ./",
-        "pretest": "npm run test-compile && npm run lint",
-        "lint": "eslint src --ext ts",
-        "test": "node ./out/test/runTest.js"
-    },
-    "devDependencies": {
-        "@types/glob": "^7.1.3",
-        "@types/mocha": "^8.0.0",
-        "@types/node": "^12.11.7",
-        "@types/node-fetch": "^2.5.7",
-        "@types/vscode": "^1.51.0",
-        "@typescript-eslint/eslint-plugin": "^4.1.1",
-        "@typescript-eslint/parser": "^4.1.1",
-        "eslint": "^7.9.0",
-        "glob": "^7.1.6",
-        "mocha": "^8.1.3",
-        "rewire": "^5.0.0",
-        "ts-loader": "^8.0.3",
-        "typescript": "^4.0.2",
-        "vscode-test": "^1.4.0",
-        "webpack": "^4.44.1",
-        "webpack-cli": "^3.3.12"
-    },
-    "dependencies": {
-        "https-proxy-agent": "^2.2.4",
-        "node-fetch": "^2.6.1",
-        "vscode-express": "^1.0.1",
-        "xml-js": "^1.6.11"
+      }
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack --devtool nosources-source-map --config ./build/node-extension.webpack.config.js",
+    "watch": "webpack --watch --devtool nosources-source-map --info-verbosity verbose --config ./build/node-extension.webpack.config.js",
+    "package": "webpack --mode production --config ./build/node-extension.webpack.config.js",
+    "test-compile": "tsc -p ./",
+    "test-watch": "tsc -watch -p ./",
+    "pretest": "npm run test-compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^12.11.7",
+    "@types/node-fetch": "^2.5.7",
+    "@types/vscode": "^1.51.0",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "eslint": "^7.9.0",
+    "glob": "^7.1.6",
+    "mocha": "^8.1.3",
+    "rewire": "^5.0.0",
+    "ts-loader": "^8.0.3",
+    "typescript": "^4.0.2",
+    "vscode-test": "^1.4.0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "https-proxy-agent": "^2.2.4",
+    "node-fetch": "^2.6.1",
+    "vscode-express": "^1.0.1",
+    "xml-js": "^1.6.11"
+  }
 }

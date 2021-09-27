@@ -1,0 +1,10 @@
+<mat-tab-group [backgroundColor]="'primary'" [color]="'warn'" [selectedIndex]='0'>
+  <mat-tab label="Update / Remove Packages">
+    <app-project-list></app-project-list>
+  </mat-tab>
+  <mat-tab label="Install New Package">
+    <app-install-package></app-install-package>
+  </mat-tab>
+</mat-tab-group>
+
+<app-loading-screen></app-loading-screen>

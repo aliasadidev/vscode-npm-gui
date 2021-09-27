@@ -1,8 +1,19 @@
 # Change Log
 
+## Version 1.1.7-beta1 - Sep 27, 2021
+#### Added
+*  Add pagination to the package search results 
+*  Add search box in the project list
+*  Add new setting `nugetpackagemanagergui.indentType` for indenting XML output
+#### Fixed
+*  Fixed some bugs
+#### Changed
+* Improve UI/UX
+
+
 ## Version 1.1.6 - Jan 30, 2021
 #### Added
-*  Support several nuget servers ([#10](https://github.com/aliasadidev/vscode-npm-gui/pull/10) by [@TomyCesaille](https://github.com/TomyCesaille))
+*  Support several NuGet servers ([#10](https://github.com/aliasadidev/vscode-npm-gui/pull/10) by [@TomyCesaille](https://github.com/TomyCesaille))
 #### Changed
 * Both ~~`nuget.packageVersionsUrl`~~ and ~~`nuget.searchPackage.url`~~ properties changed to `nuget.packageVersionsUrls` and `nuget.searchPackage.urls`
 

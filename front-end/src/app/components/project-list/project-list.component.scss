@@ -1,0 +1,122 @@
+.project-container {
+  width: 100%;
+  margin-top: 20px;
+  white-space: nowrap;
+  overflow-x: auto;
+
+  .badge {
+    font-size: 13px;
+    font-weight: 500;
+    width: 66.09px;
+  }
+
+  select {
+    width: 80%;
+    text-align: center;
+    text-align-last: center;
+    -moz-text-align-last: center;
+  }
+}
+
+.project-table {
+  border: 1px solid #d3d3d3;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border-spacing: 0;
+  padding: 2px 3px;
+  text-align: center;
+
+  thead {
+    th {
+      border: 1px solid #d3d3d3;
+      background-color: #eaebec;
+      padding: 2px 3px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #000;
+    }
+  }
+
+  tbody {
+    tr {
+      max-height: 23px;
+    }
+    td {
+      padding: 2px 3px;
+      border: 1px solid #d3d3d3;
+    }
+    tr:nth-child(odd) {
+      background-color: #daecce77;
+    }
+    tr:hover {
+      background-color: #727272c5;
+    }
+  }
+}
+
+.btn-box {
+  text-align: right;
+  button {
+    text-align: center;
+    font-size: 12px;
+  }
+}
+
+.btn-sm {
+  line-height: 1.3 !important;
+  margin-top: 1px;
+  font-size: 0.77rem !important;
+}
+
+.versions-option {
+  width: 79px;
+  height: 23px;
+}
+
+.btn-default-sm {
+  margin-left: 1px;
+  margin-right: 1px;
+  color: #000;
+  background-color: #e1e1e1;
+  border-color: #565454;
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+  .btn-box {
+    order: 1;
+  }
+  .search-box {
+    order: 2;
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+  .btn-box {
+    order: 2;
+  }
+  .search-box {
+    order: 1;
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+  .btn-box {
+    order: 2;
+  }
+  .search-box {
+    order: 1;
+  }
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+  .btn-box {
+    order: 2;
+  }
+  .search-box {
+    order: 1;
+  }
+}

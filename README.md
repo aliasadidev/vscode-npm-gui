@@ -10,7 +10,7 @@
 - Update all packages with one click
 - Remove a package from the projects
 - Search and install new packages from NuGet Server
-- Support several NuGet servers (`NuGet`, `BuGet`, `GitLab`, `Nexus`)
+- Support several NuGet servers (`NuGet`, `BaGet`, `GitLab`, `Nexus`)
 - Compatible with Linux and Windows
 - Indenting XML output
 
@@ -37,7 +37,7 @@
 //* The first address in the list has highest priority
 //* The {{packageName}} property injecting by extension
 // NuGet Host "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
-// BuGet Host "http://localhost/v3/package/{{packageName}}/index.json"
+// BaGet Host "http://localhost/v3/package/{{packageName}}/index.json"
 // GitLab Host "http://localhost/api/v4/projects/2/packages/nuget/download/{{packageName}}/index.json"
 // Nexus Host "http://localhost/repository/nuget-hosted/v3/content/{{packageName}}/index.json"
 "nugetpackagemanagergui.nuget.packageVersionsUrls": [
@@ -47,7 +47,7 @@
 //The NuGet endpoint addresses for searching packages
 //* The first address in the list has highest priority
 // NuGet Host "https://azuresearch-usnc.nuget.org/query"
-// BuGet Host "http://localhost/v3/search"
+// BaGet Host "http://localhost/v3/search"
 // GitLab Host "http://localhost/api/v4/projects/2/packages/nuget/query"
 // Nexus Host "http://localhost/repository/nuget-hosted/v3/query/0"
 "nugetpackagemanagergui.nuget.searchPackage.urls": [

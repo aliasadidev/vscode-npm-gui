@@ -72,7 +72,7 @@
             <td class="center-v-h">
               <select #t (change)='change(package.id,t.value)'
                 class="versions-option"
-                (onCreate)="change(package.id,package.version)">
+                (onCreate)="change(package.id,package.stableVersion)">
 
                 <option *ngFor="let version of package.versions"
                   [attr.value]="version.version"

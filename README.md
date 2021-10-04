@@ -69,6 +69,14 @@
 
 # What's New
 
+## Version 1.1.9 - Oct 4, 2021
+#### Fixed
+*  Fixed some bugs
+
+## Version 1.1.8 - Sep 28, 2021
+#### Fixed
+*  Fixed some bugs
+
 ## Version 1.1.7 - Sep 27, 2021
 #### Added
 *  Add pagination to the package search results 

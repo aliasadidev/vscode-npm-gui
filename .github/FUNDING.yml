@@ -1,5 +1,5 @@
 # These are supported funding model platforms
 
 github: [aliasadidev]
-custom: https://etherscan.io/address/0x53895b9414dc9e8dd1b98c29e7d6010797f67695
+custom: ["https://etherscan.io/address/0x53895b9414dc9e8dd1b98c29e7d6010797f67695"]
 #ethereum: 0x53895b9414dc9e8dd1b98c29e7d6010797f67695

@@ -2,6 +2,14 @@
 
 #### An extension for Visual Studio Code that lets you easily __`update/remove/install`__ packages from NuGet server for __`.NET Core/.Net 5`__ projects
 
+
+  
+[![Marketplace](https://vsmarketplacebadge.apphb.com/version-short/aliasadidev.nugetpackagemanagergui.svg)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/aliasadidev.nugetpackagemanagergui.svg)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
+[![Downloads](https://vsmarketplacebadge.apphb.com/downloads-short/aliasadidev.nugetpackagemanagergui.svg)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
+[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/aliasadidev.nugetpackagemanagergui.svg)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
+
+
 ## Features
 
 - Simple & Fast

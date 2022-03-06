@@ -1,16 +1,16 @@
-import { SearchPackageResult } from "../models/nuget.model";
+import { PackageSearchResult } from "../models/nuget.model";
 import { ExtensionConfiguration } from "../models/option.model";
 import { searchPackage as searchPkg } from "../modules/nuget.module"
 
-export async function searchPackage(query: string, skip: number, take: number, config: ExtensionConfiguration): Promise<SearchPackageResult> {
-  let searchResult: SearchPackageResult;
+export async function searchPackage(query: string, skip: number, take: number, config: ExtensionConfiguration, packageSourceId?: number): Promise<PackageSearchResult[]> {
+  let searchResult: PackageSearchResult[];
 
   searchResult = await searchPkg(query,
-    config.nugetSearchPackageUrls,
-    config.nugetSearchPackagePreRelease,
+    config.packageSources,
     take,
     skip,
-    config.nugetRequestTimeout);
+    config.requestTimeout,
+    packageSourceId);
 
   return searchResult;
 }

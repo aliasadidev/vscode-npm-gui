@@ -33,7 +33,7 @@ export async function install(projectList: Project[], projectID: number, package
       const projectFileContent = readFileContent(project.projectPath);
       const xml: string = addPackage(projectFileContent, packageName, selectedVersion, config.indentType);
       writeToFile(project.projectPath, xml);
-      const pkgVersions: PackageVersion = await fetchPackageVersions(packageName, config.nugetPackageVersionsUrls, config.nugetRequestTimeout);
+      const pkgVersions: PackageVersion = await fetchPackageVersions(packageName, config.packageSources, config.requestTimeout);
 
       const newerPackageVersion = findStableVersion(pkgVersions.versions);
       const isUpdated = newerPackageVersion == selectedVersion;
@@ -43,7 +43,8 @@ export async function install(projectList: Project[], projectID: number, package
         isUpdated: isUpdated,
         newerVersion: newerPackageVersion,
         packageName: packageName,
-        packageVersion: selectedVersion
+        packageVersion: selectedVersion,
+        sourceName: pkgVersions.sourceName
       });
       commandResult = { message: `${packageName} installed in ${project.projectName}`, isSuccessful: true };
     }

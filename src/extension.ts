@@ -5,13 +5,13 @@ import * as vscode from 'vscode';
 import { VSCExpress } from 'vscode-express';
 import { showErrorMessage, setStatusBarMessage, resetStatusBarMessage, showInformationMessage } from './modules/notify.module';
 import { tryCatch } from './modules/utils'
-import { SearchPackageResult } from './models/nuget.model';
+import { PackageSearchResult } from './models/nuget.model';
 import { getConfiguration } from './modules/config.module';
 import { Project } from './models/project.model';
 import { reload } from './services/project.service';
 import { searchPackage } from './services/search-package.service';
 import { update, updateAllPackage, updateAllProjects } from './services/update.service';
-import { remove, removeAllPackage } from './services/unistall.service';
+import { remove, removeAllPackage } from './services/uninstall.service';
 import { install } from './services/install.service';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -19,14 +19,14 @@ export function activate(context: vscode.ExtensionContext) {
   const vscexpress = new VSCExpress(context, 'front-end');
   const workspacePath = vscode.workspace.workspaceFolders;
   if (workspacePath === undefined) {
-    showErrorMessage("Workdirectory is empty!");
-    throw "Workdirectory is empty!";
+    showErrorMessage("Work directory is empty!");
+    throw "Work directory is empty!";
   }
 
   const configOptions = getConfiguration();
   let projectList: Project[];
 
-  vscode.commands.registerCommand('nugetpackagemanagergui.getdata', () => {
+  vscode.commands.registerCommand('nugetpackagemanagergui.getData', () => {
     return projectList;
   });
 
@@ -34,16 +34,16 @@ export function activate(context: vscode.ExtensionContext) {
     await tryCatch(async () => {
       setStatusBarMessage(data.LoadVersion ? 'Loading packages...' : 'Loading projects...');
       const result = await reload(configOptions, workspacePath, data.LoadVersion);
-      projectList = result.porjectList;
+      projectList = result.projectList;
       return result;
     }, data.LoadVersion ? 'All packages loaded.' : 'All projects loaded.');
     return projectList;
   });
 
-  vscode.commands.registerCommand('nugetpackagemanagergui.searchPackage', async (data: { Query: string, Skip: number, Take: number }) => {
-    let searchResult: SearchPackageResult | undefined;
+  vscode.commands.registerCommand('nugetpackagemanagergui.searchPackage', async (data: { Query: string, Skip: number, Take: number, PackageSourceId?: number }) => {
+    let searchResult: PackageSearchResult[] | undefined;
     try {
-      searchResult = await searchPackage(data.Query, data.Skip, data.Take, configOptions);
+      searchResult = await searchPackage(data.Query, data.Skip, data.Take, configOptions, data.PackageSourceId);
     } catch (ex) {
       resetStatusBarMessage();
       showErrorMessage(ex);
@@ -62,6 +62,10 @@ export function activate(context: vscode.ExtensionContext) {
     await tryCatch(async () => {
       return remove(projectList, data.ID, data.PackageName, configOptions);
     });
+  });
+
+  vscode.commands.registerCommand('nugetpackagemanagergui.getPackageSources', () => {
+    return configOptions.packageSources;
   });
 
 

@@ -62,12 +62,12 @@
               },
               "sourceType": {
                 "type": "string",
-                "default": "remote",
+                "default": "server",
                 "enum": [
-                  "remote",
+                  "server",
                   "local"
                 ],
-                "description": "only support remote"
+                "description": "Local is unsupported yet!"
               },
               "authorization": {
                 "type": "object",
@@ -120,7 +120,7 @@
               "packageVersionsUrl": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
               "searchUrl": "https://azuresearch-usnc.nuget.org/query",
               "packageUrl": "https://www.nuget.org/packages/{{packageName}}",
-              "sourceType": "remote"
+              "sourceType": "server"
             }
           ]
         },

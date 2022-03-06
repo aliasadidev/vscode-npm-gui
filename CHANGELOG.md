@@ -1,5 +1,19 @@
 # Change Log
 
+## Version 2.0.0 - Mar 6, 2022
+**⚠ WARNING: This version incompatible with the previous versions** 
+
+#### Added
+*  Add support for basic auth to package sources
+*  Add the package sources drop-down list into the install package page
+*  Add `packageUrl` setting to see the packages in the package source host
+#### Changed
+*  Improve the speed of load package versions functionality
+*  Improve extension `Settings` config
+#### Fixed
+*  Fixed the proxy problem
+
+
 ## Version 1.1.9 - Oct 4, 2021
 #### Fixed
 *  Fixed some bugs

@@ -1,11 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { LoadingScreenService } from 'src/app/services/loading-screen/loading-screen.service';
-import { SearchPackageResult, SearchPackageResultVersion } from '../../../../../src/models/nuget.model';
+import { SearchPackageResultVersion, PackageSearchResult } from '../../../../../src/models/nuget.model';
 import { DropDownKeyValue } from 'src/app/models/drop-down-key-value';
 import { CommandService } from 'src/app/services/command-service/command.service';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
+import { PackageSource } from '../../../../../src/models/option.model';
+import { getPackageSourceWebUrl } from '../../shared/component-shared';
 
 @Component({
   selector: 'app-install-package',
@@ -23,19 +25,25 @@ export class InstallPackageComponent implements AfterViewInit {
 
   }
 
-  installForm: FormGroup = new FormGroup({
-    projectIndex: new FormControl('', [])
-  })
-  pageNumber: number = 1;
-  totalHits: number = 0;
-  itemsPerPage: number = 10;
+  installForm = new FormGroup({
+    projectIndex: new FormControl('', []),
+    packageSourceId: new FormControl('', []),
+    searchValue: new FormControl('', [])
+  });
+
+
+  // pageNumber: number = 1;
+  // totalHits: number = 0;
+  readonly itemsPerPage: number = 10;
   projectList: DropDownKeyValue[] = [];
+  packageSourceList: DropDownKeyValue[] = [];
 
   ngAfterViewInit(): void {
     this.getData();
-
   }
 
+  totalPackageSource: number = 0;
+  originalPackageSources: PackageSource[] = [];
   getData() {
     this.loading.startLoading();
     this.commandSrv.reload().subscribe(res => {
@@ -45,55 +53,96 @@ export class InstallPackageComponent implements AfterViewInit {
         Value: proj.projectName
       }));
 
+      this.commandSrv.getPackageSources().subscribe(sources => {
+        if (Array.isArray(sources.result) && sources.result.length >= 1) {
+          this.originalPackageSources = sources.result;
+          this.packageSourceList = sources.result.map(z => ({ Key: z.id.toString(), Value: z.sourceName }));
 
-      // console.log(this.projectList, this.installForm.getRawValue())
+          sources.result.forEach(src => {
+            this.packageSearchResultList[src.id] = {
+              packageSourceId: src.id,
+              packageSourceName: src.sourceName,
+              packages: [],
+              totalHits: 0
+            };
+            this.sourcesPages[src.id] = 1;
+          });
 
-      this.loading.stopLoading();
-      this.cd.detectChanges();
-      if (this.projectList.length == 1) {
-        this.installForm.controls["projectIndex"].setValue(this.projectList[0].Key);
-        this.installForm.controls["projectIndex"].updateValueAndValidity();
+          if (this.packageSourceList.length == 1) {
+            this.totalPackageSource = 1;
+            this.installForm.controls["packageSourceId"].setValue(this.packageSourceList[0].Key);
+          }
+          else {
+            this.totalPackageSource = this.packageSourceList.length;
+            this.packageSourceList.unshift({
+              Key: '0',
+              Value: 'All Sources'
+            });
+            this.installForm.controls["packageSourceId"].setValue(this.packageSourceList[0].Key);
+          }
+          this.cd.detectChanges();
+        }
 
-      }
+        if (this.projectList.length == 1) {
+          this.installForm.controls["projectIndex"].setValue(this.projectList[0].Key);
+          this.cd.detectChanges();
+        }
+        this.loading.stopLoading();
+
+      });
+
     });
   }
-  searchValue: string = "";
-  packages: SearchPackageResult = { data: [], totalHits: 0 };
-  searchPackage() {
+  sourcesPages: Record<number, number> = {};
+  packageSearchResultList: Record<number, PackageSearchResult> = {};
+
+  searchPackage(pageNumber: number, packageSourceId: number | null) {
+
     this.loading.startLoading();
-    const skip = (this.pageNumber - 1) * this.itemsPerPage;
+    const skip = (pageNumber - 1) * this.itemsPerPage;
     const take = this.itemsPerPage;
 
-    this.commandSrv.searchPackage(this.searchValue.trim(), skip, take).subscribe(res => {
-      this.loading.stopLoading();
-      this.packages = res.result;
-      this.packages.data.forEach(e => {
-        e.stableVersion = this.findStableVersion(e.versions);
-      })
-      this.totalHits = this.packages.totalHits!;
-      if (this.searchValue.trim() == "" && (this.packages.totalHits && this.packages.totalHits > 200)) {
-        this.totalHits = this.packages.totalHits = 200;
-      }
-      this.itemsPerPage = this.packages.data.length == 0 ? 10 : this.packages.data.length;
+    this.commandSrv.searchPackage(this.installForm.controls["searchValue"].value.trim(), skip, take, packageSourceId).subscribe(res => {
 
-      this.cd.detectChanges();
+      res.result.filter(x => x.packageSourceId == packageSourceId || packageSourceId == null).forEach(source => {
+        this.packageSearchResultList[source.packageSourceId] = source;
+        source.packages.forEach(p => {
+          p.stableVersion = this.findStableVersion(p.versions);
+        });
+        this.sourcesPages[source.packageSourceId] = pageNumber;
+        this.cd.detectChanges();
+      });
+
+      this.loading.stopLoading();
+
     });
+  }
+
+  getPackageSourceId() {
+    const val: string = this.installForm.controls["packageSourceId"].value;
+    let packageSourceId: number | null = null;
+
+    if (val != '0') {
+      packageSourceId = +val;
+    }
+    return packageSourceId;
   }
 
   onSearch() {
-    this.pageNumber = 1;
-    this.totalHits = 0;
-    this.itemsPerPage = 10;
-    this.searchPackage();
+    this.searchPackage(1, this.getPackageSourceId());
   }
 
-  pageChanged(pageNumber: number) {
-    this.pageNumber = pageNumber;
-    this.searchPackage();
+  pageChanged(pageNumber: number, packageSourceId: number) {
+    this.searchPackage(pageNumber, packageSourceId);
   }
   packageListVersion: Record<string, string> = {};
   change(packageName: string, value: any) {
     this.packageListVersion[packageName] = value;
+  }
+
+  isFilterOnSource(packageSourceId: number | null) {
+    var selected = this.getPackageSourceId();
+    return selected == null || selected == packageSourceId
   }
 
   install(packageName: string) {
@@ -122,4 +171,5 @@ export class InstallPackageComponent implements AfterViewInit {
     return version ?? "Unknown";
   }
 
+  getPackageSourceWebUrl = getPackageSourceWebUrl;
 }

@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import { runTests } from 'vscode-test';
+import { runTests } from '@vscode/test-electron';
 
 async function main() {
   try {
@@ -21,3 +21,7 @@ async function main() {
 }
 
 main();
+
+export function getTestPath(fileName: string): string {
+  return path.resolve(`${__dirname}/../../src/test/test-data/${fileName}`);
+}

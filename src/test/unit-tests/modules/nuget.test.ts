@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { PackageVersion, SearchPackageResult } from '../../../models/nuget.model';
+import { PackageSearchResult, PackageVersion } from '../../../models/nuget.model';
 import { getConfiguration } from '../../../modules/config.module';
 import { fetchPackageVersions, searchPackage, fetchPackageVersionsBatch } from '../../../modules/nuget.module';
 
@@ -8,13 +8,13 @@ suite('nuget.ts tests', () => {
   const configOptions = getConfiguration();
 
   test('fetchPackageVersions test', async () => {
-    const result: PackageVersion = await fetchPackageVersions('Microsoft.NET.Test.Sdk', configOptions.nugetPackageVersionsUrls, configOptions.nugetRequestTimeout);
+    const result: PackageVersion = await fetchPackageVersions('Microsoft.NET.Test.Sdk', configOptions.packageSources, configOptions.requestTimeout);
     assert(result.packageName != null && result.packageName != undefined)
     assert(result.versions != null && result.packageName != undefined && result.versions.length > 0)
   });
 
   test('fetchPackageVersionsBatch test', async () => {
-    const result: PackageVersion[] = await fetchPackageVersionsBatch(['Microsoft.NET.Test.Sdk', 'xunit'], configOptions.nugetPackageVersionsUrls, configOptions.nugetRequestTimeout);
+    const result: PackageVersion[] = await fetchPackageVersionsBatch(['Microsoft.NET.Test.Sdk', 'xunit'], configOptions.packageSources, configOptions.requestTimeout);
 
     assert(result != null && result != undefined && result.length == 2);
 
@@ -28,16 +28,15 @@ suite('nuget.ts tests', () => {
 
   test('searchPackage test', async () => {
     const packageName = 'Microsoft.NET.Test.Sdk';
-    const result: SearchPackageResult = await searchPackage(packageName,
-      configOptions.nugetSearchPackageUrls,
-      configOptions.nugetSearchPackagePreRelease,
+    const result: PackageSearchResult[] = await searchPackage(packageName,
+      configOptions.packageSources,
       1,
       0,
-      configOptions.nugetRequestTimeout
+      configOptions.requestTimeout
     );
 
-    assert(result != null && result != undefined && result.data.length == 1);
-    assert(result.data[0].id == packageName);
+    assert(result != null && result != undefined && result[0].packages.length == 1);
+    assert(result[0].packages[0].id == packageName);
   });
 
 });

@@ -2,7 +2,6 @@ import * as assert from 'assert';
 import { PackageDetail } from '../../../models/nuget.model';
 import { getConfiguration } from '../../../modules/config.module';
 import { addPackage, getPackages, removePackage, updatePackage } from '../../../modules/xml.module';
-// const privateNugetModule = require('rewire')('../../../modules/xml.module');
 
 
 suite('xml.module.ts tests', () => {
@@ -72,7 +71,7 @@ suite('xml.module.ts tests', () => {
                      </Project>`;
 
     const func = () => addPackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.1', indentType);
-    assert.throws(func, /package already exists in project!/)
+    assert.throws(func, /package already exists in project!/);
   });
 
 });

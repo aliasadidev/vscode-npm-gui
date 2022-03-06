@@ -9,8 +9,8 @@ import { DropDownKeyValue } from 'src/app/models/drop-down-key-value';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      multi: true,
       useExisting: forwardRef(() => DropDownComponent),
+      multi: true
     }
   ]
 })
@@ -23,11 +23,11 @@ export class DropDownComponent implements ControlValueAccessor {
 
 
 
-  label: string | undefined = "Select a item";
-  private readonly contrllName: string = "";
+  @Input() label: string | undefined = "Select a item";
+  private readonly formControlName: string = "";
 
   constructor(private eRef: ElementRef, private parent: FormGroupDirective) {
-    this.contrllName = eRef.nativeElement.getAttribute("formControlName")
+    this.formControlName = eRef.nativeElement.getAttribute("formControlName");
   }
 
 
@@ -64,11 +64,12 @@ export class DropDownComponent implements ControlValueAccessor {
     this.isStyledSelect = false;
     this.label = this.dataSource.find(e => e.Key == key)?.Value;
     this.isShowList = false;
-    this.parent.control.controls[this.contrllName].setValue(key);
+    if (this.parent.control.controls[this.formControlName])
+      this.parent.control.controls[this.formControlName].setValue(key);
   }
 
   @HostListener('document:click', ['$event'])
-  clickout(event: any) {
+  clickOut(event: any) {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.isShowList = this.isStyledSelect = false;
     }

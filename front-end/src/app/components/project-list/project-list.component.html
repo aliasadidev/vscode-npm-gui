@@ -38,24 +38,29 @@
           <thead>
             <tr>
               <th colspan="1">Project Name</th>
-              <th colspan="5" style="text-align: left;">{{project.projectName}}</th>
+              <th colspan="6" style="text-align: left;">{{project.projectName}}</th>
             </tr>
             <tr>
               <th colspan="1">Project Path</th>
-              <th colspan="5" style="text-align: left;">{{project.projectPath}}</th>
+              <th colspan="6" style="text-align: left;">{{project.projectPath}}</th>
             </tr>
             <tr>
               <th style="width:30%;">Package Name</th>
+              <th style="width:8%;">Source Name</th>
               <th style="width:10%;">Installed Version</th>
               <th style="width:10%;">Versions</th>
-              <th style="width:10%;">Is Updated</th>
-              <th style="width:10%;">Newer Version</th>
+              <th style="width:6%;">Is Updated</th>
+              <th style="width:6%;">Newer Version</th>
               <th style="width:30%;">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="tr-package" *ngFor="let package of project.packages" [hidden]="!seatchFilter(package.packageName)">
+            <tr class="tr-package" *ngFor="let package of project.packages" [hidden]="!searchFilter(package.packageName)">
               <td>{{package.packageName}}</td>
+              <td>
+                <span *ngIf="package.sourceId==null">{{package.sourceName}}</span>
+                <a class="packageUrl" *ngIf="package.sourceId" [attr.href]="getPackageSourceWebUrl(packageSources,package.sourceId,package.packageName)" target="_blank">{{package.sourceName}}</a>
+              </td>
               <td>{{package.packageVersion}}</td>
               <td>
                 <!-- <select class="versions-option">
@@ -88,7 +93,7 @@
             </tr>
 
             <tr class='tr-package' *ngIf="!(project.packages && project.packages.length>0)">
-              <td colspan='6' class='empty-table'>This project hasn't any package</td>
+              <td colspan='7' class='empty-table'>This project hasn't any package</td>
             </tr>
           </tbody>
         </table>

@@ -3,39 +3,101 @@
  */
 export interface ExtensionConfiguration {
   /**
-   * The maximum duration for completing a request from this extension
+   * The NuGet Package Registries
    */
-  nugetRequestTimeout: number;
+  packageSources: PackageSource[],
   /**
-   * `https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json`
-   *
-   * The NuGet endpoint addresses for getting package versions
-   *
-   * The first address in the list has highest priority
-   *
-   * The {{packageName}} property injecting by extension
+   * The number of spaces to be used for indenting XML output
    */
-  nugetPackageVersionsUrls: string[];
-  /**
-   * `https://azuresearch-usnc.nuget.org/query`
-   *
-   * The NuGet endpoint addresses for searching packages
-   *
-   * The first address in the list has highest priority
-   */
-  nugetSearchPackageUrls: string[];
-  /**
-   * `true` or `false` determining whether to include pre-release packages in the result of the search
-   */
-  nugetSearchPackagePreRelease: boolean;
-  /**
-   * The number of packages to return in the search result
-   */
-  nugetSearchPackageDefaultTake: number;
-  /**
-   * The number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted
-  */
   indentType: string;
+  /**
+   * The maximum duration for completing a request
+   */
+  requestTimeout: number;
+}
+
+/**
+ * The package source model
+ */
+export interface PackageSource {
+  /**
+   * The package source id
+   */
+  id: number;
+  /**
+   * The package source name
+   */
+  sourceName: string;
+  /**
+   * The package source type
+   */
+  sourceType: SourceType;
+  /**
+   * The package source auth information
+   */
+  authorization: AuthorizationOption;
+  /**
+   * The NuGet endpoint address for searching packages
+   */
+  searchUrl: string;
+  /**
+   * The NuGet endpoint address for getting package versions
+   */
+  packageVersionsUrl: string;
+  /**
+   * true or false determining whether to include pre-release packages
+   */
+  preRelease: boolean;
+  /**
+   * The package url
+   */
+  packageUrl: string;
+}
+
+/**
+ * The package source types
+ */
+export enum SourceType {
+  /**
+   * The package source is hosted on a server
+   */
+  server = 1,
+  /**
+   * The package source is a directory [Unsupported yet!]
+   */
+  local = 2
+}
+
+/**
+ * The auth types
+ */
+export enum AuthorizationType {
+  /**
+   * The endpoint doesn't need an auth token
+   */
+  none = 1,
+  /**
+   * The endpoint needs an auth token
+   */
+  basicAuth = 2
+}
+
+/**
+ * The auth option
+ */
+export interface AuthorizationOption {
+  /**
+   * The auth type
+   */
+  authType: string;
+  /**
+   * The username
+   */
+  username: string;
+  /**
+   * The access token key
+   */
+  password: string;
 }
 
 /**
@@ -53,8 +115,9 @@ export interface ProxyOption {
   /**
    * The auth headers
    */
-  headers?: any[];
+  headers?: any;
 }
+
 /**
  * The request settings for the all requests
  */
@@ -66,7 +129,7 @@ export interface RequestOption {
   /**
    * Filling in the proxy module
    */
-  headers: any[];
+  headers: any;
   /**
    * Filling in the extension setting `nugetRequestTimeout`
    */

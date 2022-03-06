@@ -40,11 +40,13 @@ async function setPackageVersions(config: ExtensionConfiguration, projects: Proj
   if (hasPackage) {
     const allUniquePackages: string[] = mergeList(projects.map(q => q.packages.map(e => e.packageName)));
 
-    let packageVersions: PackageVersion[] = await fetchPackageVersionsBatch(allUniquePackages, config.nugetPackageVersionsUrls, config.nugetRequestTimeout);
+    let packageVersions: PackageVersion[] = await fetchPackageVersionsBatch(allUniquePackages, config.packageSources, config.requestTimeout);
 
     let keyValuePackageVersions: Record<string, string[]> = {}
+    let keyValuePackageSource: Record<string, { name: string, id: number }> = {}
     packageVersions.forEach(pkg => {
       keyValuePackageVersions[pkg.packageName] = pkg.versions;
+      keyValuePackageSource[pkg.packageName] = { name: pkg.sourceName, id: pkg.sourceId };
     });
 
     projects.forEach(project => {
@@ -54,6 +56,8 @@ async function setPackageVersions(config: ExtensionConfiguration, projects: Proj
         pkg.newerVersion = findStableVersion(versions);
         pkg.isUpdated = pkg.newerVersion == pkg.packageVersion;
         pkg.versionList = versions;
+        pkg.sourceName = keyValuePackageSource[pkg.packageName].name;
+        pkg.sourceId = keyValuePackageSource[pkg.packageName].id;
       });
     });
   }
@@ -86,7 +90,9 @@ export async function loadProjects(workspacePath: readonly vscode.WorkspaceFolde
           packageVersion: pkg.packageVersion,
           versionList: [pkg.packageVersion],
           isUpdated: false,
-          newerVersion: "Unknown"
+          newerVersion: "Unknown",
+          sourceName: "Unknown",
+          sourceId: null
         };
       })
     });
@@ -104,9 +110,9 @@ export async function reload(config: ExtensionConfiguration, workspacePath: read
   let commandResult: FindProjectResult;
   let projects = await loadProjects(workspacePath, config, loadVersion);
   if (projects && projects.length === 0) {
-    commandResult = { message: `No project found in the selected workspace!`, isSuccessful: false, porjectList: [] };
+    commandResult = { message: `No project found in the selected workspace!`, isSuccessful: false, projectList: [] };
   } else {
-    commandResult = { isSuccessful: true, porjectList: projects };
+    commandResult = { isSuccessful: true, projectList: projects };
   }
   return commandResult;
 }

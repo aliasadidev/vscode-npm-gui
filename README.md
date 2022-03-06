@@ -18,9 +18,10 @@
 - Update all packages with one click
 - Remove a package from the projects
 - Search and install new packages from NuGet Server
-- Support several NuGet servers (`NuGet`, `BaGet`, `GitLab`, `Nexus`)
+- Support several NuGet servers (`NuGet`, `BaGet`, `GitLab`, `Nexus`, `Azure`, `JFrog`)
 - Compatible with Linux and Windows
 - Indenting XML output
+- Support basic authentication for private registries
 
 
 ### How it works
@@ -38,44 +39,66 @@
 ### You can override the following settings in the **User or Workspace** `settings.json`:
 ```js
 {
-//The maximum duration for completing a request from this extension
-"nugetpackagemanagergui.nuget.requestTimeout": 9000,
 
-//The NuGet endpoint addresses for getting package versions
-//* The first address in the list has highest priority
-//* The {{packageName}} property injecting by extension
-// NuGet Host "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
-// BaGet Host "http://localhost/v3/package/{{packageName}}/index.json"
-// GitLab Host "http://localhost/api/v4/projects/2/packages/nuget/download/{{packageName}}/index.json"
-// Nexus Host "http://localhost/repository/nuget-hosted/v3/content/{{packageName}}/index.json"
-"nugetpackagemanagergui.nuget.packageVersionsUrls": [
-    "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
-],
+	//The number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted
+	"nugetpackagemanagergui.indentType": "2",
+	//The maximum duration for completing a request from this extension
+	"nugetpackagemanagergui.requestTimeout": 9000,
+	// The package sources
+	// The supported package sources: Azure/GitLab/GitHub/BaGet/Nexus/NuGet
+	"nugetpackagemanagergui.packageSources": [{
+		// The package source name
+		"sourceName": "Azure",
+		// True or false determining whether to include pre-release packages
+		"preRelease": true,
+		// The package source authentication settings
+		"authorization": {
+			// The auth types (basicAuth / none)
+			"authType": "basicAuth",
+			// It is required if authType is equal to basicAuth
+			"username": "ali.asadi",
+			// It is required if authType is equal to basicAuth
+			"password": "ACCESS_TOKEN_KEY"
+		},
+		//The NuGet endpoint address for getting package versions
+		//* The extension injects {{packageName}} property automatically
+		// NuGet  Host  "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
+		// BaGet  Host  "http://localhost/v3/package/{{packageName}}/index.json"
+		// GitLab Host  "https://gitlab.com/api/v4/projects/x/packages/nuget/download/{{packageName}}/index.json"
+		// Nexus  Host  "http://localhost/repository/nuget-hosted/v3/content/{{packageName}}/index.json"
+		// Azure  Host  "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/flat2/{{packageName}}/index.json"
+		"packageVersionsUrl": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
 
-//The NuGet endpoint addresses for searching packages
-//* The first address in the list has highest priority
-// NuGet Host "https://azuresearch-usnc.nuget.org/query"
-// BaGet Host "http://localhost/v3/search"
-// GitLab Host "http://localhost/api/v4/projects/2/packages/nuget/query"
-// Nexus Host "http://localhost/repository/nuget-hosted/v3/query/0"
-"nugetpackagemanagergui.nuget.searchPackage.urls": [
-    "https://azuresearch-usnc.nuget.org/query"
-],
-
-//true or false determining whether to include pre-release packages in the result of the search
-"nugetpackagemanagergui.nuget.searchPackage.preRelease": false,
-
-//deprecated
-//The number of packages to return in the search result
-"nugetpackagemanagergui.nuget.searchPackage.defaultTake":  10
-
-//The number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted
-"nugetpackagemanagergui.indentType":  "2"		
+		//The NuGet endpoint address for searching packages
+		// NuGet  Host "https://azuresearch-usnc.nuget.org/query"
+		// BaGet  Host "http://localhost/v3/search"
+		// GitLab Host "https://gitlab.com/api/v4/projects/x/packages/nuget/query"
+		// Nexus  Host "http://localhost/repository/nuget-hosted/v3/query/0"
+		// Azure  Host "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/query2"
+		"searchUrl": "https://azuresearch-usnc.nuget.org/query",
+		// The source types (server / local)
+		// * local type isn't supported.
+		"sourceType": "server",
+	}]
 }
 
 ```
 
 # What's New
+
+## Version 2.0.0 - Mar 6, 2022
+**⚠ WARNING: This version incompatible with the previous versions** 
+
+#### Added
+*  Add support for basic auth to package sources
+*  Add the package sources drop-down list into the install package page
+*  Add `packageUrl` setting to see the packages in the package source host
+#### Changed
+*  Improve the speed of load package versions functionality
+*  Improve extension `Settings` config
+#### Fixed
+*  Fixed the proxy problem
+
 
 ## Version 1.1.9 - Oct 4, 2021
 #### Fixed

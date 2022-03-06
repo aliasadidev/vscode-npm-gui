@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, bindCallback, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { CommandResult } from 'src/app/models/command-result';
-import { SearchPackageResult } from '../../../../../src/models/nuget.model';
+import { PackageSearchResult } from '../../../../../src/models/nuget.model';
 import { Project } from '../../../../../src/models/project.model';
+import { PackageSource } from '../../../../../src/models/option.model';
 declare var command: any;
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,8 @@ export class CommandService {
     this.syncData.next(event);
   }
 
-
-
   reload(loadVersion: boolean = false): Observable<CommandResult<Project[]>> {
+
     var obs = new Observable<CommandResult<Project[]>>((sub) => {
       command('nugetpackagemanagergui.reload', { LoadVersion: loadVersion }, (res: CommandResult<Project[]>) => sub.next(res));
     });
@@ -26,9 +26,9 @@ export class CommandService {
   }
 
 
-  getdata(): Observable<CommandResult<Project[]>> {
+  getData(): Observable<CommandResult<Project[]>> {
     var obs = new Observable<CommandResult<Project[]>>((sub) => {
-      command('nugetpackagemanagergui.getdata', (res: CommandResult<Project[]>) => sub.next(res));
+      command('nugetpackagemanagergui.getData', (res: CommandResult<Project[]>) => sub.next(res));
     });
     return obs;
   }
@@ -40,14 +40,15 @@ export class CommandService {
     return obs;
   }
 
-  searchPackage(query: string, skip: number, take: number): Observable<CommandResult<SearchPackageResult>> {
+  searchPackage(query: string, skip: number, take: number, packageSourceId: number | null): Observable<CommandResult<PackageSearchResult[]>> {
 
-    var obs = new Observable<CommandResult<SearchPackageResult>>((sub) => {
+    var obs = new Observable<CommandResult<PackageSearchResult[]>>((sub) => {
       command('nugetpackagemanagergui.searchPackage', {
         Query: query,
         Skip: skip,
-        Take: take
-      }, (res: CommandResult<SearchPackageResult>) => sub.next(res));
+        Take: take,
+        PackageSourceId: packageSourceId
+      }, (res: CommandResult<PackageSearchResult[]>) => sub.next(res));
     });
     return obs;
 
@@ -105,6 +106,14 @@ export class CommandService {
           PackageName: packageName,
           SelectedVersion: selectedVersion
         }, (res: CommandResult<any>) => sub.next(res));
+    });
+    return obs;
+  }
+
+  getPackageSources(): Observable<CommandResult<PackageSource[]>> {
+    var obs = new Observable<CommandResult<PackageSource[]>>((sub) => {
+      command('nugetpackagemanagergui.getPackageSources',
+        (res: CommandResult<PackageSource[]>) => sub.next(res));
     });
     return obs;
   }

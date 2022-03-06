@@ -1,4 +1,4 @@
-import { ExtensionConfiguration } from "../models/option.model";
+import { ExtensionConfiguration, PackageSource } from "../models/option.model";
 import * as vscode from 'vscode';
 
 /**
@@ -6,19 +6,18 @@ import * as vscode from 'vscode';
  */
 export function getConfiguration(): ExtensionConfiguration {
 
-  const nugetRequestTimeout = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.requestTimeout") as number;
-  const nugetPackageVersionsUrls = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.packageVersionsUrls") as string[];
-  const nugetSearchPackageUrls = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.searchPackage.urls") as string[];
-  const nugetSearchPackagePreRelease = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.searchPackage.preRelease") as boolean;
-  const nugetSearchPackageDefaultTake = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("nuget.searchPackage.defaultTake") as number;
+  const packageSources = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("packageSources") as PackageSource[];
   const indentType = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("indentType") as string;
+  const requestTimeout = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("requestTimeout") as number;
+
+  if (Array.isArray(packageSources)) {
+    let i = 1;
+    packageSources.forEach(x => x.id = i++);
+  }
 
   return {
-    nugetRequestTimeout,
-    nugetPackageVersionsUrls: nugetPackageVersionsUrls,
-    nugetSearchPackageUrls: nugetSearchPackageUrls,
-    nugetSearchPackagePreRelease,
-    nugetSearchPackageDefaultTake,
-    indentType
+    indentType,
+    packageSources,
+    requestTimeout
   };
 }

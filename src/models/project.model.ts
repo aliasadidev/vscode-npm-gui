@@ -44,6 +44,14 @@ export interface PackageDetail {
    * All versions of the package
    */
   versionList: string[];
+  /**
+   * The package source name
+   */
+  sourceName: string;
+  /**
+ * The package source id
+ */
+  sourceId: number | null;
 }
 
 

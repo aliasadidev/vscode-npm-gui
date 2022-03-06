@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as url from 'url';
-import * as HttpsProxyAgent from 'https-proxy-agent';
 import { ProxyOption } from '../models/option.model';
+var HttpsProxyAgent = require('https-proxy-agent');
 /**
  * Get the proxy settings
  * @returns {ProxyOption}
@@ -31,10 +31,7 @@ export function getProxyOption(): ProxyOption {
 
     // Injecting the `Proxy-Authorization` header if the proxy has authorization
     if (httpConfig.proxyAuthorization) {
-      proxySetting.headers = [];
-      proxySetting.headers.push({
-        'Proxy-Authorization': httpConfig.proxyAuthorization
-      });
+      proxySetting.headers["Proxy-Authorization"] = httpConfig.proxyAuthorization;
     }
 
   }

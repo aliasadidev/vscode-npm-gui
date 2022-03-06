@@ -4,6 +4,8 @@ import { FilterSearchTypes } from 'src/app/models/filter-search-type';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { CommandService } from 'src/app/services/command-service/command.service';
 import { LoadingScreenService } from 'src/app/services/loading-screen/loading-screen.service';
+import { getPackageSourceWebUrl } from 'src/app/shared/component-shared';
+import { PackageSource } from '../../../../../src/models/option.model';
 import { PackageDetail, Project } from '../../../../../src/models/project.model'
 
 
@@ -16,6 +18,7 @@ import { PackageDetail, Project } from '../../../../../src/models/project.model'
 export class ProjectListComponent implements AfterViewInit {
   projects: Project[] = [];
   packageListVersion: Record<string, string> = {};
+  originalPackageSources: PackageSource[] = [];
   displayedColumns: string[] = [
     "PackageName",
     "InstalledVersion",
@@ -40,11 +43,15 @@ export class ProjectListComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.loadPackageVersion(false);
     this.colSpan = this.displayedColumns.length;
+    this.commandSrv.getPackageSources().subscribe(x => {
+      if (Array.isArray(x.result))
+        this.packageSources = x.result;
+    });
   }
-
+  packageSources: PackageSource[] = [];
   getData() {
     this.loading.startLoading();
-    this.commandSrv.getdata().subscribe((res) => {
+    this.commandSrv.getData().subscribe((res) => {
 
       this.projects = res.result;
       this.loading.stopLoading();
@@ -148,7 +155,7 @@ export class ProjectListComponent implements AfterViewInit {
   searchValue: string = '';
   filterSearchTypes = FilterSearchTypes;
   filterType = FilterSearchTypes.Contains;
-  seatchFilter(packageName: string) {
+  searchFilter(packageName: string) {
     let result: boolean = true;
     if (this.searchValue) {
       if (this.filterType == FilterSearchTypes.StartsWith)
@@ -166,4 +173,5 @@ export class ProjectListComponent implements AfterViewInit {
 
   // ---------------- end search box ------------------------------
 
+  getPackageSourceWebUrl = getPackageSourceWebUrl;
 }

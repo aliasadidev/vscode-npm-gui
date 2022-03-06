@@ -34,7 +34,7 @@ export interface ItemGroup {
    */
   itemGroupIndex: number;
   /**
-   * The root elemet is <Project Sdk="Microsoft...">
+   * The root element is <Project Sdk="Microsoft...">
    */
   projectElement: Element;
 }

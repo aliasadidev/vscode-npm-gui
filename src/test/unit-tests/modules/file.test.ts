@@ -1,7 +1,8 @@
 import * as assert from 'assert';
-import { getTestPath } from '../..';
+
 import { checkFileAccess, checkFileExists, hasFileAccess, readFileContent, writeToFile } from '../../../modules/file.module';
 import * as fs from 'fs';
+import { getTestPath } from '../../runTest';
 
 
 suite('file.module.ts tests', () => {

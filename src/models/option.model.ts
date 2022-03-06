@@ -2,41 +2,36 @@
  * The extension settings
  */
 export interface ExtensionConfiguration {
-  /**
-   * The maximum duration for completing a request from this extension
-   */
-  nugetRequestTimeout: number;
-  /**
-   * `https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json`
-   *
-   * The NuGet endpoint addresses for getting package versions
-   *
-   * The first address in the list has highest priority
-   *
-   * The {{packageName}} property injecting by extension
-   */
-  nugetPackageVersionsUrls: string[];
-  /**
-   * `https://azuresearch-usnc.nuget.org/query`
-   *
-   * The NuGet endpoint addresses for searching packages
-   *
-   * The first address in the list has highest priority
-   */
-  nugetSearchPackageUrls: string[];
-  /**
-   * `true` or `false` determining whether to include pre-release packages in the result of the search
-   */
-  nugetSearchPackagePreRelease: boolean;
-  /**
-   * The number of packages to return in the search result
-   */
-  nugetSearchPackageDefaultTake: number;
-  /**
-   * The number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted
-  */
+  packageSources: PackageSource[],
   indentType: string;
+  requestTimeout: number;
 }
+
+export interface PackageSource {
+  id: number;
+  sourceName: string;
+  sourceType: SourceType;
+  authorization: AuthorizationOption;
+  searchUrl: string;
+  packageVersionsUrl: string;
+  preRelease: boolean;
+}
+
+export enum SourceType {
+  remote = 1,
+  local = 2
+}
+export enum AuthorizationType {
+  none = 1,
+  basicAuth = 2
+}
+
+export interface AuthorizationOption {
+  authType: string,
+  username: string;
+  password: string;
+}
+
 
 /**
  *  The proxy settings
@@ -53,7 +48,7 @@ export interface ProxyOption {
   /**
    * The auth headers
    */
-  headers?: any[];
+  headers?: any;
 }
 /**
  * The request settings for the all requests
@@ -66,7 +61,7 @@ export interface RequestOption {
   /**
    * Filling in the proxy module
    */
-  headers: any[];
+  headers: any;
   /**
    * Filling in the extension setting `nugetRequestTimeout`
    */

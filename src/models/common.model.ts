@@ -43,5 +43,5 @@ export interface FindProjectResult extends ServiceResult {
   /**
    * The list of projects
    */
-  porjectList: Project[];
+  projectList: Project[];
 }

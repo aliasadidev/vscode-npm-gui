@@ -37,9 +37,11 @@ export interface SearchPackageResultVersion {
 }
 
 
-export interface SearchPackageResult {
-  data: PackageMetadata[];
-  totalHits?: number;
+export interface PackageSearchResult {
+  packages: PackageMetadata[];
+  totalHits: number;
+  packageSourceId: number;
+  packageSourceName: string;
 }
 /**
  * The package versions
@@ -49,6 +51,7 @@ export interface PackageVersion {
    * The package name
    */
   packageName: string;
+  sourceName: string;
   /**
    * The package versions
    */

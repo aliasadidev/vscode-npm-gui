@@ -86,6 +86,14 @@ export interface PackageVersion {
    * The package versions
    */
   versions: string[];
+  /**
+   * The package source name
+   */
+  sourceName: string;
+  /**
+   * The Package source id
+   */
+  sourceId: number;
 }
 
 /**

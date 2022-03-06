@@ -74,15 +74,11 @@
 
                 </div>
                 <div class="d-flex flex-column d-flex" style="text-align: right;">
-                  <!-- <span style="white-space: pre;" *ngIf="package.sourceName">
-                    Source Name: {{ package.sourceName }}
-                  </span> -->
                   <span style="white-space: pre;" *ngIf="package.totalDownloads">
                     Total Downloads: {{ package.totalDownloads | number: '0.'}}
                   </span>
-                  <a style="text-align: right;" [attr.href]="'https://www.nuget.org/packages/'+package.id" target="_blank">Open NuGet</a>
+                  <a class="packageUrl" [attr.href]="getPackageSourceWebUrl(this.originalPackageSources,+source.key,package.id)" target="_blank">View In Web</a>
                 </div>
-
               </div>
             </td>
             <td class="center-v-h">

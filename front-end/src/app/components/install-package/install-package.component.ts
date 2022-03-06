@@ -6,6 +6,8 @@ import { SearchPackageResultVersion, PackageSearchResult } from '../../../../../
 import { DropDownKeyValue } from 'src/app/models/drop-down-key-value';
 import { CommandService } from 'src/app/services/command-service/command.service';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
+import { PackageSource } from '../../../../../src/models/option.model';
+import { getPackageSourceWebUrl } from '../../shared/component-shared';
 
 @Component({
   selector: 'app-install-package',
@@ -41,6 +43,7 @@ export class InstallPackageComponent implements AfterViewInit {
   }
 
   totalPackageSource: number = 0;
+  originalPackageSources: PackageSource[] = [];
   getData() {
     this.loading.startLoading();
     this.commandSrv.reload().subscribe(res => {
@@ -52,6 +55,7 @@ export class InstallPackageComponent implements AfterViewInit {
 
       this.commandSrv.getPackageSources().subscribe(sources => {
         if (Array.isArray(sources.result) && sources.result.length >= 1) {
+          this.originalPackageSources = sources.result;
           this.packageSourceList = sources.result.map(z => ({ Key: z.id.toString(), Value: z.sourceName }));
 
           sources.result.forEach(src => {
@@ -167,4 +171,5 @@ export class InstallPackageComponent implements AfterViewInit {
     return version ?? "Unknown";
   }
 
+  getPackageSourceWebUrl = getPackageSourceWebUrl;
 }

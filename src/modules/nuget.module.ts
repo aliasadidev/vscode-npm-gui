@@ -72,7 +72,8 @@ async function getPackageVersions(packageName: string, packageSources: PackageSo
           let json: PackageVersion = {
             packageName: packageName,
             versions: jsonResponse.versions,
-            sourceName: src.sourceName
+            sourceName: src.sourceName,
+            sourceId: src.id
           };
           return json;
         })

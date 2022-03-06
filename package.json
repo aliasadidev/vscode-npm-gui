@@ -13,10 +13,16 @@
     "nuget package manager",
     ".net core",
     ".net 5",
+    ".net 6",
     "dotnet core",
     "nuget package manager gui",
     "nuget package",
-    "dotnet 5"
+    "dotnet 5",
+    "dotnet 6",
+    "jfrog",
+    "gitlab",
+    "github",
+    "azure"
   ],
   "bugs": {
     "url": "https://github.com/aliasadidev/vscode-npm-gui/issues"
@@ -48,7 +54,7 @@
       "title": "NuGet Package Manager GUI configuration",
       "properties": {
         "nugetpackagemanagergui.packageSources": {
-          "description": "package sources",
+          "description": "The package sources",
           "type": [
             "array"
           ],
@@ -58,7 +64,7 @@
               "sourceName": {
                 "type": "string",
                 "default": "NuGet",
-                "description": "source name"
+                "description": "The package source name"
               },
               "sourceType": {
                 "type": "string",
@@ -67,10 +73,11 @@
                   "server",
                   "local"
                 ],
-                "description": "Local is unsupported yet!"
+                "description": "Local type isn't supported yet!"
               },
               "authorization": {
                 "type": "object",
+                "description": "The package source auth settings",
                 "properties": {
                   "authType": {
                     "type": "string",
@@ -79,29 +86,34 @@
                       "none",
                       "basicAuth"
                     ],
-                    "description": "auth"
+                    "description": "The auth setting"
                   },
                   "username": {
                     "type": "string",
                     "default": "",
-                    "description": "username"
+                    "description": "The username"
                   },
                   "password": {
                     "type": "string",
                     "default": "",
-                    "description": "password"
+                    "description": "The access token key"
                   }
                 }
               },
               "searchUrl": {
                 "type": "string",
                 "default": "https://azuresearch-usnc.nuget.org/query",
-                "description": "The NuGet endpoint addresses for searching packages (The first address in the list has highest priority)"
+                "description": "The NuGet endpoint address for searching packages"
+              },
+              "packageUrl": {
+                "type": "string",
+                "default": "https://www.nuget.org/packages/{{packageName}}",
+                "description": "The NuGet endpoint address for viewing a package in the registry page\n The {{packageName}} property inject by extension"
               },
               "packageVersionsUrl": {
                 "type": "string",
                 "default": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
-                "description": "The NuGet endpoint addresses for getting package versions (The first address in the list has highest priority)\n The {{packageName}} property inject by extension"
+                "description": "The NuGet endpoint address for getting package versions\n The {{packageName}} property inject by extension"
               },
               "preRelease": {
                 "type": "boolean",

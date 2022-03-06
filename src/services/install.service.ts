@@ -44,7 +44,8 @@ export async function install(projectList: Project[], projectID: number, package
         newerVersion: newerPackageVersion,
         packageName: packageName,
         packageVersion: selectedVersion,
-        sourceName: pkgVersions.sourceName
+        sourceName: pkgVersions.sourceName,
+        sourceId: pkgVersions.sourceId
       });
       commandResult = { message: `${packageName} installed in ${project.projectName}`, isSuccessful: true };
     }

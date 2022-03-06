@@ -57,7 +57,10 @@
           <tbody>
             <tr class="tr-package" *ngFor="let package of project.packages" [hidden]="!searchFilter(package.packageName)">
               <td>{{package.packageName}}</td>
-              <td>{{package.sourceName}}</td>
+              <td>
+                <span *ngIf="package.sourceId==null">{{package.sourceName}}</span>
+                <a class="packageUrl" *ngIf="package.sourceId" [attr.href]="getPackageSourceWebUrl(packageSources,package.sourceId,package.packageName)" target="_blank">{{package.sourceName}}</a>
+              </td>
               <td>{{package.packageVersion}}</td>
               <td>
                 <!-- <select class="versions-option">

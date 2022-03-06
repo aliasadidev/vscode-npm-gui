@@ -26,3 +26,9 @@
 ::ng-deep .mat-tab-body-wrapper {
   height: 100% !important;
 }
+
+::ng-deep .packageUrl[href=""],
+::ng-deep .packageUrl[href="#"] {
+  pointer-events: none;
+  cursor: not-allowed;
+}

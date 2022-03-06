@@ -48,6 +48,10 @@ export interface PackageSource {
    * true or false determining whether to include pre-release packages
    */
   preRelease: boolean;
+  /**
+   * The package url
+   */
+  packageUrl: string;
 }
 
 /**

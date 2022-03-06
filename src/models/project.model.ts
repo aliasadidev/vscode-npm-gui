@@ -48,6 +48,10 @@ export interface PackageDetail {
    * The package source name
    */
   sourceName: string;
+  /**
+ * The package source id
+ */
+  sourceId: number | null;
 }
 
 

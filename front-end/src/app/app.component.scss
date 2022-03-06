@@ -22,3 +22,7 @@
 .mat-ink-bar {
   background-color: green !important;
 }
+
+::ng-deep .mat-tab-body-wrapper {
+  height: 100% !important;
+}

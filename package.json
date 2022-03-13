@@ -4,7 +4,7 @@
   "description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from NuGet server for .NET Core 1.1+/.Net5+ projects",
   "author": "Ali Asadi (ali.asadi.dev@gmail.com)",
   "publisher": "aliasadidev",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "preview": true,
   "icon": "images/icon.png",
   "license": "MIT",

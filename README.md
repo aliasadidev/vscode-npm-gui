@@ -88,6 +88,10 @@
 
 # What's New
 
+## Version 2.0.1 - Mar 13, 2022
+#### Changed
+*  Update README.md
+
 ## Version 2.0.0 - Mar 13, 2022
 **⚠ WARNING: This version incompatible with the previous versions** 
 

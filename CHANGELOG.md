@@ -1,6 +1,6 @@
 # Change Log
 
-## Version 2.0.0 - Mar 6, 2022
+## Version 2.0.0 - Mar 13, 2022
 **⚠ WARNING: This version incompatible with the previous versions** 
 
 #### Added

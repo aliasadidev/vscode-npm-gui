@@ -71,7 +71,7 @@
   // NuGet  Host  "https://www.nuget.org/packages/{{packageName}}"
   // Azure  Host  "https://dev.azure.com/user/project/_artifacts/feed/feed-name/NuGet/{{packageName}}/{{version}}/overview"
   // GitLab Host  "https://gitlab.com/user/project/-/packages?type=&orderBy=name&sort=asc&search[]={{packageName}}"
-  "packageUrl": "packageUrl": "https://www.nuget.org/packages/{{packageName}}",
+  "packageUrl": "https://www.nuget.org/packages/{{packageName}}",
   //The NuGet endpoint address for searching packages
   // NuGet  Host "https://azuresearch-usnc.nuget.org/query"
   // BaGet  Host "http://localhost/v3/search"

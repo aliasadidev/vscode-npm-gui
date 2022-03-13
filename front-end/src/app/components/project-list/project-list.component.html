@@ -59,7 +59,7 @@
               <td>{{package.packageName}}</td>
               <td>
                 <span *ngIf="package.sourceId==null">{{package.sourceName}}</span>
-                <a class="packageUrl" *ngIf="package.sourceId" [attr.href]="getPackageSourceWebUrl(packageSources,package.sourceId,package.packageName)" target="_blank">{{package.sourceName}}</a>
+                <a class="packageUrl" *ngIf="package.sourceId" [attr.href]="getPackageSourceWebUrl(packageSources,package.sourceId,package.packageName,package.packageVersion)" target="_blank">{{package.sourceName}}</a>
               </td>
               <td>{{package.packageVersion}}</td>
               <td>

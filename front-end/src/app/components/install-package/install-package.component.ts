@@ -95,6 +95,7 @@ export class InstallPackageComponent implements AfterViewInit {
   }
   sourcesPages: Record<number, number> = {};
   packageSearchResultList: Record<number, PackageSearchResult> = {};
+  packageSourceCollapseStatus: Record<number, boolean> = {};
 
   searchPackage(pageNumber: number, packageSourceId: number | null) {
 
@@ -171,5 +172,8 @@ export class InstallPackageComponent implements AfterViewInit {
     return version ?? "Unknown";
   }
 
+  changeCollapseStatus(packageSourceId: number) {
+    this.packageSourceCollapseStatus[packageSourceId] = !(this.packageSourceCollapseStatus[packageSourceId])
+  }
   getPackageSourceWebUrl = getPackageSourceWebUrl;
 }

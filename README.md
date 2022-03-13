@@ -68,7 +68,11 @@
 		// Nexus  Host  "http://localhost/repository/nuget-hosted/v3/content/{{packageName}}/index.json"
 		// Azure  Host  "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/flat2/{{packageName}}/index.json"
 		"packageVersionsUrl": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
-
+    // The package url in the host server
+    // NuGet  Host  "https://www.nuget.org/packages/{{packageName}}"
+    // Azure  Host  "https://dev.azure.com/user/project/_artifacts/feed/feed-name/NuGet/{{packageName}}/{{version}}/overview"
+    // GitLab Host  "https://gitlab.com/user/project/-/packages?type=&orderBy=name&sort=asc&search[]={{packageName}}"
+    "packageUrl":"packageUrl": "https://www.nuget.org/packages/{{packageName}}",
 		//The NuGet endpoint address for searching packages
 		// NuGet  Host "https://azuresearch-usnc.nuget.org/query"
 		// BaGet  Host "http://localhost/v3/search"

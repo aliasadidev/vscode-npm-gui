@@ -39,53 +39,51 @@
 ### You can override the following settings in the **User or Workspace** `settings.json`:
 ```js
 {
-
-	//The number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted
-	"nugetpackagemanagergui.indentType": "2",
-	//The maximum duration for completing a request from this extension
-	"nugetpackagemanagergui.requestTimeout": 9000,
-	// The package sources
-	// The supported package sources: Azure/GitLab/GitHub/BaGet/Nexus/NuGet
-	"nugetpackagemanagergui.packageSources": [{
-		// The package source name
-		"sourceName": "Azure",
-		// True or false determining whether to include pre-release packages
-		"preRelease": true,
-		// The package source authentication settings
-		"authorization": {
-			// The auth types (basicAuth / none)
-			"authType": "basicAuth",
-			// It is required if authType is equal to basicAuth
-			"username": "ali.asadi",
-			// It is required if authType is equal to basicAuth
-			"password": "ACCESS_TOKEN_KEY"
-		},
-		//The NuGet endpoint address for getting package versions
-		//* The extension injects {{packageName}} property automatically
-		// NuGet  Host  "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
-		// BaGet  Host  "http://localhost/v3/package/{{packageName}}/index.json"
-		// GitLab Host  "https://gitlab.com/api/v4/projects/x/packages/nuget/download/{{packageName}}/index.json"
-		// Nexus  Host  "http://localhost/repository/nuget-hosted/v3/content/{{packageName}}/index.json"
-		// Azure  Host  "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/flat2/{{packageName}}/index.json"
-		"packageVersionsUrl": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
-    // The package url in the host server
-    // NuGet  Host  "https://www.nuget.org/packages/{{packageName}}"
-    // Azure  Host  "https://dev.azure.com/user/project/_artifacts/feed/feed-name/NuGet/{{packageName}}/{{version}}/overview"
-    // GitLab Host  "https://gitlab.com/user/project/-/packages?type=&orderBy=name&sort=asc&search[]={{packageName}}"
-    "packageUrl":"packageUrl": "https://www.nuget.org/packages/{{packageName}}",
-		//The NuGet endpoint address for searching packages
-		// NuGet  Host "https://azuresearch-usnc.nuget.org/query"
-		// BaGet  Host "http://localhost/v3/search"
-		// GitLab Host "https://gitlab.com/api/v4/projects/x/packages/nuget/query"
-		// Nexus  Host "http://localhost/repository/nuget-hosted/v3/query/0"
-		// Azure  Host "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/query2"
-		"searchUrl": "https://azuresearch-usnc.nuget.org/query",
-		// The source types (server / local)
-		// * local type isn't supported.
-		"sourceType": "server",
-	}]
+//The number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted
+"nugetpackagemanagergui.indentType": "2",
+//The maximum duration for completing a request from this extension
+"nugetpackagemanagergui.requestTimeout": 9000,
+// The package sources
+// The supported package sources: Azure/GitLab/GitHub/BaGet/Nexus/NuGet
+"nugetpackagemanagergui.packageSources": [{
+  // The package source name
+  "sourceName": "Azure",
+  // True or false determining whether to include pre-release packages
+  "preRelease": true,
+  // The package source authentication settings
+  "authorization": {
+    // The auth types (basicAuth / none)
+    "authType": "basicAuth",
+    // It is required if authType is equal to basicAuth
+    "username": "ali.asadi",
+    // It is required if authType is equal to basicAuth
+    "password": "ACCESS_TOKEN_KEY"
+  },
+  //The NuGet endpoint address for getting package versions
+  //* The extension injects {{packageName}} property automatically
+  // NuGet  Host  "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
+  // BaGet  Host  "http://localhost/v3/package/{{packageName}}/index.json"
+  // GitLab Host  "https://gitlab.com/api/v4/projects/x/packages/nuget/download/{{packageName}}/index.json"
+  // Nexus  Host  "http://localhost/repository/nuget-hosted/v3/content/{{packageName}}/index.json"
+  // Azure  Host  "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/flat2/{{packageName}}/index.json"
+  "packageVersionsUrl": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
+  // The package url in the host server
+  // NuGet  Host  "https://www.nuget.org/packages/{{packageName}}"
+  // Azure  Host  "https://dev.azure.com/user/project/_artifacts/feed/feed-name/NuGet/{{packageName}}/{{version}}/overview"
+  // GitLab Host  "https://gitlab.com/user/project/-/packages?type=&orderBy=name&sort=asc&search[]={{packageName}}"
+  "packageUrl": "packageUrl": "https://www.nuget.org/packages/{{packageName}}",
+  //The NuGet endpoint address for searching packages
+  // NuGet  Host "https://azuresearch-usnc.nuget.org/query"
+  // BaGet  Host "http://localhost/v3/search"
+  // GitLab Host "https://gitlab.com/api/v4/projects/x/packages/nuget/query"
+  // Nexus  Host "http://localhost/repository/nuget-hosted/v3/query/0"
+  // Azure  Host "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/query2"
+  "searchUrl": "https://azuresearch-usnc.nuget.org/query",
+  // The source types (server / local)
+  // * local type isn't supported.
+  "sourceType": "server",
+}]
 }
-
 ```
 
 # What's New
@@ -156,3 +154,8 @@
 
 ### Added
 * Some variables overridable in `settings.json`
+
+---
+[JetBrains](https://www.jetbrains.com/?from=vscode-npm-gui) kindly provides vscode-npm-gui with a free open-source licence for their Rider.
+
+![image](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/JetBrains_Logo_2016.svg/121px-JetBrains_Logo_2016.svg.png)

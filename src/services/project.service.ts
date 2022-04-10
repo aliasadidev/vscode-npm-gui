@@ -40,7 +40,7 @@ async function setPackageVersions(config: ExtensionConfiguration, projects: Proj
   if (hasPackage) {
     const allUniquePackages: string[] = mergeList(projects.map(q => q.packages.map(e => e.packageName)));
 
-    let packageVersions: PackageVersion[] = await fetchPackageVersionsBatch(allUniquePackages, config.packageSources, config.requestTimeout);
+    let packageVersions: PackageVersion[] = await fetchPackageVersionsBatch(allUniquePackages, config.packageSources, config.requestTimeout, config.vscodeHttpConfig);
 
     let keyValuePackageVersions: Record<string, string[]> = {}
     let keyValuePackageSource: Record<string, { name: string, id: number }> = {}

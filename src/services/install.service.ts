@@ -33,7 +33,7 @@ export async function install(projectList: Project[], projectID: number, package
       const projectFileContent = readFileContent(project.projectPath);
       const xml: string = addPackage(projectFileContent, packageName, selectedVersion, config.indentType);
       writeToFile(project.projectPath, xml);
-      const pkgVersions: PackageVersion = await fetchPackageVersions(packageName, config.packageSources, config.requestTimeout);
+      const pkgVersions: PackageVersion = await fetchPackageVersions(packageName, config.packageSources, config.requestTimeout, config.vscodeHttpConfig);
 
       const newerPackageVersion = findStableVersion(pkgVersions.versions);
       const isUpdated = newerPackageVersion == selectedVersion;

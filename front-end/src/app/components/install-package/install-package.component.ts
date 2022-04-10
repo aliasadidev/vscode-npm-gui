@@ -8,6 +8,7 @@ import { CommandService } from 'src/app/services/command-service/command.service
 import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { PackageSource } from '../../../../../src/models/option.model';
 import { getPackageSourceWebUrl } from '../../shared/component-shared';
+import { findStableVersion } from '../../../../../src/services/common.service';
 
 @Component({
   selector: 'app-install-package',
@@ -108,7 +109,7 @@ export class InstallPackageComponent implements AfterViewInit {
       res.result.filter(x => x.packageSourceId == packageSourceId || packageSourceId == null).forEach(source => {
         this.packageSearchResultList[source.packageSourceId] = source;
         source.packages.forEach(p => {
-          p.stableVersion = this.findStableVersion(p.versions);
+          p.stableVersion = this.findPackageStableVersion(p.versions);
         });
         this.sourcesPages[source.packageSourceId] = pageNumber;
         this.cd.detectChanges();
@@ -161,15 +162,10 @@ export class InstallPackageComponent implements AfterViewInit {
     }
   }
 
-  findStableVersion(searchPackageResultVersions: SearchPackageResultVersion[]): string {
-    const regExp: RegExp = /^\d+\.\d+\.\d+(\.\d+)?$/m;
+  findPackageStableVersion(searchPackageResultVersions: SearchPackageResultVersion[]): string {
     let versions = searchPackageResultVersions.map(x => x.version);
-    let version: string | undefined = versions.slice().reverse().find(x => regExp.test(x));
-
-    if (version === undefined && versions && versions.length > 0)
-      version = searchPackageResultVersions[versions.length - 1].version;
-
-    return version ?? "Unknown";
+    var version = findStableVersion(versions)
+    return version;
   }
 
   changeCollapseStatus(packageSourceId: number) {

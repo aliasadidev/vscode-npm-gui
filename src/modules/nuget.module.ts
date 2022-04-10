@@ -8,11 +8,13 @@ import { jsonToQueryString } from './utils';
 
 /**
  * Get the request options(proxy,timeout,...)
+ * @param authOption package source auth option
  * @param nugetRequestTimeout request timeout
+ * @param vscodeHttpConfig vscode http config
  * @returns
  */
-function getRequestOptions(authOption: AuthorizationOption, nugetRequestTimeout: number): RequestOption {
-  const proxyOption = getProxyOption();
+function getRequestOptions(authOption: AuthorizationOption, nugetRequestTimeout: number, vscodeHttpConfig: any): RequestOption {
+  const proxyOption = getProxyOption(vscodeHttpConfig);
   const requestOption: RequestOption = {
     timeout: nugetRequestTimeout,
     headers: {}
@@ -37,15 +39,16 @@ function getRequestOptions(authOption: AuthorizationOption, nugetRequestTimeout:
  * @param packageName The package name
  * @param packageVersionsUrls The nuget server url
  * @param requestOption The request options
+ * @param vscodeHttpConfig vscode http config
  * @returns `PackageVersion`
  */
-async function getPackageVersions(packageName: string, packageSources: PackageSource[], nugetRequestTimeout: number): Promise<PackageVersion> {
+async function getPackageVersions(packageName: string, packageSources: PackageSource[], nugetRequestTimeout: number, vscodeHttpConfig: any): Promise<PackageVersion> {
   let result: PackageVersion | undefined | null;
   let errors: string[] = [];
   try {
     result = await Promise.any(packageSources.map(async (src) => {
       let url = src.packageVersionsUrl.replace("{{packageName}}", packageName?.toLowerCase());
-      const requestOption = getRequestOptions(src.authorization, nugetRequestTimeout);
+      const requestOption = getRequestOptions(src.authorization, nugetRequestTimeout, vscodeHttpConfig);
       return await fetch(url, requestOption)
         .then(async response => {
           const rawResult = await response.text();
@@ -96,10 +99,11 @@ async function getPackageVersions(packageName: string, packageSources: PackageSo
  * @param packageName The package name
  * @param packageVersionsUrls The nuget server url
  * @param requestOption The request options
+ * @param vscodeHttpConfig vscode http config
  * @returns `PackageVersion`
  */
-export async function fetchPackageVersions(packageName: string, packageSources: PackageSource[], nugetRequestTimeout: number): Promise<PackageVersion> {
-  return getPackageVersions(packageName, packageSources, nugetRequestTimeout);
+export async function fetchPackageVersions(packageName: string, packageSources: PackageSource[], nugetRequestTimeout: number, vscodeHttpConfig: any): Promise<PackageVersion> {
+  return getPackageVersions(packageName, packageSources, nugetRequestTimeout, vscodeHttpConfig);
 }
 
 /**
@@ -107,12 +111,13 @@ export async function fetchPackageVersions(packageName: string, packageSources: 
  * @param packageName The package name
  * @param packageVersionsUrls The nuget server url
  * @param requestOption The request options
+ * @param vscodeHttpConfig vscode http config
  * @returns `PackageVersion[]`
  */
-export async function fetchPackageVersionsBatch(packages: string[], packageSources: PackageSource[], nugetRequestTimeout: number): Promise<PackageVersion[]> {
+export async function fetchPackageVersionsBatch(packages: string[], packageSources: PackageSource[], nugetRequestTimeout: number, vscodeHttpConfig: any): Promise<PackageVersion[]> {
 
   let result = await Promise.all(
-    packages.map(pkgName => getPackageVersions(pkgName, packageSources, nugetRequestTimeout))
+    packages.map(pkgName => getPackageVersions(pkgName, packageSources, nugetRequestTimeout, vscodeHttpConfig))
   );
   return result;
 }
@@ -123,10 +128,11 @@ export async function fetchPackageVersionsBatch(packages: string[], packageSourc
  * @param preRelease true/false
  * @param take take items
  * @param skip skip items
+ * @param vscodeHttpConfig vscode http config
  * @param nugetRequestTimeout request timeout
  * @returns list of packages
  */
-export async function searchPackage(query: string, packageSources: PackageSource[], take: number, skip: number, nugetRequestTimeout: number, packageSourceId?: number): Promise<PackageSearchResult[]> {
+export async function searchPackage(query: string, packageSources: PackageSource[], take: number, skip: number, nugetRequestTimeout: number, vscodeHttpConfig: any, packageSourceId?: number): Promise<PackageSearchResult[]> {
 
   if (packageSourceId != null) {
     packageSources = packageSources.filter(x => x.id == packageSourceId!)
@@ -142,7 +148,7 @@ export async function searchPackage(query: string, packageSources: PackageSource
         take: take
       });
       let url = `${src.searchUrl}${queryString}`;
-      const requestOption = getRequestOptions(src.authorization, nugetRequestTimeout);
+      const requestOption = getRequestOptions(src.authorization, nugetRequestTimeout, vscodeHttpConfig);
       return fetch(url, requestOption)
         .then(async response => {
           const rawResult = await response.text();

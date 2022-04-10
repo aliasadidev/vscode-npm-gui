@@ -10,7 +10,9 @@ export async function searchPackage(query: string, skip: number, take: number, c
     take,
     skip,
     config.requestTimeout,
-    packageSourceId);
+    config.vscodeHttpConfig,
+    packageSourceId
+  );
 
   return searchResult;
 }

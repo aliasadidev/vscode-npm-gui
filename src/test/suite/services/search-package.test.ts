@@ -10,7 +10,11 @@ suite('search-package.service.ts tests', () => {
 
   test('searchPackage test', async () => {
     const packageName = 'Microsoft.NET.Test.Sdk';
-    const result: PackageSearchResult[] | undefined = await searchPackage(packageName, 0, 10, configOptions);
+    const result: PackageSearchResult[] | undefined = await searchPackage(
+      packageName,
+      0,
+      10,
+      configOptions);
 
     assert(result !== null && result !== undefined && result[0].packages.length > 1);
     assert(result[0].packages[0].id === packageName);

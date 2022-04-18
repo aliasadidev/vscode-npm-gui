@@ -28,5 +28,6 @@ export function getConfigOptions(): ExtensionConfiguration {
 
 
 export function getTestPath(fileName: string): string {
-  return path.resolve(`../../src/test/test-data/${fileName}`);
+  var testRootPath = path.resolve(__dirname, `../..`);
+  return path.resolve(testRootPath, `test-data/${fileName}`);
 }

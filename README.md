@@ -91,6 +91,11 @@
 
 # What's New
 
+## Version 2.0.2 - Apr 18, 2022
+#### Fixed
+*  Fixed unordered version list
+*  Fixed an issue in ProGet registry `authors` property
+
 ## Version 2.0.1 - Mar 13, 2022
 #### Changed
 *  Update README.md

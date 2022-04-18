@@ -117,7 +117,7 @@
               },
               "preRelease": {
                 "type": "boolean",
-                "default": false,
+                "default": true,
                 "description": "true or false determining whether to include pre-release packages in the result of the search"
               }
             }

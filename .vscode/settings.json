@@ -15,5 +15,8 @@
   },
   "cSpell.words": [
     "nugetpackagemanagergui"
-  ]
+  ],
+  "mochaExplorer.require": "ts-node/register",
+  "mochaExplorer.files": "src/test/**/**.test.ts",
+  "mochaExplorer.ui": "tdd"
 }

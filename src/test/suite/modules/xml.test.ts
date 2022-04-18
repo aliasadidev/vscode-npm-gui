@@ -1,11 +1,12 @@
 import * as assert from 'assert';
 import { PackageDetail } from '../../../models/nuget.model';
-import { getConfiguration } from '../../../modules/config.module';
 import { addPackage, getPackages, removePackage, updatePackage } from '../../../modules/xml.module';
+import { getConfigOptions } from './config';
+
 
 
 suite('xml.module.ts tests', () => {
-  const configOptions = getConfiguration();
+  const configOptions = getConfigOptions();
   const indentType = !isNaN(parseFloat(configOptions.indentType)) ? ' '.repeat(parseFloat(configOptions.indentType)) : configOptions.indentType;
 
 

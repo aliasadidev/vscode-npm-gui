@@ -12,9 +12,6 @@
 
   select {
     width: 80%;
-    text-align: center;
-    text-align-last: center;
-    -moz-text-align-last: center;
   }
 }
 
@@ -41,13 +38,16 @@
     tr {
       max-height: 23px;
     }
+
     td {
       padding: 2px 3px;
       border: 1px solid #d3d3d3;
     }
+
     tr:nth-child(odd) {
       background-color: #daecce77;
     }
+
     tr:hover {
       background-color: #727272c5;
     }
@@ -56,6 +56,7 @@
 
 .btn-box {
   text-align: right;
+
   button {
     text-align: center;
     font-size: 12px;
@@ -86,6 +87,7 @@
   .btn-box {
     order: 1;
   }
+
   .search-box {
     order: 2;
   }
@@ -96,6 +98,7 @@
   .btn-box {
     order: 2;
   }
+
   .search-box {
     order: 1;
   }
@@ -106,6 +109,7 @@
   .btn-box {
     order: 2;
   }
+
   .search-box {
     order: 1;
   }
@@ -116,6 +120,7 @@
   .btn-box {
     order: 2;
   }
+
   .search-box {
     order: 1;
   }

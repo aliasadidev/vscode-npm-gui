@@ -3,8 +3,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { VSCExpress } from 'vscode-express';
-import { showErrorMessage, setStatusBarMessage, resetStatusBarMessage, showInformationMessage } from './modules/notify.module';
-import { tryCatch } from './modules/utils'
+import { showErrorMessage, setStatusBarMessage, resetStatusBarMessage, showInformationMessage, showCommandResults, showCommandResult } from './modules/notify.module';
 import { PackageSearchResult } from './models/nuget.model';
 import { getConfiguration } from './modules/config.module';
 import { Project } from './models/project.model';
@@ -115,4 +114,19 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
+}
+
+export async function tryCatch(action: any, successMessage: string | undefined = undefined, isListResult: boolean = false): Promise<any> {
+  let result: any;
+  try {
+    result = await action();
+    if (isListResult)
+      showCommandResults(result, successMessage);
+    else
+      showCommandResult(result, successMessage);
+  } catch (ex) {
+    resetStatusBarMessage();
+    showErrorMessage(ex);
+  }
+  return result;
 }

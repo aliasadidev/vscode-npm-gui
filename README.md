@@ -66,11 +66,13 @@
   // GitLab Host  "https://gitlab.com/api/v4/projects/x/packages/nuget/download/{{packageName}}/index.json"
   // Nexus  Host  "http://localhost/repository/nuget-hosted/v3/content/{{packageName}}/index.json"
   // Azure  Host  "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/flat2/{{packageName}}/index.json"
+  // ProGet Host: "http://localhost/nuget/Test-Feed/v3/flatcontainer/{{packageName}}/index.json"
   "packageVersionsUrl": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
   // The package url in the host server
   // NuGet  Host  "https://www.nuget.org/packages/{{packageName}}"
   // Azure  Host  "https://dev.azure.com/user/project/_artifacts/feed/feed-name/NuGet/{{packageName}}/{{version}}/overview"
   // GitLab Host  "https://gitlab.com/user/project/-/packages?type=&orderBy=name&sort=asc&search[]={{packageName}}"
+  // ProGet Host: "http://localhost/feeds/Test-Feed/{{packageName}}/versions"
   "packageUrl": "https://www.nuget.org/packages/{{packageName}}",
   //The NuGet endpoint address for searching packages
   // NuGet  Host "https://azuresearch-usnc.nuget.org/query"
@@ -78,6 +80,7 @@
   // GitLab Host "https://gitlab.com/api/v4/projects/x/packages/nuget/query"
   // Nexus  Host "http://localhost/repository/nuget-hosted/v3/query/0"
   // Azure  Host "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/query2"
+  // ProGet Host:"http://localhost/nuget/Test-Feed/v3/search"
   "searchUrl": "https://azuresearch-usnc.nuget.org/query",
   // The source types (server / local)
   // * local type isn't supported.
@@ -87,6 +90,11 @@
 ```
 
 # What's New
+
+## Version 2.0.2 - Apr 18, 2022
+#### Fixed
+*  Fixed unordered version list
+*  Fixed an issue in ProGet registry `authors` property
 
 ## Version 2.0.1 - Mar 13, 2022
 #### Changed

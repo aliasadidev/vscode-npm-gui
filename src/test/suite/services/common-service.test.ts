@@ -146,7 +146,7 @@ suite('common.service.ts tests', () => {
     },
   ];
   versionListTestCases.forEach(({ actualValue, expectedValue }) => {
-    test(`should be the same given: expected :${expectedValue} values`, () => {
+    test(`should be the same given [${actualValue}] : expected :(${expectedValue}) values`, () => {
       var version = findStableVersion(actualValue);
       expect(expectedValue).to.equal(version);
     });

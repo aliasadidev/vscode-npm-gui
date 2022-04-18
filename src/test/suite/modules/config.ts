@@ -1,3 +1,4 @@
+import path = require('path');
 import { AuthorizationType, ExtensionConfiguration, SourceType } from '../../../models/option.model';
 
 export function getConfigOptions(): ExtensionConfiguration {
@@ -23,4 +24,9 @@ export function getConfigOptions(): ExtensionConfiguration {
     vscodeHttpConfig: {}
   });
   return res;
+}
+
+
+export function getTestPath(fileName: string): string {
+  return path.resolve(`../../src/test/test-data/${fileName}`);
 }

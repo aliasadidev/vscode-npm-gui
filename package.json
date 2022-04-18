@@ -33,7 +33,7 @@
     "url": "https://github.com/aliasadidev/vscode-npm-gui.git"
   },
   "engines": {
-    "vscode": "^1.65.0"
+    "vscode": "^1.66.1"
   },
   "categories": [
     "Other"

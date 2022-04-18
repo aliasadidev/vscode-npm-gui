@@ -17,7 +17,7 @@
     "nugetpackagemanagergui"
   ],
   "mochaExplorer.require": "ts-node/register",
-  "mochaExplorer.files": "src/test/**/**.test.ts",
+  "mochaExplorer.files": "src/test/suite/**/**.test.ts",
   "mochaExplorer.ui": "tdd",
-  "mochaExplorer.timeout": 100000
+  "mochaExplorer.timeout": 100000,
 }

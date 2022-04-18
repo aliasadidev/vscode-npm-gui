@@ -5,7 +5,7 @@ import { findStableVersion } from '../../../services/common.service';
 
 suite('common.service.ts tests', () => {
 
-  const VersionListTestCases = [
+  const versionListTestCases = [
     {
       actualValue: [
         '1.0.1',
@@ -145,7 +145,7 @@ suite('common.service.ts tests', () => {
       expectedValue: '7.0.0-preview.2.22153.1'
     },
   ];
-  VersionListTestCases.forEach(({ actualValue, expectedValue }) => {
+  versionListTestCases.forEach(({ actualValue, expectedValue }) => {
     test(`should be the same given: expected :${expectedValue} values`, () => {
       var version = findStableVersion(actualValue);
       expect(expectedValue).to.equal(version);

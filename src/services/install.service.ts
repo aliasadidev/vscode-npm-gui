@@ -4,8 +4,9 @@ import { ServiceResult } from "../models/common.model";
 import { readFileContent, writeToFile } from "../modules/file.module";
 import { fetchPackageVersions } from "../modules/nuget.module";
 import { addPackage } from "../modules/xml.module";
-import { checkAccess, findStableVersion, getProject } from "./common.service";
+import { checkAccess, getProject } from "./common.service";
 import { PackageVersion } from "../models/nuget.model";
+import { findStableVersion } from "./version.service";
 
 /**
  * Install a new package

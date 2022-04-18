@@ -6,7 +6,7 @@ import { PackageVersion, PackageDetail } from '../models/nuget.model';
 import { fetchPackageVersionsBatch } from '../modules/nuget.module';
 import { getPackages } from '../modules/xml.module';
 import { mergeList } from '../modules/utils';
-import { findStableVersion } from './common.service';
+import { findStableVersion } from './version.service';
 import { readFileContent } from '../modules/file.module';
 import { ExtensionConfiguration } from '../models/option.model';
 import { FindProjectResult } from '../models/common.model';

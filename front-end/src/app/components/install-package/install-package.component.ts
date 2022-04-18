@@ -8,7 +8,7 @@ import { CommandService } from 'src/app/services/command-service/command.service
 import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { PackageSource } from '../../../../../src/models/option.model';
 import { getPackageSourceWebUrl } from '../../shared/component-shared';
-import { findStableVersion } from '../../../../../src/services/common.service';
+import { findStableVersion } from '../../../../../src/services/version.service';
 
 @Component({
   selector: 'app-install-package',
@@ -171,5 +171,15 @@ export class InstallPackageComponent implements AfterViewInit {
   changeCollapseStatus(packageSourceId: number) {
     this.packageSourceCollapseStatus[packageSourceId] = !(this.packageSourceCollapseStatus[packageSourceId])
   }
+
+  getAuthors(pkg: any) {
+    let result: string | null = null;
+    if (pkg.authors && Array.isArray(pkg.authors) && pkg.authors.length > 0)
+      result = `Authors: ${pkg.authors.join(', ')}`;
+    else if (pkg.authors && (typeof pkg.authors === 'string' || pkg.authors instanceof String) && pkg.authors.length > 0)
+      result = `Author: ${pkg.authors}`;
+    return result;
+  }
+
   getPackageSourceWebUrl = getPackageSourceWebUrl;
 }

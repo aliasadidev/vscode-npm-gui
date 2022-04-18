@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { findStableVersion } from '../../../services/common.service';
+import { findStableVersion } from '../../../services/version.service';
 
 
 
@@ -144,6 +144,15 @@ suite('common.service.ts tests', () => {
       ],
       expectedValue: '7.0.0-preview.2.22153.1'
     },
+    {
+      actualValue: [
+        '1.0.0.18456',
+        '1.0.0.18454',
+        '1.0.0.18457',
+        '1.0.0.18453'
+      ],
+      expectedValue: '1.0.0.18457'
+    }
   ];
   versionListTestCases.forEach(({ actualValue, expectedValue }) => {
     test(`should be the same given [${actualValue}] : expected :(${expectedValue}) values`, () => {

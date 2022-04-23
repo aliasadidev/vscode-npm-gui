@@ -51,3 +51,8 @@ npm run test
    npm i @angular/cli@12.1.4
    ng build
    ```
+
+## Create the extension vsix file
+  ```
+   vsce package
+  ```

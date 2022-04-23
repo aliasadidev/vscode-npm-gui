@@ -19,6 +19,7 @@ jobs:
           npm install -g vsce
           npm run test
   publish:
+    needs: test
     name: Publish to VSCode Marketplace
     runs-on: ubuntu-latest
 

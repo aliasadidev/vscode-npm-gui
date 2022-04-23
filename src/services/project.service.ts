@@ -6,7 +6,7 @@ import { PackageVersion, PackageDetail } from '../models/nuget.model';
 import { fetchPackageVersionsBatch } from '../modules/nuget.module';
 import { getPackages } from '../modules/xml.module';
 import { mergeList } from '../modules/utils';
-import { findStableVersion } from './common.service';
+import { findStableVersion } from './version.service';
 import { readFileContent } from '../modules/file.module';
 import { ExtensionConfiguration } from '../models/option.model';
 import { FindProjectResult } from '../models/common.model';
@@ -40,7 +40,7 @@ async function setPackageVersions(config: ExtensionConfiguration, projects: Proj
   if (hasPackage) {
     const allUniquePackages: string[] = mergeList(projects.map(q => q.packages.map(e => e.packageName)));
 
-    let packageVersions: PackageVersion[] = await fetchPackageVersionsBatch(allUniquePackages, config.packageSources, config.requestTimeout);
+    let packageVersions: PackageVersion[] = await fetchPackageVersionsBatch(allUniquePackages, config.packageSources, config.requestTimeout, config.vscodeHttpConfig);
 
     let keyValuePackageVersions: Record<string, string[]> = {}
     let keyValuePackageSource: Record<string, { name: string, id: number }> = {}

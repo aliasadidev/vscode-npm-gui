@@ -78,7 +78,10 @@
                   </div>
 
                   <div class="d-flex">
-                    <span *ngIf="package.authors && package.authors.length>0">Authors: {{package.authors.join(', ')}}</span>
+                    <ng-container *ngIf="getAuthors(package.authors) as variable">
+                      <span>{{variable}}</span>
+                    </ng-container>
+
                   </div>
 
                 </div>

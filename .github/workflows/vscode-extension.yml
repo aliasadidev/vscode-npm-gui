@@ -43,6 +43,5 @@ jobs:
              vsce package
 
       - name: Publish to marketplace
-        run: ls
-         #run: vsce publish -p ${{ secrets.MARKETPLACE_SECRET }}
+        run: vsce publish -p ${{ secrets.MARKETPLACE_SECRET }}
 

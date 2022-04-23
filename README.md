@@ -1,6 +1,6 @@
 # NuGet Package Manager GUI For VSCode
 
-#### An extension for Visual Studio Code that lets you easily __`update/remove/install`__ packages from NuGet server for __`.NET Core/.Net 5`__ projects
+#### An extension for Visual Studio Code that lets you easily __`update/remove/install`__ packages from NuGet public/private servers for __`.NET Core/.Net 5+`__ projects
 
 
   
@@ -18,7 +18,7 @@
 - Update all packages with one click
 - Remove a package from the projects
 - Search and install new packages from NuGet Server
-- Support several NuGet servers (`NuGet`, `BaGet`, `GitLab`, `Nexus`, `Azure`, `JFrog`)
+- Support several NuGet servers (`NuGet`, `BaGet`, `GitLab`, `Nexus`, `Azure`, `JFrog`, `ProGet`)
 - Compatible with Linux and Windows
 - Indenting XML output
 - Support basic authentication for private registries

@@ -18,6 +18,7 @@ export function getConfiguration(): ExtensionConfiguration {
   return {
     indentType,
     packageSources,
-    requestTimeout
+    requestTimeout,
+    vscodeHttpConfig: vscode.workspace.getConfiguration('http')
   };
 }

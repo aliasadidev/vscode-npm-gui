@@ -1,20 +1,20 @@
 import * as assert from 'assert';
 import { PackageSearchResult, PackageVersion } from '../../../models/nuget.model';
-import { getConfiguration } from '../../../modules/config.module';
 import { fetchPackageVersions, searchPackage, fetchPackageVersionsBatch } from '../../../modules/nuget.module';
+import { getConfigOptions } from './config';
 
 
 suite('nuget.ts tests', () => {
-  const configOptions = getConfiguration();
+  const configOptions = getConfigOptions();
 
   test('fetchPackageVersions test', async () => {
-    const result: PackageVersion = await fetchPackageVersions('Microsoft.NET.Test.Sdk', configOptions.packageSources, configOptions.requestTimeout);
+    const result: PackageVersion = await fetchPackageVersions('Microsoft.NET.Test.Sdk', configOptions.packageSources, configOptions.requestTimeout, configOptions.vscodeHttpConfig);
     assert(result.packageName != null && result.packageName != undefined)
     assert(result.versions != null && result.packageName != undefined && result.versions.length > 0)
   });
 
   test('fetchPackageVersionsBatch test', async () => {
-    const result: PackageVersion[] = await fetchPackageVersionsBatch(['Microsoft.NET.Test.Sdk', 'xunit'], configOptions.packageSources, configOptions.requestTimeout);
+    const result: PackageVersion[] = await fetchPackageVersionsBatch(['Microsoft.NET.Test.Sdk', 'xunit'], configOptions.packageSources, configOptions.requestTimeout, configOptions.vscodeHttpConfig);
 
     assert(result != null && result != undefined && result.length == 2);
 
@@ -28,11 +28,13 @@ suite('nuget.ts tests', () => {
 
   test('searchPackage test', async () => {
     const packageName = 'Microsoft.NET.Test.Sdk';
-    const result: PackageSearchResult[] = await searchPackage(packageName,
+    const result: PackageSearchResult[] = await searchPackage(
+      packageName,
       configOptions.packageSources,
       1,
       0,
-      configOptions.requestTimeout
+      configOptions.requestTimeout,
+      configOptions.vscodeHttpConfig
     );
 
     assert(result != null && result != undefined && result[0].packages.length == 1);

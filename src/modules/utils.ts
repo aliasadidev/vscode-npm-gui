@@ -1,6 +1,3 @@
-import { resetStatusBarMessage, showCommandResult, showCommandResults, showErrorMessage } from './notify.module';
-
-
 /**
  * Convert Json to QueryString
  * @param json The Json data
@@ -43,18 +40,4 @@ export function uniqBy(arr: any[], key: string) {
   });
 }
 
-export async function tryCatch(action: any, successMessage: string | undefined = undefined, isListResult: boolean = false): Promise<any> {
-  let result: any;
-  try {
-    result = await action();
-    if (isListResult)
-      showCommandResults(result, successMessage);
-    else
-      showCommandResult(result, successMessage);
-  } catch (ex) {
-    resetStatusBarMessage();
-    showErrorMessage(ex);
-  }
-  return result;
-}
 

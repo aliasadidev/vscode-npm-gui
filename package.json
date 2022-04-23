@@ -4,7 +4,7 @@
   "description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from NuGet server for .NET Core 1.1+/.Net5+ projects",
   "author": "Ali Asadi (ali.asadi.dev@gmail.com)",
   "publisher": "aliasadidev",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "preview": true,
   "icon": "images/icon.png",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "url": "https://github.com/aliasadidev/vscode-npm-gui.git"
   },
   "engines": {
-    "vscode": "^1.65.0"
+    "vscode": "^1.66.2"
   },
   "categories": [
     "Other"
@@ -117,7 +117,7 @@
               },
               "preRelease": {
                 "type": "boolean",
-                "default": false,
+                "default": true,
                 "description": "true or false determining whether to include pre-release packages in the result of the search"
               }
             }
@@ -156,11 +156,13 @@
     "package": "webpack --mode production --devtool hidden-source-map",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "pretest": "npm run post-bundle && npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "post-bundle": "copyfiles -u 1 src/test/test-data/*.* out/"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.0",
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.1.0",
     "@types/node": "16.x",
@@ -169,11 +171,14 @@
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "@typescript-eslint/parser": "^5.12.1",
     "@vscode/test-electron": "^2.1.2",
+    "chai": "^4.3.6",
+    "copyfiles": "^2.4.1",
     "eslint": "^8.9.0",
     "glob": "^7.2.0",
-    "mocha": "^9.2.1",
+    "mocha": "^9.2.2",
     "ts-loader": "^9.2.6",
-    "typescript": "^4.5.5",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2"
   },

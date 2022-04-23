@@ -14,6 +14,10 @@ export interface ExtensionConfiguration {
    * The maximum duration for completing a request
    */
   requestTimeout: number;
+  /**
+   * Proxy settings
+   */
+  vscodeHttpConfig: any;
 }
 
 /**

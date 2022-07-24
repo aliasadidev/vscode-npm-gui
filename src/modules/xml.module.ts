@@ -8,8 +8,8 @@ export function getPackages(xml: string): PackageDetail[] {
   if (itemGroup.itemGroupIndex !== -1) {
     checkMoreThenOneItemGroup(itemGroup.projectElement);
     let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
-    let pacakges: Element[] = getPackageReferences(selectedItemGroup);
-    packageList = pacakges.map(e => {
+    let packages: Element[] = getPackageReferences(selectedItemGroup);
+    packageList = packages.map(e => {
       let attr = e.attributes;
       let result: PackageDetail = {
         packageName: attr["Include"],
@@ -27,12 +27,21 @@ export function removePackage(xml: string, packageName: string, indentType: stri
   checkMoreThenOneItemGroup(itemGroup.projectElement);
   let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
   let delIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
-  selectedItemGroup.elements.splice(delIndex, 1);
+
+  let indexSize = 1;
+
+  let left = (selectedItemGroup.elements[delIndex - 1].text);
+  if (left != null && left.search(/\s+/mg) >= 0) {
+    indexSize++;
+    delIndex--;
+  }
+
+  selectedItemGroup.elements.splice(delIndex, indexSize);
   if (selectedItemGroup.elements.length === 0) {
     itemGroup.projectElement.elements.splice(itemGroup.itemGroupIndex, 1);
   }
-  xmlResult = convert.js2xml(itemGroup.rootElement, { compact: false, spaces: indentType });
-  return xmlResult;
+  xmlResult = convert.js2xml(itemGroup.rootElement, {});
+  return fixXmlIndention(xmlResult);
 }
 
 export function updatePackage(xml: string, packageName: string, version: string, indentType: string) {
@@ -41,8 +50,8 @@ export function updatePackage(xml: string, packageName: string, version: string,
   let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
   let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
   selectedItemGroup.elements[packageIndex].attributes["Version"] = version;
-  xmlResult = convert.js2xml(itemGroup.rootElement, { compact: false, spaces: indentType });
-  return xmlResult;
+  xmlResult = convert.js2xml(itemGroup.rootElement, {});
+  return fixXmlIndention(xmlResult);
 }
 
 export function addPackage(xml: string, packageName: string, version: string, indentType: string) {
@@ -50,14 +59,92 @@ export function addPackage(xml: string, packageName: string, version: string, in
   let itemGroup = getItemGroupIndexResult(xml);
 
   if (itemGroup.itemGroupIndex == -1) {
-    itemGroup.projectElement.elements.push({ type: "element", name: "ItemGroup", elements: [] });
-    itemGroup.itemGroupIndex = itemGroup.projectElement.elements.length - 1
+    let lstIndex = itemGroup.projectElement.elements.map(ele => ele.type === 'element')
+      .lastIndexOf(true);
+    let topLeft = itemGroup.projectElement.elements[lstIndex - 1].text;
+
+    if (topLeft != null && topLeft.search(/\s+/mg) >= 0) {
+      itemGroup.projectElement.elements = insertElement(
+        itemGroup.projectElement.elements,
+        lstIndex + 1,
+        {
+          type: 'text',
+          text: topLeft,
+          name: '',
+          elements: []
+        });
+      lstIndex++;
+    }
+
+
+    itemGroup.projectElement.elements = insertElement(
+      itemGroup.projectElement.elements,
+      lstIndex + 1,
+      {
+        type: "element",
+        name: "ItemGroup",
+        elements: []
+      });
+
+
+    itemGroup.itemGroupIndex = lstIndex + 1
+    // item group is empty
+    var text = topLeft?.split(/\r\n|\r|\n/)
+    if (text) {
+      var lastFormat = text[text.length - 1];
+      let space = {
+        type: 'text',
+        text: "\r\n" + lastFormat + lastFormat,
+        name: '',
+        elements: []
+      };
+      let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
+      selectedItemGroup.elements.push(space);
+
+
+      let space2 = {
+        type: 'text',
+        text: topLeft,
+        name: '',
+        elements: []
+      };
+
+      selectedItemGroup.elements.push(space2);
+    }
+
   }
   checkMoreThenOneItemGroup(itemGroup.projectElement);
 
   let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
   let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
   if (packageIndex === -1) {
+
+    let lstIndex = selectedItemGroup.elements.map(ele => ele.type === 'element')
+      .lastIndexOf(true);
+
+    let insertIndex = 0;
+    if (lstIndex != -1) {
+
+      insertIndex = lstIndex + 1;
+      let right = selectedItemGroup.elements[lstIndex - 1].text;
+
+      if (right != null && right.search(/\s+/mg) >= 0) {
+        let space = {
+          type: 'text',
+          text: right,
+          name: '',
+          elements: []
+        };
+        selectedItemGroup.elements = insertElement(
+          selectedItemGroup.elements,
+          insertIndex,
+          space);
+
+        insertIndex++;
+      }
+    } else {
+      insertIndex = 1;
+    }
 
     let newElement: any = {
       type: "element",
@@ -67,16 +154,39 @@ export function addPackage(xml: string, packageName: string, version: string, in
         Version: version
       }
     }
-    selectedItemGroup.elements.push(newElement);
-    xmlResult = convert.js2xml(itemGroup.rootElement, { compact: false, spaces: indentType });
+
+    selectedItemGroup.elements = insertElement(
+      selectedItemGroup.elements,
+      insertIndex,
+      newElement);
+
+    xmlResult = convert.js2xml(itemGroup.rootElement, {});
 
   } else {
     throw "package already exists in project!"
   }
-  return xmlResult;
+  return fixXmlIndention(xmlResult);
 }
 
+function insertElement(arr: Element[], index: number, newItem: Element) {
+  return [
+    // part of the array before the specified index
+    ...arr.slice(0, index),
+    // inserted item
+    newItem,
+    // part of the array after the specified index
+    ...arr.slice(index)
+  ];
+}
 
+function fixXmlIndention(xml: string): string {
+  let reg = /.[/?]>/g;
+  var result = xml.replace(reg, function (match, index) {
+    let spaceSelfClosing = (xml[index] == '"' || xml[index] == "'");
+    return match.replace(/ ?([/?]>)/g, spaceSelfClosing ? ' $1' : match);
+  });
+  return result;
+}
 
 function getItemGroupIndexResult(xml: string): ItemGroup {
   let rootObj: Element = xmlToObject(xml);
@@ -89,7 +199,7 @@ function getItemGroupIndexResult(xml: string): ItemGroup {
 
 
 function xmlToObject(xml: string): any {
-  return convert.xml2js(xml);
+  return convert.xml2js(xml, { captureSpacesBetweenElements: true });
 }
 
 

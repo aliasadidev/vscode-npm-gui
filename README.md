@@ -91,6 +91,11 @@
 
 # What's New
 
+## Version 2.0.3 - July 31, 2022
+#### Added
+*  Auto detect VSCode theme
+*  Perform search when pressing enter in the install package tab
+
 ## Version 2.0.2 - Apr 18, 2022
 #### Fixed
 *  Fixed unordered version list

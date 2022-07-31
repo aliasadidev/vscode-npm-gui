@@ -5,6 +5,7 @@ body {
   height: 100%;
   overflow: hidden;
 }
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -16,4 +17,43 @@ body {
 
 .mat-tab-label-content {
   font-size: 15px !important;
+}
+
+body {
+  background-color: var(--vscode-editor-background) !important;
+}
+
+.form-control[type=text] {
+  background: var(--vscode-input-background) !important;
+  color: var(--vscode-input-foreground) !important;
+}
+
+.input-group-text,
+.form-control {
+  color: var(--vscode-foreground) !important;
+}
+
+.input-group-text {
+  background: var(--vscode-panel-background) !important;
+}
+
+.project-table th,
+.project-table thead {
+  background: var(--vscode-menu-background) !important;
+  color: var(--vscode-menu-foreground) !important;
+}
+
+.search-result-box table th,
+.search-result-box table thead {
+  background: var(--vscode-menu-background) !important;
+  color: var(--vscode-menu-foreground) !important;
+}
+
+.project-table tbody tr :nth-child(odd),
+.search-result-box table tbody tr :nth-child(odd) {
+  color: var(--vscode-foreground) !important;
+}
+
+.table {
+  color: var(--vscode-menu-foreground) !important;
 }

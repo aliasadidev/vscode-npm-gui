@@ -11,7 +11,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 1; /* after 1 line show ... */
+  -webkit-line-clamp: 1;
+  /* after 1 line show ... */
   -webkit-box-orient: vertical;
 }
 
@@ -42,15 +43,18 @@
     tr {
       max-height: 23px;
     }
+
     td {
       padding: 2px 3px;
       border: 1px solid #d3d3d3;
     }
+
     tr:nth-child(odd) {
       background-color: #daecce77;
     }
+
     tr:hover {
-      background-color: #727272c5;
+      background-color: #4e60749e;
     }
   }
 }
@@ -85,4 +89,30 @@
 
 .collapse-up {
   background-color: #d2e0dd;
+}
+
+
+.version-style span,
+.install-package-table td button {
+  color: #000 !important;
+}
+
+select {
+  background: var(--vscode-dropdown-background) !important;
+  color: var(--vscode-dropdown-foreground) !important;
+}
+
+::ng-deep .ngx-pagination li a,
+::ng-deep .ngx-pagination li a span {
+  color: var(--vscode-input-foreground) !important;
+}
+
+.install-package-table {
+  overflow-x: scroll;
+  display: inline-table;
+  width: 100%;
+}
+
+.search-result-box {
+  overflow-x: scroll;
 }

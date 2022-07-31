@@ -125,3 +125,13 @@
     order: 1;
   }
 }
+
+.version-style span,
+.project-table td button {
+  color: #000 !important;
+}
+
+select {
+  background: var(--vscode-dropdown-background) !important;
+  color: var(--vscode-dropdown-foreground) !important;
+}

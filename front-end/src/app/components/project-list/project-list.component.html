@@ -82,7 +82,7 @@
                 <!-- </mat-select> -->
                 <!-- </mat-form-field> -->
               </td>
-              <td><span [attr.class]='getVersionStyle(package)'>{{getVersion(package)}}</span></td>
+              <td class="version-style"><span [attr.class]='getVersionStyle(package)'>{{getVersion(package)}}</span></td>
               <td>{{package.newerVersion}}</td>
               <td>
                 <button type="button" (click)="update(project.id,package.packageName)" class="btn btn-default-sm btn-sm">Update</button>

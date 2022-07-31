@@ -3,7 +3,7 @@
 
   <div class="row pr-3">
     <div class="col-md-12 mt-3 pr-0 pl-0">
-      <form [formGroup]='installForm'>
+      <form [formGroup]='installForm' (keydown.enter)="onSearch()">
         <div class="input-group">
 
           <input id="search-input" formControlName="searchValue" type="text" class="form-control" placeholder="Search for..." aria-describedby="search-box-group">
@@ -30,7 +30,7 @@
 
 
     <div class="col-md-12  search-result-box mt-3" *ngFor="let source of packageSearchResultList | keyvalue" [hidden]="!isFilterOnSource(+source.key)">
-      <table>
+      <table class="install-package-table">
         <thead>
           <tr>
             <th colspan="3" style="font-size: medium;text-align: left;font-weight: 700;">
@@ -47,9 +47,9 @@
             </th>
           </tr>
           <tr style="height: 50px;" [hidden]="packageSourceCollapseStatus[+source.key]">
-            <th style="width: 5px;" class="text-center">#</th>
-            <th style="width: 85%;" class="text-center">Package Details</th>
-            <th style="width: 70px;" class="text-center">Action</th>
+            <th style="width: 5px;font-weight: 600;" class="text-center">#</th>
+            <th style="width: 85%;font-weight: 600;" class="text-center">Package Details</th>
+            <th style="width: 70px;font-weight: 600;" class="text-center">Action</th>
           </tr>
         </thead>
         <tbody [hidden]="packageSourceCollapseStatus[+source.key]">

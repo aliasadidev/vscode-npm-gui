@@ -21,7 +21,7 @@ export function getPackages(xml: string): PackageDetail[] {
   return packageList;
 }
 
-export function removePackage(xml: string, packageName: string, indentType: string) {
+export function removePackage(xml: string, packageName: string) {
   let xmlResult: string = xml;
   let itemGroup = getItemGroupIndexResult(xml);
   checkMoreThenOneItemGroup(itemGroup.projectElement);
@@ -29,22 +29,25 @@ export function removePackage(xml: string, packageName: string, indentType: stri
   let delIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
 
   let indexSize = 1;
-
-  let left = (selectedItemGroup.elements[delIndex - 1].text);
-  if (left != null && left.search(/\s+/mg) >= 0) {
-    indexSize++;
-    delIndex--;
+  if (delIndex > 0) {
+    let left = (selectedItemGroup.elements[delIndex - 1].text);
+    if (left != null && left.search(/\s+/mg) >= 0) {
+      indexSize++;
+      delIndex--;
+    }
   }
 
   selectedItemGroup.elements.splice(delIndex, indexSize);
+  let fullTagEmptyElement: boolean = false;
   if (selectedItemGroup.elements.length === 0) {
     itemGroup.projectElement.elements.splice(itemGroup.itemGroupIndex, 1);
+    fullTagEmptyElement = itemGroup.projectElement?.elements.length == 0;
   }
-  xmlResult = convert.js2xml(itemGroup.rootElement, {});
+  xmlResult = convert.js2xml(itemGroup.rootElement, { fullTagEmptyElement: fullTagEmptyElement });
   return fixXmlIndention(xmlResult);
 }
 
-export function updatePackage(xml: string, packageName: string, version: string, indentType: string) {
+export function updatePackage(xml: string, packageName: string, version: string) {
   let xmlResult: string = xml;
   let itemGroup = getItemGroupIndexResult(xml);
   let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
@@ -54,7 +57,7 @@ export function updatePackage(xml: string, packageName: string, version: string,
   return fixXmlIndention(xmlResult);
 }
 
-export function addPackage(xml: string, packageName: string, version: string, indentType: string) {
+export function addPackage(xml: string, packageName: string, version: string) {
   let xmlResult: string = xml;
   let itemGroup = getItemGroupIndexResult(xml);
 

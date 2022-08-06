@@ -30,7 +30,7 @@ export function removePackage(xml: string, packageName: string) {
 
   let indexSize = 1;
   if (delIndex > 0) {
-    let left = (selectedItemGroup.elements[delIndex - 1].text);
+    let left = selectedItemGroup.elements[delIndex - 1]?.text;
     if (left != null && left.search(/\s+/mg) >= 0) {
       indexSize++;
       delIndex--;
@@ -38,11 +38,8 @@ export function removePackage(xml: string, packageName: string) {
   }
 
   selectedItemGroup.elements.splice(delIndex, indexSize);
-  let fullTagEmptyElement: boolean = false;
-  if (selectedItemGroup.elements.length === 0) {
-    itemGroup.projectElement.elements.splice(itemGroup.itemGroupIndex, 1);
-    fullTagEmptyElement = itemGroup.projectElement?.elements.length == 0;
-  }
+
+  let fullTagEmptyElement: boolean = (selectedItemGroup.elements.length === 0);
   xmlResult = convert.js2xml(itemGroup.rootElement, { fullTagEmptyElement: fullTagEmptyElement });
   return fixXmlIndention(xmlResult);
 }
@@ -60,61 +57,9 @@ export function updatePackage(xml: string, packageName: string, version: string)
 export function addPackage(xml: string, packageName: string, version: string) {
   let xmlResult: string = xml;
   let itemGroup = getItemGroupIndexResult(xml);
-
+  let isEmptyProject = false;
   if (itemGroup.itemGroupIndex == -1) {
-    let lstIndex = itemGroup.projectElement.elements.map(ele => ele.type === 'element')
-      .lastIndexOf(true);
-    let topLeft = itemGroup.projectElement.elements[lstIndex - 1].text;
-
-    if (topLeft != null && topLeft.search(/\s+/mg) >= 0) {
-      itemGroup.projectElement.elements = insertElement(
-        itemGroup.projectElement.elements,
-        lstIndex + 1,
-        {
-          type: 'text',
-          text: topLeft,
-          name: '',
-          elements: []
-        });
-      lstIndex++;
-    }
-
-
-    itemGroup.projectElement.elements = insertElement(
-      itemGroup.projectElement.elements,
-      lstIndex + 1,
-      {
-        type: "element",
-        name: "ItemGroup",
-        elements: []
-      });
-
-
-    itemGroup.itemGroupIndex = lstIndex + 1
-    // item group is empty
-    var text = topLeft?.split(/\r\n|\r|\n/)
-    if (text) {
-      var lastFormat = text[text.length - 1];
-      let space = {
-        type: 'text',
-        text: "\r\n" + lastFormat + lastFormat,
-        name: '',
-        elements: []
-      };
-      let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
-      selectedItemGroup.elements.push(space);
-
-
-      let space2 = {
-        type: 'text',
-        text: topLeft,
-        name: '',
-        elements: []
-      };
-
-      selectedItemGroup.elements.push(space2);
-    }
-
+    isEmptyProject = createNewItemGroup(itemGroup);
   }
   checkMoreThenOneItemGroup(itemGroup.projectElement);
 
@@ -129,7 +74,7 @@ export function addPackage(xml: string, packageName: string, version: string) {
     if (lstIndex != -1) {
 
       insertIndex = lstIndex + 1;
-      let right = selectedItemGroup.elements[lstIndex - 1].text;
+      let right = selectedItemGroup.elements[lstIndex - 1]?.text;
 
       if (right != null && right.search(/\s+/mg) >= 0) {
         let space = {
@@ -162,6 +107,17 @@ export function addPackage(xml: string, packageName: string, version: string) {
       selectedItemGroup.elements,
       insertIndex,
       newElement);
+
+    if (isEmptyProject) {
+      let space2 = {
+        type: 'text',
+        text: '\n  ',
+        name: '',
+        elements: []
+      };
+
+      selectedItemGroup.elements.push(space2);
+    }
 
     xmlResult = convert.js2xml(itemGroup.rootElement, {});
 
@@ -199,7 +155,102 @@ function getItemGroupIndexResult(xml: string): ItemGroup {
   return { rootElement: rootObj, itemGroupIndex: groupItemIndex, projectElement: projectElement };
 }
 
+function createNewItemGroup(itemGroup: ItemGroup): boolean {
+  let isEmptyProject = false, isEmptyInlineProject = false;
+  let lstIndex = itemGroup.projectElement.elements?.map(ele => ele.type === 'element')
+    ?.lastIndexOf(true) ?? -1;
+  let topLeft = null;
+  if (lstIndex > 0) {
+    topLeft = itemGroup.projectElement.elements[lstIndex - 1]?.text;
+  }
+  if (topLeft != null && topLeft.search(/\s+/mg) >= 0) {
+    itemGroup.projectElement.elements = insertElement(
+      itemGroup.projectElement.elements,
+      lstIndex + 1,
+      {
+        type: 'text',
+        text: topLeft,
+        name: '',
+        elements: []
+      });
+    lstIndex++;
+  } else {
+    // add a default
+    isEmptyProject = true;
+    topLeft = '  ';
+    if (itemGroup.projectElement.elements) {
+      itemGroup.projectElement.elements = insertElement(
+        itemGroup.projectElement.elements,
+        lstIndex + 1,
+        {
+          type: 'text',
+          text: '\n  ',
+          name: '',
+          elements: []
+        });
+    } else {
+      isEmptyInlineProject = true;
+      itemGroup.projectElement.elements = [{
+        type: 'text',
+        text: '\n  ',
+        name: '',
+        elements: []
+      }];
+    }
 
+    lstIndex++;
+  }
+
+
+  itemGroup.projectElement.elements = insertElement(
+    itemGroup.projectElement.elements,
+    lstIndex + 1,
+    {
+      type: "element",
+      name: "ItemGroup",
+      elements: []
+    });
+
+  if (isEmptyInlineProject) {
+    let space2 = {
+      type: 'text',
+      text: '\n',
+      name: '',
+      elements: []
+    };
+
+    itemGroup.projectElement.elements.push(space2);
+  }
+
+
+  itemGroup.itemGroupIndex = lstIndex + 1
+  // item group is empty
+  var text = topLeft?.split(/\r\n|\r|\n/)
+  if (text) {
+    var lastFormat = text[text.length - 1];
+    let space = {
+      type: 'text',
+      text: "\n" + lastFormat + lastFormat,
+      name: '',
+      elements: []
+    };
+    let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
+    selectedItemGroup.elements.push(space);
+
+
+    if (!isEmptyProject) {
+      let space2 = {
+        type: 'text',
+        text: topLeft,
+        name: '',
+        elements: []
+      };
+
+      selectedItemGroup.elements.push(space2);
+    }
+  }
+  return isEmptyProject;
+}
 
 function xmlToObject(xml: string): any {
   return convert.xml2js(xml, { captureSpacesBetweenElements: true });
@@ -222,7 +273,7 @@ function getPackageReferences(elm: Element): Element[] {
 }
 
 function getItemGroupIndex(elm: Element): number {
-  let newElm: number = elm.elements.findIndex(
+  let newElm: number = elm.elements?.findIndex(
     x => x.name == "ItemGroup" &&
       x.type == "element" &&
       x.elements &&
@@ -230,7 +281,7 @@ function getItemGroupIndex(elm: Element): number {
       x.elements.find(z => z.name == "PackageReference" && z.type == "element") !== undefined
   );
 
-  return newElm;
+  return newElm ?? -1;
 }
 
 function checkMoreThenOneItemGroup(elm: Element): Element[] {

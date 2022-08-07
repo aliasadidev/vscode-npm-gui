@@ -13,7 +13,7 @@ export function remove(projectList: Project[], projectID: number, packageName: s
   if (commandResult.isSuccessful) {
 
     const projectFileContent = readFileContent(project.projectPath);
-    const xmlContent: string = removePackage(projectFileContent, packageName);
+    const xmlContent: string = removePackage(projectFileContent, packageName, project);
     writeToFile(project.projectPath, xmlContent);
 
     project.packages.splice(pkgIndex, 1);

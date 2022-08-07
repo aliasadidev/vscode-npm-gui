@@ -1,12 +1,13 @@
 import { PackageDetail } from '../models/nuget.model';
 import { Element, ItemGroup } from '../models/project-file.model';
+import { Project } from '../models/project.model';
 const convert = require('xml-js');
 
-export function getPackages(xml: string): PackageDetail[] {
+export function getPackages(xml: string, project: Project): PackageDetail[] {
   let packageList: PackageDetail[] = [];
   let itemGroup = getItemGroupIndexResult(xml);
   if (itemGroup.itemGroupIndex !== -1) {
-    checkMoreThenOneItemGroup(itemGroup.projectElement);
+    checkMoreThenOneItemGroup(itemGroup.projectElement, project);
     let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
     let packages: Element[] = getPackageReferences(selectedItemGroup);
     packageList = packages.map(e => {
@@ -21,10 +22,10 @@ export function getPackages(xml: string): PackageDetail[] {
   return packageList;
 }
 
-export function removePackage(xml: string, packageName: string) {
+export function removePackage(xml: string, packageName: string, project: Project) {
   let xmlResult: string = xml;
   let itemGroup = getItemGroupIndexResult(xml);
-  checkMoreThenOneItemGroup(itemGroup.projectElement);
+  checkMoreThenOneItemGroup(itemGroup.projectElement, project);
   let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
   let delIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
 
@@ -54,14 +55,14 @@ export function updatePackage(xml: string, packageName: string, version: string)
   return fixXmlIndention(xmlResult);
 }
 
-export function addPackage(xml: string, packageName: string, version: string) {
+export function addPackage(xml: string, packageName: string, version: string, project: Project) {
   let xmlResult: string = xml;
   let itemGroup = getItemGroupIndexResult(xml);
   let isEmptyProject = false;
   if (itemGroup.itemGroupIndex == -1) {
     isEmptyProject = createNewItemGroup(itemGroup);
   }
-  checkMoreThenOneItemGroup(itemGroup.projectElement);
+  checkMoreThenOneItemGroup(itemGroup.projectElement, project);
 
   let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
   let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
@@ -287,7 +288,7 @@ function getItemGroupIndex(elm: Element): number {
   return newElm ?? -1;
 }
 
-function checkMoreThenOneItemGroup(elm: Element): Element[] {
+function checkMoreThenOneItemGroup(elm: Element, project: Project): Element[] {
   let newElm: Element[] = elm.elements.filter(
     x => x.name == "ItemGroup" &&
       x.type == "element" &&
@@ -296,7 +297,7 @@ function checkMoreThenOneItemGroup(elm: Element): Element[] {
       x.elements.find(z => z.name == "PackageReference" && z.type == "element") !== undefined
   );
   if (newElm && newElm.length > 1) {
-    throw "More than one <ItemGroup> find.";
+    throw `More than one <ItemGroup> find. ${project.projectName} | ${project.projectPath}`;
   }
   return newElm;
 }

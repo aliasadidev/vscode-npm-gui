@@ -1,10 +1,11 @@
 import * as assert from 'assert';
+import { Project } from '../../../models/project.model';
 import { addPackage } from '../../../modules/xml.module';
 
 
 suite('xml.module.ts tests - add package', () => {
 
-
+  let project: Project;
   test('addPackage test', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk">
                          <ItemGroup>
@@ -18,7 +19,7 @@ suite('xml.module.ts tests - add package', () => {
                          </ItemGroup>
                      </Project>`;
 
-    const newXml = addPackage(xml, 'xunit', '2.4.1');
+    const newXml = addPackage(xml, 'xunit', '2.4.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
 
@@ -29,7 +30,7 @@ suite('xml.module.ts tests - add package', () => {
                          </ItemGroup>
                      </Project>`;
 
-    const func = () => addPackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.1');
+    const func = () => addPackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.1', project);
     assert.throws(func, /package already exists in project!/);
   });
 
@@ -44,7 +45,7 @@ suite('xml.module.ts tests - add package', () => {
                          </ItemGroup>
                      </Project>`;
 
-    const newXml = addPackage(xml, 'xunit', '2.4.1');
+    const newXml = addPackage(xml, 'xunit', '2.4.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
 
@@ -61,7 +62,7 @@ suite('xml.module.ts tests - add package', () => {
   </ItemGroup>
 </Project>`;
 
-    const newXml = addPackage(xml, 'xunit', '2.4.1');
+    const newXml = addPackage(xml, 'xunit', '2.4.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
 
@@ -78,7 +79,7 @@ suite('xml.module.ts tests - add package', () => {
         </ItemGroup>
 </Project>`;
 
-    const newXml = addPackage(xml, 'xunit', '2.4.1');
+    const newXml = addPackage(xml, 'xunit', '2.4.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
 
@@ -90,7 +91,7 @@ suite('xml.module.ts tests - add package', () => {
     <ItemGroup><PackageReference Include="xunit" Version="2.4.1" /><PackageReference Include="xunit2" Version="2.4.1" /></ItemGroup>
 </Project>`;
 
-    const newXml = addPackage(xml, 'xunit2', '2.4.1');
+    const newXml = addPackage(xml, 'xunit2', '2.4.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
 
@@ -102,7 +103,7 @@ suite('xml.module.ts tests - add package', () => {
     <PackageReference Include="xunit" Version="2.4.1" />
   </ItemGroup>
 </Project>`;
-    const newXml = addPackage(xml, 'xunit', '2.4.1');
+    const newXml = addPackage(xml, 'xunit', '2.4.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
 
@@ -114,7 +115,7 @@ suite('xml.module.ts tests - add package', () => {
     <PackageReference Include="xunit" Version="2.4.1" />
   </ItemGroup>
 </Project>`;
-    const newXml = addPackage(xml, 'xunit', '2.4.1');
+    const newXml = addPackage(xml, 'xunit', '2.4.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
 
@@ -126,7 +127,7 @@ suite('xml.module.ts tests - add package', () => {
     <PackageReference Include="xunit" Version="2.4.1" />
   </ItemGroup>
 </Project>`;
-    const newXml = addPackage(xml, 'xunit', '2.4.1');
+    const newXml = addPackage(xml, 'xunit', '2.4.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
 
@@ -148,7 +149,7 @@ suite('xml.module.ts tests - add package', () => {
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 </Project>`;
-    const newXml = addPackage(xml, 'Newtonsoft.Json', '13.0.1');
+    const newXml = addPackage(xml, 'Newtonsoft.Json', '13.0.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
 
@@ -171,7 +172,7 @@ suite('xml.module.ts tests - add package', () => {
 <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 </ItemGroup>
 </Project>`;
-    const newXml = addPackage(xml, 'Newtonsoft.Json', '13.0.1');
+    const newXml = addPackage(xml, 'Newtonsoft.Json', '13.0.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
 

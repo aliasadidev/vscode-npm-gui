@@ -17,7 +17,7 @@ suite('xml.module.ts tests', () => {
       { packageName: "Microsoft.NET.Test.Sdk", packageVersion: "16.7.1" },
       { packageName: "xunit", packageVersion: "2.4.1" },
     ];
-    const packages = getPackages(xml);
+    const packages = getPackages(xml, { id: 0, packages: [], projectName: "", projectPath: "" });
     assert.deepStrictEqual(packages, expected);
   });
 

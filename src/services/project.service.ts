@@ -75,10 +75,14 @@ export async function loadProjects(workspacePath: readonly vscode.WorkspaceFolde
     const projectPath = projectPathList[pathIndex];
 
     const originalData: string = readFileContent(projectPath);
-
-    let packages: PackageDetail[] = getPackages(originalData);
-
     let projectName = path.basename(projectPath);
+
+    let packages: PackageDetail[] = getPackages(originalData, {
+      id: projectID + 1,
+      projectName: projectName,
+      projectPath: projectPath,
+      packages: []
+    });
 
     projectList.push({
       id: projectID++,

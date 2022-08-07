@@ -39,8 +39,6 @@
 ### You can override the following settings in the **User or Workspace** `settings.json`:
 ```js
 {
-//The number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted
-"nugetpackagemanagergui.indentType": "2",
 //The maximum duration for completing a request from this extension
 "nugetpackagemanagergui.requestTimeout": 9000,
 // The package sources

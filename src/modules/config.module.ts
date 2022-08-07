@@ -7,7 +7,6 @@ import * as vscode from 'vscode';
 export function getConfiguration(): ExtensionConfiguration {
 
   const packageSources = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("packageSources") as PackageSource[];
-  const indentType = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("indentType") as string;
   const requestTimeout = vscode.workspace.getConfiguration('nugetpackagemanagergui').get("requestTimeout") as number;
 
   if (Array.isArray(packageSources)) {
@@ -16,7 +15,6 @@ export function getConfiguration(): ExtensionConfiguration {
   }
 
   return {
-    indentType,
     packageSources,
     requestTimeout,
     vscodeHttpConfig: vscode.workspace.getConfiguration('http')

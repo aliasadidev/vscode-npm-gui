@@ -1,3 +1,6 @@
+
+export const EOL: string = '\n';
+
 /**
  * Convert Json to QueryString
  * @param json The Json data

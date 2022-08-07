@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import { Project } from '../../../models/project.model';
+import { writeToFile } from '../../../modules/file.module';
 import { addPackage } from '../../../modules/xml.module';
 
 
@@ -177,6 +178,78 @@ suite('xml.module.ts tests - add package', () => {
   });
 
 
+  test('addPackage test - Indention 10', () => {
+    const xml = `<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <Item>
+
+  </Item>
+</Project>
+`;
+
+    const expected = `<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <Item>
+
+  </Item>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+</Project>
+`;
+    const newXml = addPackage(xml, 'Newtonsoft.Json', '13.0.1', project);
+    assert.deepStrictEqual(newXml, expected);
+  });
+
+  test('addPackage test - Indention 11', () => {
+    const xml = `<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="file.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
+`;
+    const expected = `<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="file.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+</Project>
+`;
+    const newXml = addPackage(xml, 'Newtonsoft.Json', '13.0.1', project);
+    assert.deepStrictEqual(newXml, expected);
+  });
 
 });
 

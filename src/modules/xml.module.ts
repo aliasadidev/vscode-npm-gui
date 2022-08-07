@@ -1,6 +1,7 @@
 import { PackageDetail } from '../models/nuget.model';
 import { Element, ItemGroup } from '../models/project-file.model';
 import { Project } from '../models/project.model';
+import { EOL } from './utils';
 const convert = require('xml-js');
 
 export function getPackages(xml: string, project: Project): PackageDetail[] {
@@ -115,7 +116,7 @@ export function addPackage(xml: string, packageName: string, version: string, pr
     if (isEmptyProject) {
       let space2 = {
         type: 'text',
-        text: '\n  ',
+        text: `${EOL}  `,
         name: '',
         elements: []
       };
@@ -168,6 +169,9 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
     topLeft = itemGroup.projectElement.elements[lstIndex - 1]?.text;
   }
   if (topLeft != null && topLeft.search(/\s+/mg) >= 0) {
+    if (topLeft.search(/(\r\n|\n|\r)/gm) >= 0) {
+      topLeft = `${EOL}` + topLeft.replace(/(\r\n|\n|\r)/gm, "");
+    }
     itemGroup.projectElement.elements = insertElement(
       itemGroup.projectElement.elements,
       lstIndex + 1,
@@ -188,7 +192,7 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
         lstIndex + 1,
         {
           type: 'text',
-          text: '\n  ',
+          text: `${EOL}  `,
           name: '',
           elements: []
         });
@@ -196,7 +200,7 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
       isEmptyInlineProject = true;
       itemGroup.projectElement.elements = [{
         type: 'text',
-        text: '\n  ',
+        text: `${EOL}  `,
         name: '',
         elements: []
       }];
@@ -218,7 +222,7 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
   if (isEmptyInlineProject) {
     let space2 = {
       type: 'text',
-      text: '\n',
+      text: `${EOL}`,
       name: '',
       elements: []
     };
@@ -234,7 +238,7 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
     var lastFormat = text[text.length - 1];
     let space = {
       type: 'text',
-      text: "\n" + lastFormat + lastFormat,
+      text: `${EOL}` + lastFormat + lastFormat,
       name: '',
       elements: []
     };

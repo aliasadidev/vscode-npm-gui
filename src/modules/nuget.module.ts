@@ -4,7 +4,7 @@ const utf8 = require('utf8');
 import { PackageMetadata, PackageSearchResult, PackageVersion } from '../models/nuget.model';
 import { AuthorizationOption, AuthorizationType, PackageSource, RequestOption } from '../models/option.model';
 import { getProxyOption } from './proxy.module';
-import { jsonToQueryString } from './utils';
+import { EOL, jsonToQueryString } from './utils';
 
 /**
  * Get the request options(proxy,timeout,...)
@@ -67,7 +67,7 @@ async function getPackageVersions(packageName: string, packageSources: PackageSo
             [timeout:${nugetRequestTimeout}]
             [proxy is active:${!!requestOption.agent}]
             [auth is active:${src.authorization && src.authorization.authType != AuthorizationType[AuthorizationType.none]}]
-            [result:${rawResult}]\n`);
+            [result:${rawResult}]${EOL}`);
             throw ex;
           }
 
@@ -160,7 +160,7 @@ export async function searchPackage(query: string, packageSources: PackageSource
             jsonResponse.packageSourceName = src.sourceName;
             jsonResponse.packageSourceId = src.id;
           } catch (ex) {
-            console.log(`[NuGet Package Manager GUI => ERROR!!!]\n[Request to url:${url}]\n[timeout:${requestOption.timeout}]\n[proxy is active:${!!requestOption.agent}]\n[result:${rawResult}]\n`);
+            console.log(`[NuGet Package Manager GUI => ERROR!!!]${EOL}[Request to url:${url}]${EOL}[timeout:${requestOption.timeout}]${EOL}[proxy is active:${!!requestOption.agent}]${EOL}[result:${rawResult}]${EOL}`);
             throw ex;
           }
 

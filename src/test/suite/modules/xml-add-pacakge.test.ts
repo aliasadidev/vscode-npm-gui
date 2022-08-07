@@ -1,5 +1,4 @@
 import * as assert from 'assert';
-import { writeToFile } from '../../../modules/file.module';
 import { addPackage } from '../../../modules/xml.module';
 
 
@@ -150,7 +149,6 @@ suite('xml.module.ts tests - add package', () => {
   </ItemGroup>
 </Project>`;
     const newXml = addPackage(xml, 'Newtonsoft.Json', '13.0.1');
-    writeToFile("./out.txt", newXml);
     assert.deepStrictEqual(newXml, expected);
   });
 
@@ -174,7 +172,6 @@ suite('xml.module.ts tests - add package', () => {
 </ItemGroup>
 </Project>`;
     const newXml = addPackage(xml, 'Newtonsoft.Json', '13.0.1');
-    writeToFile("./out.txt", newXml);
     assert.deepStrictEqual(newXml, expected);
   });
 

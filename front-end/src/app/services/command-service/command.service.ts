@@ -20,7 +20,7 @@ export class CommandService {
   reload(loadVersion: boolean = false): Observable<CommandResult<Project[]>> {
 
     var obs = new Observable<CommandResult<Project[]>>((sub) => {
-      command('nugetpackagemanagergui.reload', { LoadVersion: loadVersion }, (res: CommandResult<Project[]>) => sub.next(res));
+      command('nugetpackagemanagergui.reload', { loadVersion: loadVersion }, (res: CommandResult<Project[]>) => sub.next(res));
     });
     return obs;
   }
@@ -44,10 +44,10 @@ export class CommandService {
 
     var obs = new Observable<CommandResult<PackageSearchResult[]>>((sub) => {
       command('nugetpackagemanagergui.searchPackage', {
-        Query: query,
-        Skip: skip,
-        Take: take,
-        PackageSourceId: packageSourceId
+        query: query,
+        skip: skip,
+        take: take,
+        packageSourceId: packageSourceId
       }, (res: CommandResult<PackageSearchResult[]>) => sub.next(res));
     });
     return obs;
@@ -59,9 +59,9 @@ export class CommandService {
 
     var obs = new Observable<CommandResult<any>>((sub) => {
       command('nugetpackagemanagergui.installPackage', {
-        ID: projectId,
-        PackageName: packageName,
-        SelectedVersion: selectedVersion
+        id: projectId,
+        packageName: packageName,
+        selectedVersion: selectedVersion
       }, (res: CommandResult<any>) => sub.next(res));
     });
     return obs;
@@ -74,23 +74,22 @@ export class CommandService {
     var obs = new Observable<CommandResult<any>>((sub) => {
       command('nugetpackagemanagergui.updatePackage',
         {
-          ID: projectId,
-          PackageName: packageName,
-          SelectedVersion: selectedVersion
+          id: projectId,
+          packageName: packageName,
+          selectedVersion: selectedVersion
         }, (res: CommandResult<any>) => sub.next(res));
     });
     return obs;
   }
 
 
-  updateAllPackage(projectId: number, packageName: string, selectedVersion: string): Observable<CommandResult<any>> {
+  updateAllPackage(packageName: string, selectedVersion: string): Observable<CommandResult<any>> {
 
     var obs = new Observable<CommandResult<any>>((sub) => {
       command('nugetpackagemanagergui.updateAllPackage',
         {
-          ID: projectId,
-          PackageName: packageName,
-          SelectedVersion: selectedVersion
+          packageName: packageName,
+          selectedVersion: selectedVersion
         }, (res: CommandResult<any>) => sub.next(res));
     });
     return obs;
@@ -102,9 +101,9 @@ export class CommandService {
     var obs = new Observable<CommandResult<any>>((sub) => {
       command('nugetpackagemanagergui.removePackage',
         {
-          ID: projectId,
-          PackageName: packageName,
-          SelectedVersion: selectedVersion
+          id: projectId,
+          packageName: packageName,
+          selectedVersion: selectedVersion
         }, (res: CommandResult<any>) => sub.next(res));
     });
     return obs;
@@ -124,8 +123,8 @@ export class CommandService {
     var obs = new Observable<CommandResult<any>>((sub) => {
       command('nugetpackagemanagergui.removeAllPackage',
         {
-          ID: projectId,
-          PackageName: packageName
+          id: projectId,
+          packageName: packageName
         }, (res: CommandResult<any>) => sub.next(res));
     });
     return obs;

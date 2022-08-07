@@ -29,20 +29,20 @@ export function activate(context: vscode.ExtensionContext) {
     return projectList;
   });
 
-  vscode.commands.registerCommand('nugetpackagemanagergui.reload', async (data: { LoadVersion?: boolean }) => {
+  vscode.commands.registerCommand('nugetpackagemanagergui.reload', async (data: { loadVersion?: boolean }) => {
     await tryCatch(async () => {
-      setStatusBarMessage(data.LoadVersion ? 'Loading packages...' : 'Loading projects...');
-      const result = await reload(configOptions, workspacePath, data.LoadVersion);
+      setStatusBarMessage(data.loadVersion ? 'Loading packages...' : 'Loading projects...');
+      const result = await reload(configOptions, workspacePath, data.loadVersion);
       projectList = result.projectList;
       return result;
-    }, data.LoadVersion ? 'All packages loaded.' : 'All projects loaded.');
+    }, data.loadVersion ? 'All packages loaded.' : 'All projects loaded.');
     return projectList;
   });
 
-  vscode.commands.registerCommand('nugetpackagemanagergui.searchPackage', async (data: { Query: string, Skip: number, Take: number, PackageSourceId?: number }) => {
+  vscode.commands.registerCommand('nugetpackagemanagergui.searchPackage', async (data: { query: string, skip: number, take: number, packageSourceId?: number }) => {
     let searchResult: PackageSearchResult[] | undefined;
     try {
-      searchResult = await searchPackage(data.Query, data.Skip, data.Take, configOptions, data.PackageSourceId);
+      searchResult = await searchPackage(data.query, data.skip, data.take, configOptions, data.packageSourceId);
     } catch (ex) {
       resetStatusBarMessage();
       showErrorMessage(ex);
@@ -50,16 +50,16 @@ export function activate(context: vscode.ExtensionContext) {
     return searchResult;
   });
 
-  vscode.commands.registerCommand('nugetpackagemanagergui.updatePackage', async (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
+  vscode.commands.registerCommand('nugetpackagemanagergui.updatePackage', async (data: { id: number, packageName: string, selectedVersion: string }) => {
     await tryCatch(async () => {
-      return update(projectList, data.ID, data.PackageName, data.SelectedVersion, configOptions);
+      return update(projectList, data.id, data.packageName, data.selectedVersion, configOptions);
     });
   });
 
 
-  vscode.commands.registerCommand('nugetpackagemanagergui.removePackage', async (data: { ID: number, PackageName: string }) => {
+  vscode.commands.registerCommand('nugetpackagemanagergui.removePackage', async (data: { id: number, packageName: string }) => {
     await tryCatch(async () => {
-      return remove(projectList, data.ID, data.PackageName, configOptions);
+      return remove(projectList, data.id, data.packageName, configOptions);
     });
   });
 
@@ -68,10 +68,10 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
 
-  vscode.commands.registerCommand('nugetpackagemanagergui.removeAllPackage', async (data: { PackageName: string }) => {
+  vscode.commands.registerCommand('nugetpackagemanagergui.removeAllPackage', async (data: { packageName: string }) => {
     await tryCatch(async () => {
-      return removeAllPackage(projectList, data.PackageName, configOptions)
-    }, `${data.PackageName} removed in all projects`, true);
+      return removeAllPackage(projectList, data.packageName, configOptions);
+    }, `${data.packageName} removed in all projects`, true);
   });
 
 
@@ -80,27 +80,27 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
 
-  vscode.commands.registerCommand('nugetpackagemanagergui.installPackage', async (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
-    await tryCatch(async () => install(projectList, data.ID, data.PackageName, data.SelectedVersion, configOptions), undefined, false);
+  vscode.commands.registerCommand('nugetpackagemanagergui.installPackage', async (data: { id: number, packageName: string, selectedVersion: string }) => {
+    await tryCatch(async () => install(projectList, data.id, data.packageName, data.selectedVersion, configOptions), undefined, false);
   });
 
 
-  vscode.commands.registerCommand('nugetpackagemanagergui.updateAllPackage', async (data: { ID: number, PackageName: string, SelectedVersion: string }) => {
-    await tryCatch(async () => updateAllPackage(projectList, data.PackageName, data.SelectedVersion, configOptions), `${data.PackageName} updated in all projects`, true);
+  vscode.commands.registerCommand('nugetpackagemanagergui.updateAllPackage', async (data: { packageName: string, selectedVersion: string }) => {
+    await tryCatch(async () => updateAllPackage(projectList, data.packageName, data.selectedVersion, configOptions), `${data.packageName} updated in all projects`, true);
   });
 
-  vscode.commands.registerCommand('nugetpackagemanagergui.showMessage', async (data: { Message: string, Type: string }) => {
-    switch (data.Type) {
+  vscode.commands.registerCommand('nugetpackagemanagergui.showMessage', async (data: { message: string, type: string }) => {
+    switch (data.type) {
       case 'error': {
-        showErrorMessage(data.Message);
+        showErrorMessage(data.message);
         break;
       }
       case 'info': {
-        showInformationMessage(data.Message)
+        showInformationMessage(data.message);
         break;
       }
       default: {
-        showErrorMessage(`An internal error has occurred,[Message Type '${data.Type}' not found}]`);
+        showErrorMessage(`An internal error has occurred,[Message Type '${data.type}' not found}]`);
         break;
       }
     }
@@ -120,10 +120,12 @@ export async function tryCatch(action: any, successMessage: string | undefined =
   let result: any;
   try {
     result = await action();
-    if (isListResult)
+    if (isListResult) {
       showCommandResults(result, successMessage);
-    else
+    }
+    else {
       showCommandResult(result, successMessage);
+    }
   } catch (ex) {
     resetStatusBarMessage();
     showErrorMessage(ex);

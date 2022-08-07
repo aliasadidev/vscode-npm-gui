@@ -14,7 +14,7 @@ export function getPackages(xml: string): PackageDetail[] {
       let result: PackageDetail = {
         packageName: attr["Include"],
         packageVersion: attr["Version"]
-      }
+      };
       return result;
     });
   }
@@ -94,6 +94,8 @@ export function addPackage(xml: string, packageName: string, version: string) {
       insertIndex = 1;
     }
 
+
+    /* eslint-disable */
     let newElement: any = {
       type: "element",
       name: "PackageReference",
@@ -101,7 +103,8 @@ export function addPackage(xml: string, packageName: string, version: string) {
         Include: packageName,
         Version: version
       }
-    }
+    };
+    /* eslint-enable */
 
     selectedItemGroup.elements = insertElement(
       selectedItemGroup.elements,
@@ -122,7 +125,7 @@ export function addPackage(xml: string, packageName: string, version: string) {
     xmlResult = convert.js2xml(itemGroup.rootElement, {});
 
   } else {
-    throw "package already exists in project!"
+    throw "package already exists in project!";
   }
   return fixXmlIndention(xmlResult);
 }
@@ -223,9 +226,9 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
   }
 
 
-  itemGroup.itemGroupIndex = lstIndex + 1
+  itemGroup.itemGroupIndex = lstIndex + 1;
   // item group is empty
-  var text = topLeft?.split(/\r\n|\r|\n/)
+  var text = topLeft?.split(/\r\n|\r|\n/);
   if (text) {
     var lastFormat = text[text.length - 1];
     let space = {
@@ -293,7 +296,7 @@ function checkMoreThenOneItemGroup(elm: Element): Element[] {
       x.elements.find(z => z.name == "PackageReference" && z.type == "element") !== undefined
   );
   if (newElm && newElm.length > 1) {
-    throw "More than one <ItemGroup> find."
+    throw "More than one <ItemGroup> find.";
   }
   return newElm;
 }

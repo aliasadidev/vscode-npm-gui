@@ -7,11 +7,14 @@ import { ServiceResult } from '../models/common.model';
  * @param hideAfterTimeout Timeout in milliseconds after which the message will be disposed
  */
 export function setStatusBarMessage(message: string | undefined, hideAfterTimeout?: number) {
-  if (message)
-    if (hideAfterTimeout)
-      vscode.window.setStatusBarMessage(message, hideAfterTimeout)
-    else
-      vscode.window.setStatusBarMessage(message)
+  if (message) {
+    if (hideAfterTimeout) {
+      vscode.window.setStatusBarMessage(message, hideAfterTimeout);
+    }
+    else {
+      vscode.window.setStatusBarMessage(message);
+    }
+  }
 }
 
 /**
@@ -47,9 +50,10 @@ export function showCommandResult(serviceResult: ServiceResult, successMessage: 
   if (serviceResult.isSuccessful && (successMessage || serviceResult.message)) {
     setStatusBarMessage(successMessage ? successMessage : serviceResult.message, 5000);
   } else {
-    if (serviceResult.message)
+    if (serviceResult.message) {
       setStatusBarMessage(serviceResult.message, 5000);
-    showErrorMessage(serviceResult.exception)
+    }
+    showErrorMessage(serviceResult.exception);
   }
 }
 

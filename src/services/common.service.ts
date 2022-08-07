@@ -11,8 +11,9 @@ import * as fs from 'fs';
  */
 export function getProject(projectList: Project[], projectID: number): Project {
   let project = projectList.find(d => d.id === projectID);
-  if (project === undefined)
+  if (project === undefined) {
     throw "The project file does not exists";
+  }
   return project;
 }
 
@@ -34,8 +35,9 @@ export function getPackage(project: Project, packageName: string): PackageDetail
  */
 export function getPackageIndex(project: Project, packageName: string): number {
   let pkgIndex = project.packages.findIndex(e => e.packageName === packageName);
-  if (pkgIndex === -1)
+  if (pkgIndex === -1) {
     throw `The selected package does not exists in '${project.projectName}' project`;
+  }
   return pkgIndex;
 }
 

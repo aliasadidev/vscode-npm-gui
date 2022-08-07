@@ -42,8 +42,8 @@ async function setPackageVersions(config: ExtensionConfiguration, projects: Proj
 
     let packageVersions: PackageVersion[] = await fetchPackageVersionsBatch(allUniquePackages, config.packageSources, config.requestTimeout, config.vscodeHttpConfig);
 
-    let keyValuePackageVersions: Record<string, string[]> = {}
-    let keyValuePackageSource: Record<string, { name: string, id: number }> = {}
+    let keyValuePackageVersions: Record<string, string[]> = {};
+    let keyValuePackageSource: Record<string, { name: string, id: number }> = {};
     packageVersions.forEach(pkg => {
       keyValuePackageVersions[pkg.packageName] = pkg.versions;
       keyValuePackageSource[pkg.packageName] = { name: pkg.sourceName, id: pkg.sourceId };

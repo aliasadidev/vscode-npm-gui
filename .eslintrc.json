@@ -12,7 +12,6 @@
     "@typescript-eslint/naming-convention": "warn",
     "@typescript-eslint/semi": "warn",
     "curly": "warn",
-    "no-throw-literal": "warn",
     "semi": "off"
   },
   "ignorePatterns": [

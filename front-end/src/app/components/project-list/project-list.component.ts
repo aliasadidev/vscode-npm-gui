@@ -120,7 +120,7 @@ export class ProjectListComponent implements AfterViewInit {
     if (this.versionIsLoad) {
       const selectedVersion = this.getSelectedVersion(projectId, packageName);
 
-      this.commandSrv.updateAllPackage(projectId, packageName, selectedVersion).subscribe(res => {
+      this.commandSrv.updateAllPackage(packageName, selectedVersion).subscribe(() => {
         this.getData();
       });
     } else {

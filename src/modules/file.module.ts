@@ -56,10 +56,12 @@ export function hasFileAccess(filePath: string, accessMode: number): ValidationR
 
   if (isExists.isSuccessful) {
     let hasAccess = checkFileAccess(filePath, accessMode);
-    if (!hasAccess.isSuccessful)
+    if (!hasAccess.isSuccessful) {
       result = { errorMessage: hasAccess.errorMessage, isSuccessful: false, exception: hasAccess.exception };
-  } else
+    }
+  } else {
     result = { errorMessage: isExists.errorMessage, isSuccessful: false, exception: isExists.exception };
+  }
 
   return result;
 }

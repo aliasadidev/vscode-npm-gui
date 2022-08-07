@@ -9,8 +9,8 @@ suite('nuget.ts tests', () => {
 
   test('fetchPackageVersions test', async () => {
     const result: PackageVersion = await fetchPackageVersions('Microsoft.NET.Test.Sdk', configOptions.packageSources, configOptions.requestTimeout, configOptions.vscodeHttpConfig);
-    assert(result.packageName != null && result.packageName != undefined)
-    assert(result.versions != null && result.packageName != undefined && result.versions.length > 0)
+    assert(result.packageName != null && result.packageName != undefined);
+    assert(result.versions != null && result.packageName != undefined && result.versions.length > 0);
   });
 
   test('fetchPackageVersionsBatch test', async () => {

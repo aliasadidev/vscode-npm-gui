@@ -3,7 +3,6 @@ import { AuthorizationType, ExtensionConfiguration, SourceType } from '../../../
 
 export function getConfigOptions(): ExtensionConfiguration {
   const res: ExtensionConfiguration = ({
-    indentType: "\t",
     requestTimeout: 90000,
     packageSources: [
       {

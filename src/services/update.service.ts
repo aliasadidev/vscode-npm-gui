@@ -67,6 +67,6 @@ export function updateAllProjects(projectList: Project[], config: ExtensionConfi
 
 function updatePackageInProjectFile(projectPath: string, packageName: string, selectedVersion: string, config: ExtensionConfiguration) {
   const projectFileContent = readFileContent(projectPath);
-  const xmlContent: string = updatePackage(projectFileContent, packageName, selectedVersion, config.indentType);
+  const xmlContent: string = updatePackage(projectFileContent, packageName, selectedVersion);
   writeToFile(projectPath, xmlContent);
 }

@@ -1,6 +1,12 @@
 # Change Log
 
 
+## Version 2.0.4 - Aug 7, 2022
+#### Changed
+*  Auto detect csproj/fsproj indention style and keep the file style
+#### Removed
+*  Removed ~~nugetpackagemanagergui.indentType~~ property for the setting
+
 ## Version 2.0.3 - July 31, 2022
 #### Added
 *  Auto detect VSCode theme

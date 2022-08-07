@@ -1,6 +1,6 @@
 import * as url from 'url';
 import { ProxyOption } from '../models/option.model';
-var HttpsProxyAgent = require('https-proxy-agent');
+var httpsProxyAgent = require('https-proxy-agent');
 /**
  * Get the proxy settings
  * @param vscodeHttpConfig vscode http config
@@ -17,14 +17,15 @@ export function getProxyOption(vscodeHttpConfig: any): ProxyOption {
   if (vscodeHttpConfig.proxy) {
     const parsedProxy = url.parse(vscodeHttpConfig.proxy);
     proxySetting.proxyIsActive = true;
-    if (!parsedProxy.host || !parsedProxy.port)
+    if (!parsedProxy.host || !parsedProxy.port) {
       throw "Proxy address/port isn't valid!";
+    }
 
     const host: string = parsedProxy.host!,
       port: string = parsedProxy.port!,
       secureProxy: boolean = vscodeHttpConfig.proxyStrictSSL === true;
 
-    proxySetting.httpsProxyAgent = new HttpsProxyAgent({
+    proxySetting.httpsProxyAgent = new httpsProxyAgent({
       host: host,
       port: port,
       secureProxy: secureProxy,

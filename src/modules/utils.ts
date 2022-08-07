@@ -1,4 +1,9 @@
 /**
+ * Contains the new line character (\n)
+ */
+export const EOL: string = '\n';
+
+/**
  * Convert Json to QueryString
  * @param json The Json data
  * @returns query string with `?` character at the first position of the result

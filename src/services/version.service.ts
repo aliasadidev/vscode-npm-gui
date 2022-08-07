@@ -10,8 +10,9 @@ export function findStableVersion(versions: string[]): string {
     .reverse()
     .find(x => regExp.test(x));
 
-  if (version === undefined && versions && versions.length > 0)
+  if (version === undefined && versions && versions.length > 0) {
     version = versions[versions.length - 1];
+  }
 
   return version ?? "Unknown";
 }

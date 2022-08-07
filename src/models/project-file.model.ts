@@ -18,6 +18,10 @@ export interface Element {
   * The children elements
   */
   elements: Element[];
+  /**
+  * The text of element
+  */
+  text?: string;
 }
 
 

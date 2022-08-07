@@ -42,8 +42,8 @@ async function setPackageVersions(config: ExtensionConfiguration, projects: Proj
 
     let packageVersions: PackageVersion[] = await fetchPackageVersionsBatch(allUniquePackages, config.packageSources, config.requestTimeout, config.vscodeHttpConfig);
 
-    let keyValuePackageVersions: Record<string, string[]> = {}
-    let keyValuePackageSource: Record<string, { name: string, id: number }> = {}
+    let keyValuePackageVersions: Record<string, string[]> = {};
+    let keyValuePackageSource: Record<string, { name: string, id: number }> = {};
     packageVersions.forEach(pkg => {
       keyValuePackageVersions[pkg.packageName] = pkg.versions;
       keyValuePackageSource[pkg.packageName] = { name: pkg.sourceName, id: pkg.sourceId };
@@ -75,10 +75,14 @@ export async function loadProjects(workspacePath: readonly vscode.WorkspaceFolde
     const projectPath = projectPathList[pathIndex];
 
     const originalData: string = readFileContent(projectPath);
-
-    let packages: PackageDetail[] = getPackages(originalData);
-
     let projectName = path.basename(projectPath);
+
+    let packages: PackageDetail[] = getPackages(originalData, {
+      id: projectID + 1,
+      projectName: projectName,
+      projectPath: projectPath,
+      packages: []
+    });
 
     projectList.push({
       id: projectID++,

@@ -7,10 +7,6 @@ export interface ExtensionConfiguration {
    */
   packageSources: PackageSource[],
   /**
-   * The number of spaces to be used for indenting XML output
-   */
-  indentType: string;
-  /**
    * The maximum duration for completing a request
    */
   requestTimeout: number;

@@ -76,12 +76,12 @@ export function addPackage(xml: string, packageName: string, version: string, pr
     if (lstIndex != -1) {
 
       insertIndex = lstIndex + 1;
-      let right = selectedItemGroup.elements[lstIndex - 1]?.text;
+      let rightText = selectedItemGroup.elements[lstIndex - 1]?.text;
 
-      if (right != null && right.search(/\s+/mg) >= 0) {
+      if (rightText != null && rightText.search(/\s+/mg) >= 0) {
         let space = {
           type: 'text',
-          text: right,
+          text: rightText,
           name: '',
           elements: []
         };
@@ -164,20 +164,20 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
   let isEmptyProject = false, isEmptyInlineProject = false;
   let lstIndex = itemGroup.projectElement.elements?.map(ele => ele.type === 'element')
     ?.lastIndexOf(true) ?? -1;
-  let topLeft = null;
+  let topLeftText = null;
   if (lstIndex > 0) {
-    topLeft = itemGroup.projectElement.elements[lstIndex - 1]?.text;
+    topLeftText = itemGroup.projectElement.elements[lstIndex - 1]?.text;
   }
-  if (topLeft != null && topLeft.search(/\s+/mg) >= 0) {
-    if (topLeft.search(/(\r\n|\n|\r)/gm) >= 0) {
-      topLeft = `${EOL}` + topLeft.replace(/(\r\n|\n|\r)/gm, "");
+  if (topLeftText != null && topLeftText.search(/\s+/mg) >= 0) {
+    if (topLeftText.search(/(\r\n|\n|\r)/gm) >= 0) {
+      topLeftText = `${EOL}` + topLeftText.replace(/(\r\n|\n|\r)/gm, "");
     }
     itemGroup.projectElement.elements = insertElement(
       itemGroup.projectElement.elements,
       lstIndex + 1,
       {
         type: 'text',
-        text: topLeft,
+        text: topLeftText,
         name: '',
         elements: []
       });
@@ -185,7 +185,7 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
   } else {
     // add a default
     isEmptyProject = true;
-    topLeft = '  ';
+    topLeftText = '  ';
     if (itemGroup.projectElement.elements) {
       itemGroup.projectElement.elements = insertElement(
         itemGroup.projectElement.elements,
@@ -233,9 +233,9 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
 
   itemGroup.itemGroupIndex = lstIndex + 1;
   // item group is empty
-  var text = topLeft?.split(/\r\n|\r|\n/);
-  if (text) {
-    var lastFormat = text[text.length - 1];
+  var newTopLeftText = topLeftText?.split(/\r\n|\r|\n/);
+  if (newTopLeftText) {
+    var lastFormat = newTopLeftText[newTopLeftText.length - 1];
     let space = {
       type: 'text',
       text: `${EOL}` + lastFormat + lastFormat,
@@ -249,7 +249,7 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
     if (!isEmptyProject) {
       let space2 = {
         type: 'text',
-        text: topLeft,
+        text: topLeftText,
         name: '',
         elements: []
       };

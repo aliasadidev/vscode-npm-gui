@@ -1,4 +1,6 @@
-
+/**
+ * Contains the new line character (\n)
+ */
 export const EOL: string = '\n';
 
 /**

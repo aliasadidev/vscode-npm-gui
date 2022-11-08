@@ -1,6 +1,10 @@
 # Change Log
 
 
+## Version 2.0.5 - Nov 9, 2022
+#### Fixed
+*  Fixed the empty screen in VS Code version 1.73.0
+
 ## Version 2.0.4 - Aug 7, 2022
 #### Changed
 *  Auto detect csproj/fsproj indention style and keep the file style

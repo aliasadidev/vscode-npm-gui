@@ -2,7 +2,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { VSCExpress } from 'vscode-express';
+import { VSCExpress } from './view';
 import { showErrorMessage, setStatusBarMessage, resetStatusBarMessage, showInformationMessage, showCommandResults, showCommandResult } from './modules/notify.module';
 import { PackageSearchResult } from './models/nuget.model';
 import { getConfiguration } from './modules/config.module';

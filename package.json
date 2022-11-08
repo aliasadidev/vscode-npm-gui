@@ -4,7 +4,7 @@
   "description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from NuGet server for .NET Core 1.1+/.Net5+ projects",
   "author": "Ali Asadi (ali.asadi.dev@gmail.com)",
   "publisher": "aliasadidev",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "preview": true,
   "icon": "images/icon.png",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "url": "https://github.com/aliasadidev/vscode-npm-gui.git"
   },
   "engines": {
-    "vscode": "^1.70.0"
+    "vscode": "^1.73.0"
   },
   "categories": [
     "Other"
@@ -182,7 +182,6 @@
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.1",
     "utf8": "^3.0.0",
-    "vscode-express": "^1.0.1",
     "xml-js": "^1.6.11"
   },
   "__metadata": {

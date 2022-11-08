@@ -36,7 +36,7 @@ export interface ItemGroup {
   /**
    * The index of ItemGroup tag
    */
-  itemGroupIndex: number;
+  itemGroupIndex: number[];
   /**
    * The root element is <Project Sdk="Microsoft...">
    */

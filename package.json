@@ -182,7 +182,7 @@
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.1",
     "utf8": "^3.0.0",
-    "xml-js": "^1.6.11"
+    "sax": "^1.2.4"
   },
   "__metadata": {
     "id": "697a8357-0d3b-4765-8ec9-3a394c9e82c7",

@@ -57,6 +57,38 @@ suite('xml.module.ts tests - update package', () => {
     assert.equal(newXml, expected);
   });
 
+  test('updatePackage test same indention  - 4', () => {
+    const xml = `<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputPath></OutputPath>
+        <OutputPath2></OutputPath2>
+        <OutputPath33/>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Dapper" Version="2.0.0"/>
+        <PackageReference Include="Dapper2" Version="2.0.0" />
+    </ItemGroup>
+
+</Project>`;
+
+    const expected = `<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputPath></OutputPath>
+        <OutputPath2></OutputPath2>
+        <OutputPath33 />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Dapper" Version="2.0.1" />
+        <PackageReference Include="Dapper2" Version="2.0.0" />
+    </ItemGroup>
+
+</Project>`;
+
+    const newXml = updatePackage(xml, 'Dapper', '2.0.1');
+    assert.equal(newXml, expected);
+  });
 
 });
 

@@ -11,7 +11,7 @@ suite('nuget.ts tests', () => {
     const result: PackageVersion = await fetchPackageVersions('Microsoft.NET.Test.Sdk', configOptions.packageSources, configOptions.requestTimeout, configOptions.vscodeHttpConfig);
     assert(result.packageName != null && result.packageName != undefined);
     assert(result.versions != null && result.packageName != undefined && result.versions.length > 0);
-  });
+  }).timeout(configOptions.requestTimeout);
 
   test('fetchPackageVersionsBatch test', async () => {
     const result: PackageVersion[] = await fetchPackageVersionsBatch(['Microsoft.NET.Test.Sdk', 'xunit'], configOptions.packageSources, configOptions.requestTimeout, configOptions.vscodeHttpConfig);
@@ -23,7 +23,7 @@ suite('nuget.ts tests', () => {
 
     assert(result[1].packageName != null && result[1].packageName != undefined);
     assert(result[1].versions != null && result[1].packageName != undefined && result[1].versions.length > 0);
-  });
+  }).timeout(configOptions.requestTimeout);
 
 
   test('searchPackage test', async () => {
@@ -39,6 +39,6 @@ suite('nuget.ts tests', () => {
 
     assert(result != null && result != undefined && result[0].packages.length == 1);
     assert(result[0].packages[0].id == packageName);
-  });
+  }).timeout(configOptions.requestTimeout);
 
 });

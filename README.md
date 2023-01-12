@@ -61,6 +61,7 @@
   //* The extension injects {{packageName}} property automatically
   // NuGet  Host  "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json"
   // BaGet  Host  "http://localhost/v3/package/{{packageName}}/index.json"
+  // GitHub Host  "https://nuget.pkg.github.com/username/download/{{packageName}}/index.json"
   // GitLab Host  "https://gitlab.com/api/v4/projects/x/packages/nuget/download/{{packageName}}/index.json"
   // Nexus  Host  "http://localhost/repository/nuget-hosted/v3/content/{{packageName}}/index.json"
   // Azure  Host  "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/flat2/{{packageName}}/index.json"
@@ -69,12 +70,14 @@
   // The package url in the host server
   // NuGet  Host  "https://www.nuget.org/packages/{{packageName}}"
   // Azure  Host  "https://dev.azure.com/user/project/_artifacts/feed/feed-name/NuGet/{{packageName}}/{{version}}/overview"
+  // GitHub Host  "https://nuget.pkg.github.com/username/{{packageName}}/index.json"
   // GitLab Host  "https://gitlab.com/user/project/-/packages?type=&orderBy=name&sort=asc&search[]={{packageName}}"
   // ProGet Host: "http://localhost/feeds/Test-Feed/{{packageName}}/versions"
   "packageUrl": "https://www.nuget.org/packages/{{packageName}}",
   //The NuGet endpoint address for searching packages
   // NuGet  Host "https://azuresearch-usnc.nuget.org/query"
   // BaGet  Host "http://localhost/v3/search"
+  // GitHub Host ""https://nuget.pkg.github.com/username/query""
   // GitLab Host "https://gitlab.com/api/v4/projects/x/packages/nuget/query"
   // Nexus  Host "http://localhost/repository/nuget-hosted/v3/query/0"
   // Azure  Host "https://pkgs.dev.azure.com/username/guid/_packaging/guid/nuget/v3/query2"

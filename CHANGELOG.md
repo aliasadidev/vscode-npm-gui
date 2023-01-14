@@ -1,5 +1,8 @@
 # Change Log
 
+# Version 2.0.6 - Jan 14, 2023
+#### Fixed
+*  Fixed known bugs
 
 ## Version 2.0.5 - Nov 9, 2022
 #### Fixed

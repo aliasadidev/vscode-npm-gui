@@ -94,6 +94,7 @@
 # Version 2.0.6 - Jan 14, 2023
 #### Fixed
 *  Fixed known bugs
+*  Use a custom XML module and remove xml-js package
 
 ## Version 2.0.5 - Nov 9, 2022
 #### Fixed

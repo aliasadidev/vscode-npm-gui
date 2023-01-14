@@ -1,4 +1,4 @@
-import { helper } from "./xml-helper.module";
+import { Helper } from "./xml-helper.module";
 var sax = require('sax');
 
 var options: any;
@@ -6,7 +6,7 @@ var pureJsParser = true;
 
 var currentElement: any;
 
-let h = new helper();
+let h = new Helper();
 function validateOptions(userOptions: any) {
   options = h.copyOptions(userOptions);
   h.ensureFlagExists('ignoreDeclaration', options);
@@ -142,11 +142,15 @@ function manipulateAttributes(attributes: any) {
     var key;
     for (key in attributes) {
       if (attributes.hasOwnProperty(key)) {
-        if (options.trim) attributes[key] = attributes[key].trim();
+        if (options.trim) {
+          attributes[key] = attributes[key].trim();
+        }
         if (options.nativeTypeAttributes) {
           attributes[key] = nativeType(attributes[key]);
         }
-        if ('attributeValueFn' in options) attributes[key] = options.attributeValueFn(attributes[key], key, currentElement);
+        if ('attributeValueFn' in options) {
+          attributes[key] = options.attributeValueFn(attributes[key], key, currentElement);
+        }
         if ('attributeNameFn' in options) {
           var temp = attributes[key];
           delete attributes[key];
@@ -199,7 +203,7 @@ function onInstruction(instruction: any) {
 
 function onStartElement(name: any, attributes: any) {
   var element: any;
-  var isSelfClosing = name?.isSelfClosing === true
+  var isSelfClosing = name?.isSelfClosing === true;
   if (typeof name === 'object') {
     attributes = name.attributes;
     name = name.name;

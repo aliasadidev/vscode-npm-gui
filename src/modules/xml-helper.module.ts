@@ -1,4 +1,4 @@
-export class helper {
+export class Helper {
   public copyOptions(options: any) {
     var key, copy: any = {};
     for (key in options) {

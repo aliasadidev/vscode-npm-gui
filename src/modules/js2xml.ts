@@ -1,7 +1,7 @@
-import { helper } from "./xml-helper.module";
+import { Helper } from "./xml-helper.module";
 
 var currentElement: any, currentElementName: any;
-var h = new helper();
+var h = new Helper();
 
 function validateOptions(userOptions: any) {
   var options = h.copyOptions(userOptions);
@@ -98,7 +98,9 @@ function writeInstruction(instruction: any, options: any, depth: any) {
     return '<?' + instructionName + writeAttributes(instruction[key][options.attributesKey], options, depth) + '?>';
   } else {
     var instructionValue = instruction[key] ? instruction[key] : '';
-    if ('instructionFn' in options) instructionValue = options.instructionFn(instructionValue, key, currentElementName, currentElement);
+    if ('instructionFn' in options) {
+      instructionValue = options.instructionFn(instructionValue, key, currentElementName, currentElement);
+    }
     return '<?' + instructionName + (instructionValue ? ' ' + instructionValue : '') + '?>';
   }
 }
@@ -116,7 +118,9 @@ function writeDoctype(doctype: any, options: any) {
 }
 
 function writeText(text: any, options: any) {
-  if (options.ignoreText) return '';
+  if (options.ignoreText) {
+    return '';
+  }
   text = '' + text; // ensure Number and Boolean are converted to String
   text = text.replace(/&amp;/g, '&'); // desanitize to avoid double sanitization
   text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

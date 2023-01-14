@@ -22,6 +22,11 @@ export interface Element {
   * The text of element
   */
   text?: string;
+
+  /**
+   * The tag is self closing
+   */
+  isSelfClosing?: boolean;
 }
 
 

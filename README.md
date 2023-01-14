@@ -4,10 +4,12 @@
 
 
   
-[![Marketplace](https://vsmarketplacebadge.apphb.com/version-short/aliasadidev.nugetpackagemanagergui.svg)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/aliasadidev.nugetpackagemanagergui.svg)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
-[![Downloads](https://vsmarketplacebadge.apphb.com/downloads-short/aliasadidev.nugetpackagemanagergui.svg)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
-[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/aliasadidev.nugetpackagemanagergui.svg)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
+[![Install](https://img.shields.io/visual-studio-marketplace/i/aliasadidev.nugetpackagemanagergui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
+[![Download](https://img.shields.io/visual-studio-marketplace/d/aliasadidev.nugetpackagemanagergui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/aliasadidev.nugetpackagemanagergui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/aliasadidev.nugetpackagemanagergui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
+[![Issues](https://img.shields.io/github/issues/aliasadidev/vscode-npm-gui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
+[![Closed Issues](https://img.shields.io/github/issues-closed/aliasadidev/vscode-npm-gui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
 
 
 ## Features
@@ -18,7 +20,7 @@
 - Update all packages with one click
 - Remove a package from the projects
 - Search and install new packages from NuGet Server
-- Support several NuGet servers (`NuGet`, `BaGet`, `GitLab`, `Nexus`, `Azure`, `JFrog`, `ProGet`)
+- Support several NuGet servers (`NuGet`, `BaGet`, `GitLab`, `Nexus`, `Azure`, `ProGet`)
 - Compatible with Linux and Windows
 - Indenting XML output
 - Support basic authentication for private registries
@@ -91,6 +93,11 @@
 ```
 
 # What's New
+
+# Version 2.0.6 - Jan 14, 2023
+#### Fixed
+*  Fixed known bugs
+*  Use a custom XML module and remove xml-js package
 
 ## Version 2.0.5 - Nov 9, 2022
 #### Fixed

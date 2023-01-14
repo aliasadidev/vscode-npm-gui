@@ -2,7 +2,8 @@ import { PackageDetail } from '../models/nuget.model';
 import { Element, ItemGroup } from '../models/project-file.model';
 import { Project } from '../models/project.model';
 import { EOL } from './utils';
-const convert = require('xml-js');
+import { js2xml } from './js2xml';
+import { xml2js } from './xml2js';
 
 export function getPackages(xml: string, project: Project): PackageDetail[] {
   let packageList: PackageDetail[] = [];
@@ -42,8 +43,8 @@ export function removePackage(xml: string, packageName: string, project: Project
   selectedItemGroup.elements.splice(delIndex, indexSize);
 
   let fullTagEmptyElement: boolean = (selectedItemGroup.elements.length === 0);
-  xmlResult = convert.js2xml(itemGroup.rootElement, { fullTagEmptyElement: fullTagEmptyElement });
-  return fixXmlIndention(xmlResult);
+  xmlResult = js2xml(itemGroup.rootElement, { fullTagEmptyElement: fullTagEmptyElement });
+  return xmlResult;
 }
 
 export function updatePackage(xml: string, packageName: string, version: string) {
@@ -52,8 +53,8 @@ export function updatePackage(xml: string, packageName: string, version: string)
   let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
   let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
   selectedItemGroup.elements[packageIndex].attributes["Version"] = version;
-  xmlResult = convert.js2xml(itemGroup.rootElement, {});
-  return fixXmlIndention(xmlResult);
+  xmlResult = js2xml(itemGroup.rootElement, {});
+  return xmlResult;
 }
 
 export function addPackage(xml: string, packageName: string, version: string, project: Project) {
@@ -124,12 +125,12 @@ export function addPackage(xml: string, packageName: string, version: string, pr
       selectedItemGroup.elements.push(space2);
     }
 
-    xmlResult = convert.js2xml(itemGroup.rootElement, {});
+    xmlResult = js2xml(itemGroup.rootElement, {});
 
   } else {
     throw "package already exists in project!";
   }
-  return fixXmlIndention(xmlResult);
+  return xmlResult;
 }
 
 function insertElement(arr: Element[], index: number, newItem: Element) {
@@ -143,14 +144,6 @@ function insertElement(arr: Element[], index: number, newItem: Element) {
   ];
 }
 
-function fixXmlIndention(xml: string): string {
-  let reg = /.[/?]>/g;
-  var result = xml.replace(reg, function (match, index) {
-    let spaceSelfClosing = (xml[index] == '"' || xml[index] == "'");
-    return match.replace(/ ?([/?]>)/g, spaceSelfClosing ? ' $1' : match);
-  });
-  return result;
-}
 
 function getItemGroupIndexResult(xml: string): ItemGroup {
   let rootObj: Element = xmlToObject(xml);
@@ -261,7 +254,7 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
 }
 
 function xmlToObject(xml: string): any {
-  return convert.xml2js(xml, { captureSpacesBetweenElements: true });
+  return xml2js(xml, { captureSpacesBetweenElements: true });
 }
 
 

@@ -20,9 +20,9 @@ Please note we have a code of conduct, please follow it in all your interactions
 
 1. install tools 
    ```sh
-   install nodejs version v16.14.0
-   install npm version v8.7.0
-   npm install -g vsce  # version 2.6.7
+   install nodejs version v20.11.1
+   install npm version v10.5.0
+   npm install -g vsce  # version 2.24.0
    ```
 2. install test extensions
    ```sh
@@ -48,7 +48,7 @@ npm run test
 1. install angular cli and build
    ```
    cd front-end
-   npm i @angular/cli@12.1.4
+   npm i @angular/cli@17.2.3 
    ng build
    ```
 

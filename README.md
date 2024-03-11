@@ -94,6 +94,10 @@
 
 # What's New
 
+# Version 2.0.7 - Mar 11, 2024
+#### Fixed
+*  Update project to node 20
+
 # Version 2.0.6 - Jan 14, 2023
 #### Fixed
 *  Fixed known bugs

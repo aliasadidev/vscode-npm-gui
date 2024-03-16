@@ -1,122 +1,223 @@
 <!-- Update / Remove Packages -->
-<div class="container-fluid" style="max-width: 1400px;">
-
-  <div class="row pr-3">
-    <div class="col-md-12 mt-3 pr-0 pl-0">
-      <form [formGroup]='installForm' (keydown.enter)="onSearch()">
+<div class="container-fluid" style="max-width: 1400px">
+  <div class="row">
+    <div class="col-md-12 mt-3">
+      <form [formGroup]="installForm" (keydown.enter)="onSearch()">
         <div class="input-group">
+          <input
+            id="search-input"
+            formControlName="searchValue"
+            type="text"
+            class="form-control"
+            placeholder="Search for... (Press the `Enter` key)"
+            aria-describedby="search-box-group" />
 
-          <input id="search-input" formControlName="searchValue" type="text" class="form-control" placeholder="Search for... (Press the `Enter` key)" aria-describedby="search-box-group">
+          <div
+            class="input-group-append"
+            id="search-box-group"
+            style="width: 400px">
+            <button class="btn btn-primary" type="button" (click)="onSearch()">
+              Search
+            </button>
 
-          <div class="input-group-append" id="search-box-group" style="width: 400px;">
-
-            <button class="btn btn-primary" type="button" (click)="onSearch()">Search</button>
-
-            <div class="input-group-btn" style="width: 100%;min-width: 300px;">
-              <app-drop-down formControlName="projectIndex" [dataSource]="projectList"> </app-drop-down>
+            <div class="input-group-btn" style="width: 100%; min-width: 300px">
+              <app-drop-down
+                formControlName="projectIndex"
+                [dataSource]="projectList">
+              </app-drop-down>
             </div>
-
           </div>
-
         </div>
 
-        <div class="mt-3" style="width:340px;float:right;" *ngIf="packageSourceList && packageSourceList.length>1">
+        <div
+          class="mt-3"
+          style="width: 340px; float: right"
+          *ngIf="packageSourceList && packageSourceList.length > 1">
           <div class="input-group-btn">
-            <app-drop-down formControlName="packageSourceId" [dataSource]="packageSourceList"> </app-drop-down>
+            <app-drop-down
+              formControlName="packageSourceId"
+              [dataSource]="packageSourceList">
+            </app-drop-down>
           </div>
         </div>
       </form>
     </div>
 
-
-    <div class="col-md-12  search-result-box mt-3" *ngFor="let source of packageSearchResultList | keyvalue" [hidden]="!isFilterOnSource(+source.key)">
+    <div
+      class="col-md-12 search-result-box mt-3"
+      *ngFor="let source of packageSearchResultList | keyvalue"
+      [hidden]="!isFilterOnSource(+source.key)">
       <table class="install-package-table">
         <thead>
           <tr>
-            <th colspan="3" style="font-size: medium;text-align: left;font-weight: 700;">
-              Source Name: {{source.value.packageSourceName}}
-              <button type="button" class="btn btn-default-sm btn-sm collapse-btn" (click)="changeCollapseStatus(+source.key)" [ngClass]="packageSourceCollapseStatus[+source.key]?'collapse-down':'collapse-up'">
+            <th
+              colspan="3"
+              style="font-size: medium; text-align: left; font-weight: 700">
+              Source Name: {{ source.value.packageSourceName }}
+              <button
+                type="button"
+                class="btn btn-default-sm btn-sm collapse-btn"
+                (click)="changeCollapseStatus(+source.key)"
+                [ngClass]="
+                  packageSourceCollapseStatus[+source.key]
+                    ? 'collapse-down'
+                    : 'collapse-up'
+                ">
                 Collapse
-                <svg class="ml-1" *ngIf="!packageSourceCollapseStatus[+source.key]" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
+                <svg
+                  class="ml-1"
+                  *ngIf="!packageSourceCollapseStatus[+source.key]"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-arrow-down-circle"
+                  viewBox="0 0 16 16">
+                  <path
+                    fill-rule="evenodd"
+                    d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
                 </svg>
-                <svg class="ml-1" *ngIf="packageSourceCollapseStatus[+source.key]" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                <svg
+                  class="ml-1"
+                  *ngIf="packageSourceCollapseStatus[+source.key]"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-arrow-up-circle"
+                  viewBox="0 0 16 16">
+                  <path
+                    fill-rule="evenodd"
+                    d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
                 </svg>
               </button>
             </th>
           </tr>
-          <tr style="height: 50px;" [hidden]="packageSourceCollapseStatus[+source.key]">
-            <th style="width: 5px;font-weight: 600;" class="text-center">#</th>
-            <th style="width: 85%;font-weight: 600;" class="text-center">Package Details</th>
-            <th style="width: 70px;font-weight: 600;" class="text-center">Action</th>
+          <tr
+            style="height: 50px"
+            [hidden]="packageSourceCollapseStatus[+source.key]">
+            <th style="width: 5px; font-weight: 600" class="text-center">#</th>
+            <th style="width: 85%; font-weight: 600" class="text-center">
+              Package Details
+            </th>
+            <th style="width: 70px; font-weight: 600" class="text-center">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody [hidden]="packageSourceCollapseStatus[+source.key]">
-          <tr class="tr-package" *ngFor="let package of source.value.packages |
-                    paginate: {id: source.key,itemsPerPage: this.itemsPerPage, currentPage: sourcesPages[+source.key], totalItems:source.value.totalHits };let i= index;">
-            <td class="center-v-h">{{i + 1 + ((sourcesPages[+source.key]-1) * itemsPerPage)}}</td>
+          <tr
+            class="tr-package"
+            *ngFor="
+              let package of source.value.packages
+                | paginate
+                  : {
+                      id: source.key,
+                      itemsPerPage: this.itemsPerPage,
+                      currentPage: sourcesPages[+source.key],
+                      totalItems: source.value.totalHits
+                    };
+              let i = index
+            ">
+            <td class="center-v-h">
+              {{ i + 1 + (sourcesPages[+source.key] - 1) * itemsPerPage }}
+            </td>
             <td>
               <div class="m-2 d-flex">
-
-
-
-                <div class="d-flex" style="min-width: 50px;">
-                  <img [src]="package.iconUrl || 'assets/images/default-package-icon.svg'"
-                    width="42px" height="42" class="mr-2"
-                    onerror="this.src='assets/images/default-package-icon.svg'; this.onerror = null;">
-
+                <div class="d-flex" style="min-width: 50px">
+                  <img
+                    [src]="
+                      package.iconUrl ||
+                      'assets/images/default-package-icon.svg'
+                    "
+                    width="42px"
+                    height="42"
+                    class="mr-2"
+                    onerror="this.src='assets/images/default-package-icon.svg'; this.onerror = null;" />
                 </div>
 
-                <div class="d-flex flex-column" style="flex: auto;">
-
+                <div class="d-flex flex-column" style="flex: auto">
                   <div class="mr-2 d-flex">
-                    <strong class="mr-1">{{package.id}}</strong>
+                    <strong class="mr-1">{{ package.id }}</strong>
                     <p class="detail-eclips mb-0">
-                      {{package.description}}
+                      {{ package.description }}
                     </p>
                   </div>
 
                   <div class="d-flex">
-                    <ng-container *ngIf="getAuthors(package.authors) as variable">
-                      <span>{{variable}}</span>
+                    <ng-container
+                      *ngIf="getAuthors(package.authors) as variable">
+                      <span>{{ variable }}</span>
                     </ng-container>
-
                   </div>
-
                 </div>
-                <div class="d-flex flex-column d-flex" style="text-align: right;">
-                  <span style="white-space: pre;" *ngIf="package.totalDownloads">
-                    Total Downloads: {{ package.totalDownloads | number: '0.'}}
+                <div
+                  class="d-flex flex-column d-flex"
+                  style="text-align: right">
+                  <span style="white-space: pre" *ngIf="package.totalDownloads">
+                    Total Downloads: {{ package.totalDownloads | number: '0.' }}
                   </span>
-                  <a class="packageUrl" [attr.href]="getPackageSourceWebUrl(this.originalPackageSources,+source.key,package.id,package.stableVersion??'')" target="_blank">View In Web</a>
+                  <a
+                    class="packageUrl"
+                    [attr.href]="
+                      getPackageSourceWebUrl(
+                        this.originalPackageSources,
+                        +source.key,
+                        package.id,
+                        package.stableVersion ?? ''
+                      )
+                    "
+                    target="_blank"
+                    >View In Web</a
+                  >
                 </div>
               </div>
             </td>
             <td class="center-v-h">
-              <select #t (change)='change(package.id,t.value)'
+              <select
+                #t
+                (change)="change(package.id, t.value)"
                 class="versions-option"
-                (onCreate)="change(package.id,package.stableVersion)">
-
-                <option *ngFor="let version of package.versions"
+                (onCreate)="change(package.id, package.stableVersion)">
+                <option
+                  *ngFor="let version of package.versions"
                   [attr.value]="version.version"
-                  [attr.selected]='package.stableVersion==version.version?true:null'>{{version.version}}</option>
+                  [attr.selected]="
+                    package.stableVersion == version.version ? true : null
+                  ">
+                  {{ version.version }}
+                </option>
               </select>
-              <button class="mt-2" type="button" (click)="install(package.id)" class="btn btn-default-sm btn-sm">Install</button>
+              <button
+                class="mt-2"
+                type="button"
+                (click)="install(package.id)"
+                class="btn btn-default-sm btn-sm">
+                Install
+              </button>
             </td>
           </tr>
 
-          <tr class='tr-package' *ngIf="!(source.value && source.value.packages && source.value.packages.length>0)">
-            <td colspan='6' class='empty-table'>Empty!</td>
+          <tr
+            class="tr-package"
+            *ngIf="
+              !(
+                source.value &&
+                source.value.packages &&
+                source.value.packages.length > 0
+              )
+            ">
+            <td colspan="6" class="empty-table">Empty!</td>
           </tr>
         </tbody>
       </table>
 
       <div class="text-right mt-3">
-        <pagination-controls [id]="source.key" (pageChange)="sourcesPages[+source.key] = $event" (pageChange)="pageChanged($event,+source.key)"></pagination-controls>
+        <pagination-controls
+          [id]="source.key"
+          (pageChange)="sourcesPages[+source.key] = $event"
+          (pageChange)="pageChanged($event, +source.key)"></pagination-controls>
       </div>
-
     </div>
-
   </div>
 </div>

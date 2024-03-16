@@ -1,16 +1,13 @@
 # NuGet Package Manager GUI For VSCode
 
-#### An extension for Visual Studio Code that lets you easily __`update/remove/install`__ packages from NuGet public/private servers for __`.NET Core/.Net 5+`__ projects
+#### An extension for Visual Studio Code that lets you easily **`update/remove/install`** packages from NuGet public/private servers for **`.NET Core/.Net 5+`** projects
 
-
-  
 [![Install](https://img.shields.io/visual-studio-marketplace/i/aliasadidev.nugetpackagemanagergui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
 [![Download](https://img.shields.io/visual-studio-marketplace/d/aliasadidev.nugetpackagemanagergui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
 [![Rating](https://img.shields.io/visual-studio-marketplace/r/aliasadidev.nugetpackagemanagergui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
 [![Version](https://img.shields.io/visual-studio-marketplace/v/aliasadidev.nugetpackagemanagergui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
 [![Issues](https://img.shields.io/github/issues/aliasadidev/vscode-npm-gui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
 [![Closed Issues](https://img.shields.io/github/issues-closed/aliasadidev/vscode-npm-gui)](https://marketplace.visualstudio.com/items?itemName=aliasadidev.nugetpackagemanagergui)
-
 
 ## Features
 
@@ -25,20 +22,18 @@
 - Indenting XML output
 - Support basic authentication for private registries
 
-
 ### How it works
+
 1. Open your project workspace in VSCode
-2. Open the Command Palette (Ctrl+Shift+P) 
+2. Open the Command Palette (Ctrl+Shift+P)
 3. Select **`> NuGet Package Manager GUI`**
-
-
 
 ![Update a Package](https://raw.githubusercontent.com/aliasadidev/vscode-npm-gui/main/images/demo2-v1.1.7.gif)
 
-
-
 ## Settings
+
 ### You can override the following settings in the **User or Workspace** `settings.json`:
+
 ```js
 {
 //The maximum duration for completing a request from this extension
@@ -95,102 +90,147 @@
 # What's New
 
 # Version 2.0.6 - Jan 14, 2023
+
 #### Fixed
-*  Fixed known bugs
-*  Use a custom XML module and remove xml-js package
+
+- Fixed known bugs
+- Use a custom XML module and remove xml-js package
 
 ## Version 2.0.5 - Nov 9, 2022
+
 #### Fixed
-*  Fixed the empty screen in VS Code version 1.73.0
+
+- Fixed the empty screen in VS Code version 1.73.0
 
 ## Version 2.0.4 - Aug 7, 2022
+
 #### Changed
-*  Auto detect csproj/fsproj indention style and keep the file style
+
+- Auto detect csproj/fsproj indention style and keep the file style
+
 #### Removed
-*  Removed ~~nugetpackagemanagergui.indentType~~ property form the setting
+
+- Removed ~~nugetpackagemanagergui.indentType~~ property form the setting
 
 ## Version 2.0.3 - July 31, 2022
+
 #### Added
-*  Auto detect VSCode theme
-*  Perform search when pressing enter in the install package tab
+
+- Auto detect VSCode theme
+- Perform search when pressing enter in the install package tab
 
 ## Version 2.0.2 - Apr 18, 2022
+
 #### Fixed
-*  Fixed unordered version list
-*  Fixed an issue in ProGet registry `authors` property
+
+- Fixed unordered version list
+- Fixed an issue in ProGet registry `authors` property
 
 ## Version 2.0.1 - Mar 13, 2022
+
 #### Changed
-*  Update README.md
+
+- Update README.md
 
 ## Version 2.0.0 - Mar 13, 2022
-**⚠ WARNING: This version incompatible with the previous versions** 
+
+**⚠ WARNING: This version incompatible with the previous versions**
 
 #### Added
-*  Add support for basic auth to package sources
-*  Add the package sources drop-down list into the install package page
-*  Add `packageUrl` setting to see the packages in the package source host
-#### Changed
-*  Improve the speed of load package versions functionality
-*  Improve extension `Settings` config
-#### Fixed
-*  Fixed the proxy problem
 
+- Add support for basic auth to package sources
+- Add the package sources drop-down list into the install package page
+- Add `packageUrl` setting to see the packages in the package source host
+
+#### Changed
+
+- Improve the speed of load package versions functionality
+- Improve extension `Settings` config
+
+#### Fixed
+
+- Fixed the proxy problem
 
 ## Version 1.1.9 - Oct 4, 2021
+
 #### Fixed
-*  Fixed some bugs
+
+- Fixed some bugs
 
 ## Version 1.1.8 - Sep 28, 2021
+
 #### Fixed
-*  Fixed some bugs
+
+- Fixed some bugs
 
 ## Version 1.1.7 - Sep 27, 2021
+
 #### Added
-*  Add pagination to the package search results 
-*  Add search box in the project list
-*  Add new setting `nugetpackagemanagergui.indentType` for indenting XML output
+
+- Add pagination to the package search results
+- Add search box in the project list
+- Add new setting `nugetpackagemanagergui.indentType` for indenting XML output
+
 #### Fixed
-*  Fixed some bugs
+
+- Fixed some bugs
+
 #### Changed
-* Improve UI/UX
+
+- Improve UI/UX
 
 #### Deprecated
-* ~~nugetpackagemanagergui.nuget.searchPackage.defaultTake~~ is deprecated
 
+- ~~nugetpackagemanagergui.nuget.searchPackage.defaultTake~~ is deprecated
 
 ## Version 1.1.6 - Jan 30, 2021
+
 #### Added
-*  Support several NuGet servers ([#10](https://github.com/aliasadidev/vscode-npm-gui/pull/10) by [@TomyCesaille](https://github.com/TomyCesaille))
+
+- Support several NuGet servers ([#10](https://github.com/aliasadidev/vscode-npm-gui/pull/10) by [@TomyCesaille](https://github.com/TomyCesaille))
+
 #### Changed
-* Both ~~`nuget.packageVersionsUrl`~~ and ~~`nuget.searchPackage.url`~~ properties changed to `nuget.packageVersionsUrls` and `nuget.searchPackage.urls`
+
+- Both ~~`nuget.packageVersionsUrl`~~ and ~~`nuget.searchPackage.url`~~ properties changed to `nuget.packageVersionsUrls` and `nuget.searchPackage.urls`
 
 ## Version 1.1.5 - Jan 24, 2021
+
 #### Added
-* Log error detail in VSCode Developer Tools
+
+- Log error detail in VSCode Developer Tools
+
 #### Fixed
-*  Find projects in all workspace folders ([#8](https://github.com/aliasadidev/vscode-npm-gui/pull/8) by [@m4ss1m0g](https://github.com/m4ss1m0g))
+
+- Find projects in all workspace folders ([#8](https://github.com/aliasadidev/vscode-npm-gui/pull/8) by [@m4ss1m0g](https://github.com/m4ss1m0g))
 
 ## Version 1.1.4 - Jan 14, 2021
-#### Added
-* Add the proxy support
 
+#### Added
+
+- Add the proxy support
 
 ## Version 1.1.3 - Jan 08, 2021
+
 #### Changed
-* Improve UI/UX
+
+- Improve UI/UX
 
 #### Fixed
-* Install new package bug fixed
+
+- Install new package bug fixed
 
 ## Version 1.1.2 - Dec 25, 2020
+
 #### Changed
-* Improve the speed of loading package versions from NuGet server(**`4x faster than the older versions`**)
+
+- Improve the speed of loading package versions from NuGet server(**`4x faster than the older versions`**)
 
 ### Added
-* Some variables overridable in `settings.json`
+
+- Some variables overridable in `settings.json`
 
 ---
+
 [JetBrains](https://www.jetbrains.com/?from=vscode-npm-gui) kindly provides vscode-npm-gui with a free open-source licence for their Rider.
 
 ![image](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/JetBrains_Logo_2016.svg/121px-JetBrains_Logo_2016.svg.png)

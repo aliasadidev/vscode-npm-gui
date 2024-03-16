@@ -72,7 +72,7 @@ p a:hover {
 }
 
 .select-styled:after {
-  content: "";
+  content: '';
   width: 0;
   height: 0;
   border: 7px solid transparent;
@@ -127,6 +127,6 @@ p a:hover {
   background: rgb(146, 145, 145);
 }
 
-.select-options li[rel="hide"] {
+.select-options li[rel='hide'] {
   display: none;
 }

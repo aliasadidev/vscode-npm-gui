@@ -1,12 +1,10 @@
-import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoadingScreenService {
-
-
   private _counter: number = 0;
   loadingStatus: Subject<number> = new Subject();
 
@@ -24,8 +22,6 @@ export class LoadingScreenService {
   }
 
   stopLoading() {
-    if (this.counter > 0)
-      this.counter--;
+    if (this.counter > 0) {this.counter--;}
   }
-
 }

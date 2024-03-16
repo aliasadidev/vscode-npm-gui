@@ -5,17 +5,21 @@ import { LoadingScreenService } from 'src/app/services/loading-screen/loading-sc
 @Component({
   selector: 'app-loading-screen',
   templateUrl: './loading-screen.component.html',
-  styleUrls: ['./loading-screen.component.scss']
+  styleUrls: ['./loading-screen.component.scss'],
 })
 export class LoadingScreenComponent implements OnDestroy {
   counter: number = 0;
   loadingSubscription: Subscription;
 
-  constructor(private loadingScreenService: LoadingScreenService, private cd: ChangeDetectorRef) {
-    this.loadingSubscription = this.loadingScreenService.loadingStatus.subscribe((value) => {
-      this.counter = value;
-      this.cd.detectChanges();
-    });
+  constructor(
+    private loadingScreenService: LoadingScreenService,
+    private cd: ChangeDetectorRef
+  ) {
+    this.loadingSubscription =
+      this.loadingScreenService.loadingStatus.subscribe(value => {
+        this.counter = value;
+        this.cd.detectChanges();
+      });
   }
 
   ngOnDestroy(): void {

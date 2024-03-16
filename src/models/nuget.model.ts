@@ -51,7 +51,6 @@ export interface SearchPackageResultVersion {
   downloads: number;
 }
 
-
 /**
  * The search result model
  */
@@ -105,7 +104,7 @@ export interface PackageDetail {
    */
   packageName: string;
   /**
-  * The package version
-  */
+   * The package version
+   */
   packageVersion: string;
 }

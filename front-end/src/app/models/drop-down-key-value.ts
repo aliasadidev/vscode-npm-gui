@@ -1,4 +1,4 @@
 export interface DropDownKeyValue {
-  Key: string;
-  Value: string;
+  key: string;
+  value: string;
 }

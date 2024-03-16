@@ -4,9 +4,8 @@ import { LoadingScreenService } from './services/loading-screen/loading-screen.s
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(public loadingScreen: LoadingScreenService) {
-  }
+  constructor(public loadingScreen: LoadingScreenService) {}
 }

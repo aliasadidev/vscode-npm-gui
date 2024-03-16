@@ -1,4 +1,4 @@
-import { Helper } from "./xml-helper.module";
+import { Helper } from './xml-helper.module';
 var sax = require('sax');
 
 var options: any;
@@ -69,17 +69,27 @@ function addField(type: any, value: any) {
   if (options.compact) {
     if (
       !currentElement[options[type + 'Key']] &&
-      (h.isArray(options.alwaysArray) ? options.alwaysArray.indexOf(options[type + 'Key']) !== -1 : options.alwaysArray)
+      (h.isArray(options.alwaysArray)
+        ? options.alwaysArray.indexOf(options[type + 'Key']) !== -1
+        : options.alwaysArray)
     ) {
       currentElement[options[type + 'Key']] = [];
     }
-    if (currentElement[options[type + 'Key']] && !h.isArray(currentElement[options[type + 'Key']])) {
-      currentElement[options[type + 'Key']] = [currentElement[options[type + 'Key']]];
+    if (
+      currentElement[options[type + 'Key']] &&
+      !h.isArray(currentElement[options[type + 'Key']])
+    ) {
+      currentElement[options[type + 'Key']] = [
+        currentElement[options[type + 'Key']],
+      ];
     }
     if (type + 'Fn' in options && typeof value === 'string') {
       value = options[type + 'Fn'](value, currentElement);
     }
-    if (type === 'instruction' && ('instructionFn' in options || 'instructionNameFn' in options)) {
+    if (
+      type === 'instruction' &&
+      ('instructionFn' in options || 'instructionNameFn' in options)
+    ) {
       for (key in value) {
         if (value.hasOwnProperty(key)) {
           if ('instructionFn' in options) {
@@ -109,11 +119,18 @@ function addField(type: any, value: any) {
           break;
         }
       }
-      element[options.nameKey] = 'instructionNameFn' in options ? options.instructionNameFn(key, value, currentElement) : key;
+      element[options.nameKey] =
+        'instructionNameFn' in options
+          ? options.instructionNameFn(key, value, currentElement)
+          : key;
       if (options.instructionHasAttributes) {
         element[options.attributesKey] = value[key][options.attributesKey];
         if ('instructionFn' in options) {
-          element[options.attributesKey] = options.instructionFn(element[options.attributesKey], key, currentElement);
+          element[options.attributesKey] = options.instructionFn(
+            element[options.attributesKey],
+            key,
+            currentElement
+          );
         }
       } else {
         if ('instructionFn' in options) {
@@ -138,7 +155,13 @@ function manipulateAttributes(attributes: any) {
   if ('attributesFn' in options && attributes) {
     attributes = options.attributesFn(attributes, currentElement);
   }
-  if ((options.trim || 'attributeValueFn' in options || 'attributeNameFn' in options || options.nativeTypeAttributes) && attributes) {
+  if (
+    (options.trim ||
+      'attributeValueFn' in options ||
+      'attributeNameFn' in options ||
+      options.nativeTypeAttributes) &&
+    attributes
+  ) {
     var key;
     for (key in attributes) {
       if (attributes.hasOwnProperty(key)) {
@@ -149,12 +172,18 @@ function manipulateAttributes(attributes: any) {
           attributes[key] = nativeType(attributes[key]);
         }
         if ('attributeValueFn' in options) {
-          attributes[key] = options.attributeValueFn(attributes[key], key, currentElement);
+          attributes[key] = options.attributeValueFn(
+            attributes[key],
+            key,
+            currentElement
+          );
         }
         if ('attributeNameFn' in options) {
           var temp = attributes[key];
           delete attributes[key];
-          attributes[options.attributeNameFn(key, attributes[key], currentElement)] = temp;
+          attributes[
+            options.attributeNameFn(key, attributes[key], currentElement)
+          ] = temp;
         }
       }
     }
@@ -164,7 +193,11 @@ function manipulateAttributes(attributes: any) {
 
 function onInstruction(instruction: any) {
   var attributes: any = {};
-  if (instruction.body && (instruction.name.toLowerCase() === 'xml' || options.instructionHasAttributes)) {
+  if (
+    instruction.body &&
+    (instruction.name.toLowerCase() === 'xml' ||
+      options.instructionHasAttributes)
+  ) {
     var attrsRegExp = /([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|(\w+))\s*/g;
     var match: any;
     while ((match = attrsRegExp.exec(instruction.body)) !== null) {
@@ -178,10 +211,12 @@ function onInstruction(instruction: any) {
     }
     currentElement[options.declarationKey] = {};
     if (Object.keys(attributes).length) {
-      currentElement[options.declarationKey][options.attributesKey] = attributes;
+      currentElement[options.declarationKey][options.attributesKey] =
+        attributes;
     }
     if (options.addParent) {
-      currentElement[options.declarationKey][options.parentKey] = currentElement;
+      currentElement[options.declarationKey][options.parentKey] =
+        currentElement;
     }
   } else {
     if (options.ignoreInstruction) {
@@ -214,7 +249,11 @@ function onStartElement(name: any, attributes: any) {
   }
   if (options.compact) {
     element = {};
-    if (!options.ignoreAttributes && attributes && Object.keys(attributes).length) {
+    if (
+      !options.ignoreAttributes &&
+      attributes &&
+      Object.keys(attributes).length
+    ) {
       element[options.attributesKey] = {};
       var key;
       for (key in attributes) {
@@ -225,7 +264,9 @@ function onStartElement(name: any, attributes: any) {
     }
     if (
       !(name in currentElement) &&
-      (h.isArray(options.alwaysArray) ? options.alwaysArray.indexOf(name) !== -1 : options.alwaysArray)
+      (h.isArray(options.alwaysArray)
+        ? options.alwaysArray.indexOf(name) !== -1
+        : options.alwaysArray)
     ) {
       currentElement[name] = [];
     }
@@ -245,7 +286,11 @@ function onStartElement(name: any, attributes: any) {
     element[options.typeKey] = 'element';
     element[options.nameKey] = name;
     element['isSelfClosing'] = isSelfClosing;
-    if (!options.ignoreAttributes && attributes && Object.keys(attributes).length) {
+    if (
+      !options.ignoreAttributes &&
+      attributes &&
+      Object.keys(attributes).length
+    ) {
       element[options.attributesKey] = attributes;
     }
     if (options.alwaysChildren) {
@@ -271,7 +316,10 @@ function onText(text: any) {
     text = nativeType(text);
   }
   if (options.sanitize) {
-    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    text = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
   addField('text', text);
 }
@@ -320,7 +368,6 @@ function onError(error: any) {
 }
 
 export function xml2js(xml: any, userOptions: any) {
-
   var parser: any = sax.parser(true, {});
   var result: any = {};
   currentElement = result;

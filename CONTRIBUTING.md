@@ -1,24 +1,24 @@
 # Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue,
-email, or any other method with the owners of this repository before making a change. 
+email, or any other method with the owners of this repository before making a change.
 
 Please note we have a code of conduct, please follow it in all your interactions with the project.
 
 ## Pull Request Process
 
-1. Ensure any install or build dependencies are removed before the end of the layer when doing a 
+1. Ensure any install or build dependencies are removed before the end of the layer when doing a
    build.
-2. Update the README.md and CHANGELOG.md with details of changes to the interface, this includes new environment 
+2. Update the README.md and CHANGELOG.md with details of changes to the interface, this includes new environment
    variables, exposed ports, useful file locations and container parameters.
 3. Increase the version numbers in any examples files and the README.md to the new version that this
    Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
-4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you 
+4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you
    do not have permission to do that, you may request the second reviewer to merge it for you.
 
 ## Requirements
 
-1. install tools 
+1. install tools
    ```sh
    install nodejs version v16.14.0
    install npm version v8.7.0
@@ -30,13 +30,16 @@ Please note we have a code of conduct, please follow it in all your interactions
    https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer
    ```
 
-
 ## How to run the all unit tests:
+
 ### Open the terminal:
+
 ```sh
 npm run test
 ```
+
 ### To run a specific unit test
+
 1. The first step is, refresh the unit tests
 
    ![test explorer](images/test-explorer.png)
@@ -45,14 +48,16 @@ npm run test
    ![run or debug](images/vscode-run-and-debug.png)
 
 ## Build front-end app
+
 1. install angular cli and build
    ```
    cd front-end
-   npm i @angular/cli@12.1.4
+   npm i @angular/cli@16
    ng build
    ```
 
 ## Create the extension vsix file
-  ```
-   vsce package
-  ```
+
+```
+ vsce package
+```

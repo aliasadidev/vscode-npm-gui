@@ -1,6 +1,7 @@
 export class Helper {
   public copyOptions(options: any) {
-    var key, copy: any = {};
+    var key,
+      copy: any = {};
     for (key in options) {
       if (options.hasOwnProperty(key)) {
         copy[key] = options[key];
@@ -16,13 +17,20 @@ export class Helper {
   }
 
   public ensureSpacesExists(options: any) {
-    if (!('spaces' in options) || (typeof options.spaces !== 'number' && typeof options.spaces !== 'string')) {
+    if (
+      !('spaces' in options) ||
+      (typeof options.spaces !== 'number' && typeof options.spaces !== 'string')
+    ) {
       options.spaces = 0;
     }
   }
 
   public ensureAlwaysArrayExists(options: any) {
-    if (!('alwaysArray' in options) || (typeof options.alwaysArray !== 'boolean' && !this.isArray(options.alwaysArray))) {
+    if (
+      !('alwaysArray' in options) ||
+      (typeof options.alwaysArray !== 'boolean' &&
+        !this.isArray(options.alwaysArray))
+    ) {
       options.alwaysArray = false;
     }
   }

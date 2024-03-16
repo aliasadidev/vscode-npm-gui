@@ -8,7 +8,7 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 #toast-container {
@@ -23,7 +23,7 @@ body {
   background-color: var(--vscode-editor-background) !important;
 }
 
-.form-control[type=text] {
+.form-control[type='text'] {
   background: var(--vscode-input-background) !important;
   color: var(--vscode-input-foreground) !important;
 }

@@ -17,12 +17,12 @@ function command(cmd, callback) {
 
   callbackStack.push({
     messageId,
-    callback
+    callback,
   });
   vscode.postMessage({
     messageId,
     command: cmd,
-    parameter: args
+    parameter: args,
   });
 }
 window.addEventListener('message', event => {

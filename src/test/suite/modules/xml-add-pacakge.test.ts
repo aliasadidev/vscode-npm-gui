@@ -3,9 +3,7 @@ import { Project } from '../../../models/project.model';
 import { writeToFile } from '../../../modules/file.module';
 import { addPackage } from '../../../modules/xml.module';
 
-
 suite('xml.module.ts tests - add package', () => {
-
   let project: Project;
   test('addPackage test', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk">
@@ -31,10 +29,10 @@ suite('xml.module.ts tests - add package', () => {
                          </ItemGroup>
                      </Project>`;
 
-    const func = () => addPackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.1', project);
+    const func = () =>
+      addPackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.1', project);
     assert.throws(func, /package already exists in project!/);
   });
-
 
   test('addPackage test - Indention 1', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk">
@@ -108,7 +106,6 @@ suite('xml.module.ts tests - add package', () => {
     assert.deepStrictEqual(newXml, expected);
   });
 
-
   test('addPackage test - Indention 6', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk"></Project>`;
     const expected = `<Project Sdk="Microsoft.NET.Sdk">
@@ -119,7 +116,6 @@ suite('xml.module.ts tests - add package', () => {
     const newXml = addPackage(xml, 'xunit', '2.4.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
-
 
   test('addPackage test - Indention 7', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk"></Project>`;
@@ -154,7 +150,6 @@ suite('xml.module.ts tests - add package', () => {
     assert.deepStrictEqual(newXml, expected);
   });
 
-
   test('addPackage test - Indention 9', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk">
 <PropertyGroup>
@@ -176,7 +171,6 @@ suite('xml.module.ts tests - add package', () => {
     const newXml = addPackage(xml, 'Newtonsoft.Json', '13.0.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
-
 
   test('addPackage test - Indention 10', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk">
@@ -250,6 +244,4 @@ suite('xml.module.ts tests - add package', () => {
     const newXml = addPackage(xml, 'Newtonsoft.Json', '13.0.1', project);
     assert.deepStrictEqual(newXml, expected);
   });
-
 });
-

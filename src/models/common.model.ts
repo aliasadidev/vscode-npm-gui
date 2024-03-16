@@ -1,4 +1,4 @@
-import { Project } from "./project.model";
+import { Project } from './project.model';
 
 /**
  * If the validation result was successfully, `isSuccessful` is equal to `true`
@@ -23,8 +23,8 @@ export interface ValidationResult {
  */
 export interface ServiceResult {
   /**
-  * The service result
-  */
+   * The service result
+   */
   isSuccessful: boolean;
   /**
    * The service message

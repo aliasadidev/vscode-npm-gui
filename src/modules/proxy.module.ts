@@ -33,9 +33,9 @@ export function getProxyOption(vscodeHttpConfig: any): ProxyOption {
 
     // Injecting the `Proxy-Authorization` header if the proxy has authorization
     if (vscodeHttpConfig.proxyAuthorization) {
-      proxySetting.headers["Proxy-Authorization"] = vscodeHttpConfig.proxyAuthorization;
+      proxySetting.headers['Proxy-Authorization'] =
+        vscodeHttpConfig.proxyAuthorization;
     }
-
   }
   return proxySetting;
 }

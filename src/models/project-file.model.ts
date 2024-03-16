@@ -3,24 +3,24 @@
  */
 export interface Element {
   /**
-  * The name of element
-  */
+   * The name of element
+   */
   name: string;
   /**
-  * The type of element
-  */
+   * The type of element
+   */
   type: string;
   /**
-  * The attributes of element
-  */
+   * The attributes of element
+   */
   attributes?: any;
   /**
-  * The children elements
-  */
+   * The children elements
+   */
   elements: Element[];
   /**
-  * The text of element
-  */
+   * The text of element
+   */
   text?: string;
 
   /**
@@ -28,7 +28,6 @@ export interface Element {
    */
   isSelfClosing?: boolean;
 }
-
 
 /**
  * The item group element

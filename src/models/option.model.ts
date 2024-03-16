@@ -5,7 +5,7 @@ export interface ExtensionConfiguration {
   /**
    * The NuGet Package Registries
    */
-  packageSources: PackageSource[],
+  packageSources: PackageSource[];
   /**
    * The maximum duration for completing a request
    */
@@ -65,7 +65,7 @@ export enum SourceType {
   /**
    * The package source is a directory [Unsupported yet!]
    */
-  local = 2
+  local = 2,
 }
 
 /**
@@ -79,7 +79,7 @@ export enum AuthorizationType {
   /**
    * The endpoint needs an auth token
    */
-  basicAuth = 2
+  basicAuth = 2,
 }
 
 /**

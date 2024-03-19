@@ -17,7 +17,7 @@ export interface Project {
   /**
    * The packages in the project
    */
-  packages: PackageDetail[]
+  packages: PackageDetail[];
 }
 
 /**
@@ -49,17 +49,7 @@ export interface PackageDetail {
    */
   sourceName: string;
   /**
- * The package source id
- */
+   * The package source id
+   */
   sourceId: number | null;
 }
-
-
-
-
-
-
-
-
-
-

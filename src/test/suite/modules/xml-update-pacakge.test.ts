@@ -1,10 +1,7 @@
 import * as assert from 'assert';
 import { updatePackage } from '../../../modules/xml.module';
 
-
 suite('xml.module.ts tests - update package', () => {
-
-
   test('updatePackage test', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk">
                          <ItemGroup>
@@ -18,7 +15,6 @@ suite('xml.module.ts tests - update package', () => {
     assert.deepStrictEqual(newXml, expected);
   });
 
-
   test('updatePackage test same indention - 1', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk">
                          <ItemGroup>
@@ -26,7 +22,7 @@ suite('xml.module.ts tests - update package', () => {
                          </ItemGroup>
                      </Project>`;
 
-    const expected = xml.replace("16.7.1", "16.7.2");
+    const expected = xml.replace('16.7.1', '16.7.2');
     const newXml = updatePackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.2');
     assert.equal(newXml, expected);
   });
@@ -39,7 +35,7 @@ suite('xml.module.ts tests - update package', () => {
                          <!--Your comment-->
  </Project>`;
 
-    const expected = xml.replace("16.7.1", "16.7.2");
+    const expected = xml.replace('16.7.1', '16.7.2');
     const newXml = updatePackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.2');
     assert.equal(newXml, expected);
   });
@@ -52,7 +48,7 @@ suite('xml.module.ts tests - update package', () => {
                          <!--Your comment-->
  </Project>`;
 
-    const expected = xml.replace("16.7.1", "16.7.2");
+    const expected = xml.replace('16.7.1', '16.7.2');
     const newXml = updatePackage(xml, 'Microsoft.NET.Test.Sdk', '16.7.2');
     assert.equal(newXml, expected);
   });
@@ -89,6 +85,4 @@ suite('xml.module.ts tests - update package', () => {
     const newXml = updatePackage(xml, 'Dapper', '2.0.1');
     assert.equal(newXml, expected);
   });
-
 });
-

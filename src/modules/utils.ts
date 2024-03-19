@@ -9,11 +9,14 @@ export const EOL: string = '\n';
  * @returns query string with `?` character at the first position of the result
  */
 export function jsonToQueryString(json: any) {
-  return '?' +
-    Object.keys(json).map(function (key) {
-      return encodeURIComponent(key) + '=' +
-        encodeURIComponent(json[key]);
-    }).join('&');
+  return (
+    '?' +
+    Object.keys(json)
+      .map(function (key) {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(json[key]);
+      })
+      .join('&')
+  );
 }
 
 /**
@@ -44,5 +47,3 @@ export function uniqBy(arr: any[], key: string) {
     }
   });
 }
-
-

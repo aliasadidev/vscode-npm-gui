@@ -21,7 +21,6 @@ suite('xml.module.ts tests - remove package', () => {
     assert.deepStrictEqual(newXml, expected);
   });
 
-
   test('remove test same indention - Empty ItemGroup', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
@@ -47,7 +46,6 @@ suite('xml.module.ts tests - remove package', () => {
 \t\t<ItemGroup></ItemGroup>
 </Project>`;
 
-
     const newXml = removePackage(xml, 'Microsoft.NET.Test.Sdk', project);
     assert.equal(newXml, expected);
   });
@@ -70,7 +68,6 @@ suite('xml.module.ts tests - remove package', () => {
     const expected = `<Project Sdk="Microsoft.NET.Sdk"><ItemGroup>
     <PackageReference Include="xunit" Version="2.4.1" /></ItemGroup></Project>`;
 
-
     const newXml = removePackage(xml, 'Microsoft.NET.Test.Sdk', project);
     assert.equal(newXml, expected);
   });
@@ -80,17 +77,14 @@ suite('xml.module.ts tests - remove package', () => {
 
     const expected = `<Project Sdk="Microsoft.NET.Sdk"><ItemGroup></ItemGroup></Project>`;
 
-
     const newXml = removePackage(xml, 'Microsoft.NET.Test.Sdk', project);
     assert.equal(newXml, expected);
   });
-
 
   test('remove test same indention - 6', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk"><!--Your comment--><ItemGroup><PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1"/></ItemGroup></Project>`;
 
     const expected = `<Project Sdk="Microsoft.NET.Sdk"><!--Your comment--><ItemGroup></ItemGroup></Project>`;
-
 
     const newXml = removePackage(xml, 'Microsoft.NET.Test.Sdk', project);
     assert.equal(newXml, expected);
@@ -103,10 +97,7 @@ suite('xml.module.ts tests - remove package', () => {
     const expected = `<!--Your comment--><Project Sdk="Microsoft.NET.Sdk">
     <!--Your comment--><ItemGroup></ItemGroup></Project>`;
 
-
     const newXml = removePackage(xml, 'Microsoft.NET.Test.Sdk', project);
     assert.equal(newXml, expected);
   });
-
 });
-

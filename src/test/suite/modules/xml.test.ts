@@ -2,9 +2,7 @@ import * as assert from 'assert';
 import { PackageDetail } from '../../../models/nuget.model';
 import { getPackages } from '../../../modules/xml.module';
 
-
 suite('xml.module.ts tests', () => {
-
   test('getPackages test', () => {
     const xml = `<Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
@@ -14,12 +12,15 @@ suite('xml.module.ts tests', () => {
 </Project>`;
 
     const expected: PackageDetail[] = [
-      { packageName: "Microsoft.NET.Test.Sdk", packageVersion: "16.7.1" },
-      { packageName: "xunit", packageVersion: "2.4.1" },
+      { packageName: 'Microsoft.NET.Test.Sdk', packageVersion: '16.7.1' },
+      { packageName: 'xunit', packageVersion: '2.4.1' },
     ];
-    const packages = getPackages(xml, { id: 0, packages: [], projectName: "", projectPath: "" });
+    const packages = getPackages(xml, {
+      id: 0,
+      packages: [],
+      projectName: '',
+      projectPath: '',
+    });
     assert.deepStrictEqual(packages, expected);
   });
-
 });
-

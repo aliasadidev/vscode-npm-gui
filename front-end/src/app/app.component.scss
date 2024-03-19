@@ -27,8 +27,8 @@
   height: 100% !important;
 }
 
-::ng-deep .packageUrl[href=""],
-::ng-deep .packageUrl[href="#"] {
+::ng-deep .packageUrl[href=''],
+::ng-deep .packageUrl[href='#'] {
   pointer-events: none;
   cursor: not-allowed;
 }

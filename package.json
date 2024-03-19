@@ -4,7 +4,7 @@
   "description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from NuGet server for .NET Core 1.1+/.Net5+ projects",
   "author": "Ali Asadi (ali.asadi.dev@gmail.com)",
   "publisher": "aliasadidev",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "preview": true,
   "icon": "images/icon.png",
   "license": "MIT",
@@ -32,7 +32,7 @@
     "url": "https://github.com/aliasadidev/vscode-npm-gui.git"
   },
   "engines": {
-    "vscode": "^1.73.0"
+    "vscode": "^1.87.2"
   },
   "categories": [
     "Other"
@@ -153,13 +153,14 @@
     "pretest": "npm run post-bundle && npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
+    "prettier": "npx prettier . --write",
     "post-bundle": "copyfiles -u 1 src/test/test-data/*.* out/"
   },
   "devDependencies": {
     "@types/chai": "^4.3.0",
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.1.0",
-    "@types/node": "16.x",
+    "@types/node": "^20.11.28",
     "@types/node-fetch": "^2.6.1",
     "@types/vscode": "^1.65.0",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
@@ -170,9 +171,10 @@
     "eslint": "^8.9.0",
     "glob": "^7.2.0",
     "mocha": "^9.2.2",
+    "prettier": "3.2.5",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.7.0",
-    "typescript": "^4.6.3",
+    "typescript": "5.1",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2"
   },
@@ -180,8 +182,8 @@
     "base-64": "^1.0.0",
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.1",
-    "utf8": "^3.0.0",
-    "sax": "^1.2.4"
+    "sax": "^1.2.4",
+    "utf8": "^3.0.0"
   },
   "__metadata": {
     "id": "697a8357-0d3b-4765-8ec9-3a394c9e82c7",

@@ -1,13 +1,16 @@
 import * as assert from 'assert';
 
-import { checkFileAccess, checkFileExists, hasFileAccess, readFileContent, writeToFile } from '../../../modules/file.module';
+import {
+  checkFileAccess,
+  checkFileExists,
+  hasFileAccess,
+  readFileContent,
+  writeToFile,
+} from '../../../modules/file.module';
 import * as fs from 'fs';
 import { getTestPath } from './config';
 
-
-
 suite('file.module.ts tests', () => {
-
   test('readFileContent test', () => {
     const filePath = getTestPath('readFileContent-test.csproj.xml');
     const xmlContent = readFileContent(filePath);
@@ -16,7 +19,7 @@ suite('file.module.ts tests', () => {
 
   test('writeToFile test', () => {
     const filePath = getTestPath('writeToFile-test.csproj.xml');
-    writeToFile(filePath, "<test></test>");
+    writeToFile(filePath, '<test></test>');
     const newXmlContent = readFileContent(filePath);
     assert.deepStrictEqual(newXmlContent, '<test></test>');
   });
@@ -36,7 +39,10 @@ suite('file.module.ts tests', () => {
 
     assert.deepStrictEqual(exists.isSuccessful, false);
     assert.deepStrictEqual(exists.exception, undefined);
-    assert.deepStrictEqual(exists.errorMessage, `File "${filePath}" does not exists`);
+    assert.deepStrictEqual(
+      exists.errorMessage,
+      `File "${filePath}" does not exists`
+    );
   });
 
   test('checkFileAccess test', () => {
@@ -56,5 +62,4 @@ suite('file.module.ts tests', () => {
     assert.deepStrictEqual(access.exception, undefined);
     assert.deepStrictEqual(access.errorMessage, undefined);
   });
-
 });

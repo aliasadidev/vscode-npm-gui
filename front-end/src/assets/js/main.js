@@ -1,18 +1,16 @@
 var loadingQueue = [];
 function loading(mode, message) {
-  var loader = document.getElementById("loading-main");
+  var loader = document.getElementById('loading-main');
 
-  document.getElementById("loading-main-message").innerText = (mode == "show") ? message : "";
+  document.getElementById('loading-main-message').innerText =
+    mode == 'show' ? message : '';
 
-  if (mode == "show") {
-    if (loadingQueue.length == 0)
-      loader.style.display = "table";
+  if (mode == 'show') {
+    if (loadingQueue.length == 0) loader.style.display = 'table';
     loadingQueue.push(1);
-  }
-  else {
+  } else {
     loadingQueue.pop();
-    if (loadingQueue.length == 0)
-      loader.style.display = "none";
+    if (loadingQueue.length == 0) loader.style.display = 'none';
   }
 }
 
@@ -35,12 +33,12 @@ function command(cmd, callback) {
 
   callbackStack.push({
     messageId,
-    callback
+    callback,
   });
   vscode.postMessage({
     messageId,
     command: cmd,
-    parameter: args
+    parameter: args,
   });
 }
 window.addEventListener('message', event => {
@@ -59,7 +57,6 @@ window.addEventListener('message', event => {
 
 /**/
 
-
 function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

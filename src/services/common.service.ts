@@ -1,6 +1,6 @@
-import { PackageDetail, Project } from "../models/project.model";
-import { ServiceResult } from "../models/common.model";
-import { hasFileAccess } from "../modules/file.module";
+import { PackageDetail, Project } from '../models/project.model';
+import { ServiceResult } from '../models/common.model';
+import { hasFileAccess } from '../modules/file.module';
 import * as fs from 'fs';
 
 /**
@@ -12,7 +12,7 @@ import * as fs from 'fs';
 export function getProject(projectList: Project[], projectID: number): Project {
   let project = projectList.find(d => d.id === projectID);
   if (project === undefined) {
-    throw "The project file does not exists";
+    throw 'The project file does not exists';
   }
   return project;
 }
@@ -23,7 +23,10 @@ export function getProject(projectList: Project[], projectID: number): Project {
  * @param packageName The package name for searching
  * @returns {PackageDetail}
  */
-export function getPackage(project: Project, packageName: string): PackageDetail {
+export function getPackage(
+  project: Project,
+  packageName: string
+): PackageDetail {
   let pkgIndex = getPackageIndex(project, packageName);
   return project.packages[pkgIndex];
 }
@@ -47,7 +50,10 @@ export function getPackageIndex(project: Project, packageName: string): number {
  * @param mode Check a file for read-write access
  * @returns {ServiceResult}
  */
-export function checkAccess(project: Project, mode: number = fs.constants.O_RDWR): ServiceResult {
+export function checkAccess(
+  project: Project,
+  mode: number = fs.constants.O_RDWR
+): ServiceResult {
   let commandResult: ServiceResult;
   let hasAccess = hasFileAccess(project.projectPath, mode);
   if (hasAccess.isSuccessful) {
@@ -56,7 +62,7 @@ export function checkAccess(project: Project, mode: number = fs.constants.O_RDWR
     commandResult = {
       message: hasAccess.errorMessage,
       isSuccessful: false,
-      exception: hasAccess.exception
+      exception: hasAccess.exception,
     };
   }
   return commandResult;

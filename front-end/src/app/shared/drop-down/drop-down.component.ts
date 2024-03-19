@@ -1,5 +1,15 @@
-import { Component, ElementRef, forwardRef, HostListener, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormGroupDirective } from '@angular/forms';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  HostListener,
+  Input,
+} from '@angular/core';
+import {
+  NG_VALUE_ACCESSOR,
+  ControlValueAccessor,
+  FormGroupDirective,
+} from '@angular/forms';
 import { DropDownKeyValue } from 'src/app/models/drop-down-key-value';
 
 @Component({
@@ -10,39 +20,41 @@ import { DropDownKeyValue } from 'src/app/models/drop-down-key-value';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => DropDownComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class DropDownComponent implements ControlValueAccessor {
-
   private _dataSource: DropDownKeyValue[] = [];
-  @Input() set dataSource(value: DropDownKeyValue[]) { this._dataSource = value; }
-  get dataSource(): DropDownKeyValue[] { return this._dataSource; }
-
-
-
-
-  @Input() label: string | undefined = "Select a item";
-  private readonly formControlName: string = "";
-
-  constructor(private eRef: ElementRef, private parent: FormGroupDirective) {
-    this.formControlName = eRef.nativeElement.getAttribute("formControlName");
+  @Input() set dataSource(value: DropDownKeyValue[]) {
+    this._dataSource = value;
+  }
+  get dataSource(): DropDownKeyValue[] {
+    return this._dataSource;
   }
 
+  @Input() label: string | undefined = 'Select a item';
+  private readonly formControlName: string = '';
 
+  constructor(
+    private eRef: ElementRef,
+    private parent: FormGroupDirective
+  ) {
+    this.formControlName = eRef.nativeElement.getAttribute('formControlName');
+  }
 
   writeValue(obj: any): void {
     this.selectedIndex = obj;
     if (this.selectedIndex) {
-      const title = this._dataSource.find(x => x.Key == this.selectedIndex)?.Value;
+      const title = this._dataSource.find(
+        x => x.key == this.selectedIndex
+      )?.value;
       this.label = title;
     }
   }
 
-
-  onChange: any = () => { }
-  onTouch: any = () => { }
+  onChange: any = () => {};
+  onTouch: any = () => {};
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
@@ -50,7 +62,7 @@ export class DropDownComponent implements ControlValueAccessor {
     this.onTouch = fn;
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   isStyledSelect: boolean = false;
   selectedIndex?: any = null;
@@ -62,10 +74,11 @@ export class DropDownComponent implements ControlValueAccessor {
 
   onListItem(key: string) {
     this.isStyledSelect = false;
-    this.label = this.dataSource.find(e => e.Key == key)?.Value;
+    this.label = this.dataSource.find(e => e.key == key)?.value;
     this.isShowList = false;
-    if (this.parent.control.controls[this.formControlName])
+    if (this.parent.control.controls[this.formControlName]) {
       this.parent.control.controls[this.formControlName].setValue(key);
+    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -74,6 +87,4 @@ export class DropDownComponent implements ControlValueAccessor {
       this.isShowList = this.isStyledSelect = false;
     }
   }
-
-
 }

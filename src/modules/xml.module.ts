@@ -10,13 +10,14 @@ export function getPackages(xml: string, project: Project): PackageDetail[] {
   let itemGroup = getItemGroupIndexResult(xml);
   if (itemGroup.itemGroupIndex !== -1) {
     checkMoreThenOneItemGroup(itemGroup.projectElement, project);
-    let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
+    let selectedItemGroup: Element =
+      itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
     let packages: Element[] = getPackageReferences(selectedItemGroup);
     packageList = packages.map(e => {
       let attr = e.attributes;
       let result: PackageDetail = {
-        packageName: attr["Include"],
-        packageVersion: attr["Version"]
+        packageName: attr['Include'],
+        packageVersion: attr['Version'],
       };
       return result;
     });
@@ -24,17 +25,25 @@ export function getPackages(xml: string, project: Project): PackageDetail[] {
   return packageList;
 }
 
-export function removePackage(xml: string, packageName: string, project: Project) {
+export function removePackage(
+  xml: string,
+  packageName: string,
+  project: Project
+) {
   let xmlResult: string = xml;
   let itemGroup = getItemGroupIndexResult(xml);
   checkMoreThenOneItemGroup(itemGroup.projectElement, project);
-  let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
-  let delIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
+  let selectedItemGroup: Element =
+    itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
+  let delIndex: number = getPackageReferenceIndex(
+    selectedItemGroup,
+    packageName
+  );
 
   let indexSize = 1;
   if (delIndex > 0) {
     let left = selectedItemGroup.elements[delIndex - 1]?.text;
-    if (left != null && left.search(/\s+/mg) >= 0) {
+    if (left != null && left.search(/\s+/gm) >= 0) {
       indexSize++;
       delIndex--;
     }
@@ -42,22 +51,37 @@ export function removePackage(xml: string, packageName: string, project: Project
 
   selectedItemGroup.elements.splice(delIndex, indexSize);
 
-  let fullTagEmptyElement: boolean = (selectedItemGroup.elements.length === 0);
-  xmlResult = js2xml(itemGroup.rootElement, { fullTagEmptyElement: fullTagEmptyElement });
+  let fullTagEmptyElement: boolean = selectedItemGroup.elements.length === 0;
+  xmlResult = js2xml(itemGroup.rootElement, {
+    fullTagEmptyElement: fullTagEmptyElement,
+  });
   return xmlResult;
 }
 
-export function updatePackage(xml: string, packageName: string, version: string) {
+export function updatePackage(
+  xml: string,
+  packageName: string,
+  version: string
+) {
   let xmlResult: string = xml;
   let itemGroup = getItemGroupIndexResult(xml);
-  let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
-  let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
-  selectedItemGroup.elements[packageIndex].attributes["Version"] = version;
+  let selectedItemGroup: Element =
+    itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
+  let packageIndex: number = getPackageReferenceIndex(
+    selectedItemGroup,
+    packageName
+  );
+  selectedItemGroup.elements[packageIndex].attributes['Version'] = version;
   xmlResult = js2xml(itemGroup.rootElement, {});
   return xmlResult;
 }
 
-export function addPackage(xml: string, packageName: string, version: string, project: Project) {
+export function addPackage(
+  xml: string,
+  packageName: string,
+  version: string,
+  project: Project
+) {
   let xmlResult: string = xml;
   let itemGroup = getItemGroupIndexResult(xml);
   let isEmptyProject = false;
@@ -66,30 +90,34 @@ export function addPackage(xml: string, packageName: string, version: string, pr
   }
   checkMoreThenOneItemGroup(itemGroup.projectElement, project);
 
-  let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
-  let packageIndex: number = getPackageReferenceIndex(selectedItemGroup, packageName);
+  let selectedItemGroup: Element =
+    itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
+  let packageIndex: number = getPackageReferenceIndex(
+    selectedItemGroup,
+    packageName
+  );
   if (packageIndex === -1) {
-
-    let lstIndex = selectedItemGroup.elements.map(ele => ele.type === 'element')
+    let lstIndex = selectedItemGroup.elements
+      .map(ele => ele.type === 'element')
       .lastIndexOf(true);
 
     let insertIndex = 0;
     if (lstIndex != -1) {
-
       insertIndex = lstIndex + 1;
       let rightText = selectedItemGroup.elements[lstIndex - 1]?.text;
 
-      if (rightText != null && rightText.search(/\s+/mg) >= 0) {
+      if (rightText != null && rightText.search(/\s+/gm) >= 0) {
         let space = {
           type: 'text',
           text: rightText,
           name: '',
-          elements: []
+          elements: [],
         };
         selectedItemGroup.elements = insertElement(
           selectedItemGroup.elements,
           insertIndex,
-          space);
+          space
+        );
 
         insertIndex++;
       }
@@ -97,38 +125,37 @@ export function addPackage(xml: string, packageName: string, version: string, pr
       insertIndex = 1;
     }
 
-
     /* eslint-disable */
     let newElement: any = {
-      type: "element",
-      name: "PackageReference",
+      type: 'element',
+      name: 'PackageReference',
       attributes: {
         Include: packageName,
-        Version: version
-      }
+        Version: version,
+      },
     };
     /* eslint-enable */
 
     selectedItemGroup.elements = insertElement(
       selectedItemGroup.elements,
       insertIndex,
-      newElement);
+      newElement
+    );
 
     if (isEmptyProject) {
       let space2 = {
         type: 'text',
         text: `${EOL}  `,
         name: '',
-        elements: []
+        elements: [],
       };
 
       selectedItemGroup.elements.push(space2);
     }
 
     xmlResult = js2xml(itemGroup.rootElement, {});
-
   } else {
-    throw "package already exists in project!";
+    throw 'package already exists in project!';
   }
   return xmlResult;
 }
@@ -140,30 +167,36 @@ function insertElement(arr: Element[], index: number, newItem: Element) {
     // inserted item
     newItem,
     // part of the array after the specified index
-    ...arr.slice(index)
+    ...arr.slice(index),
   ];
 }
-
 
 function getItemGroupIndexResult(xml: string): ItemGroup {
   let rootObj: Element = xmlToObject(xml);
   let projectIndex: number = getProjectIndex(rootObj);
   let projectElement: Element = rootObj.elements[projectIndex];
   let groupItemIndex: number = getItemGroupIndex(projectElement);
-  return { rootElement: rootObj, itemGroupIndex: groupItemIndex, projectElement: projectElement };
+  return {
+    rootElement: rootObj,
+    itemGroupIndex: groupItemIndex,
+    projectElement: projectElement,
+  };
 }
 
 function createNewItemGroup(itemGroup: ItemGroup): boolean {
-  let isEmptyProject = false, isEmptyInlineProject = false;
-  let lstIndex = itemGroup.projectElement.elements?.map(ele => ele.type === 'element')
-    ?.lastIndexOf(true) ?? -1;
+  let isEmptyProject = false,
+    isEmptyInlineProject = false;
+  let lstIndex =
+    itemGroup.projectElement.elements
+      ?.map(ele => ele.type === 'element')
+      ?.lastIndexOf(true) ?? -1;
   let topLeftText = null;
   if (lstIndex > 0) {
     topLeftText = itemGroup.projectElement.elements[lstIndex - 1]?.text;
   }
-  if (topLeftText != null && topLeftText.search(/\s+/mg) >= 0) {
+  if (topLeftText != null && topLeftText.search(/\s+/gm) >= 0) {
     if (topLeftText.search(/(\r\n|\n|\r)/gm) >= 0) {
-      topLeftText = `${EOL}` + topLeftText.replace(/(\r\n|\n|\r)/gm, "");
+      topLeftText = `${EOL}` + topLeftText.replace(/(\r\n|\n|\r)/gm, '');
     }
     itemGroup.projectElement.elements = insertElement(
       itemGroup.projectElement.elements,
@@ -172,8 +205,9 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
         type: 'text',
         text: topLeftText,
         name: '',
-        elements: []
-      });
+        elements: [],
+      }
+    );
     lstIndex++;
   } else {
     // add a default
@@ -187,42 +221,44 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
           type: 'text',
           text: `${EOL}  `,
           name: '',
-          elements: []
-        });
+          elements: [],
+        }
+      );
     } else {
       isEmptyInlineProject = true;
-      itemGroup.projectElement.elements = [{
-        type: 'text',
-        text: `${EOL}  `,
-        name: '',
-        elements: []
-      }];
+      itemGroup.projectElement.elements = [
+        {
+          type: 'text',
+          text: `${EOL}  `,
+          name: '',
+          elements: [],
+        },
+      ];
     }
 
     lstIndex++;
   }
 
-
   itemGroup.projectElement.elements = insertElement(
     itemGroup.projectElement.elements,
     lstIndex + 1,
     {
-      type: "element",
-      name: "ItemGroup",
-      elements: []
-    });
+      type: 'element',
+      name: 'ItemGroup',
+      elements: [],
+    }
+  );
 
   if (isEmptyInlineProject) {
     let space2 = {
       type: 'text',
       text: `${EOL}`,
       name: '',
-      elements: []
+      elements: [],
     };
 
     itemGroup.projectElement.elements.push(space2);
   }
-
 
   itemGroup.itemGroupIndex = lstIndex + 1;
   // item group is empty
@@ -233,18 +269,18 @@ function createNewItemGroup(itemGroup: ItemGroup): boolean {
       type: 'text',
       text: `${EOL}` + lastFormat + lastFormat,
       name: '',
-      elements: []
+      elements: [],
     };
-    let selectedItemGroup: Element = itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
+    let selectedItemGroup: Element =
+      itemGroup.projectElement.elements[itemGroup.itemGroupIndex];
     selectedItemGroup.elements.push(space);
-
 
     if (!isEmptyProject) {
       let space2 = {
         type: 'text',
         text: topLeftText,
         name: '',
-        elements: []
+        elements: [],
       };
 
       selectedItemGroup.elements.push(space2);
@@ -257,29 +293,40 @@ function xmlToObject(xml: string): any {
   return xml2js(xml, { captureSpacesBetweenElements: true });
 }
 
-
 function getProjectIndex(elm: Element): number {
-  let index: number = elm.elements.findIndex(x => x.name == "Project" && x.type == "element");
+  let index: number = elm.elements.findIndex(
+    x => x.name == 'Project' && x.type == 'element'
+  );
 
   return index;
 }
 function getPackageReferenceIndex(elm: Element, pkgName: string): number {
-  let index: number = elm.elements.findIndex(x => x.name == "PackageReference" && x.type == "element" && x.attributes["Include"] === pkgName);
+  let index: number = elm.elements.findIndex(
+    x =>
+      x.name == 'PackageReference' &&
+      x.type == 'element' &&
+      x.attributes['Include'] === pkgName
+  );
   return index;
 }
 
 function getPackageReferences(elm: Element): Element[] {
-  let index: Element[] = elm.elements.filter(x => x.name == "PackageReference" && x.type == "element");
+  let index: Element[] = elm.elements.filter(
+    x => x.name == 'PackageReference' && x.type == 'element'
+  );
   return index;
 }
 
 function getItemGroupIndex(elm: Element): number {
   let newElm: number = elm.elements?.findIndex(
-    x => x.name == "ItemGroup" &&
-      x.type == "element" &&
+    x =>
+      x.name == 'ItemGroup' &&
+      x.type == 'element' &&
       x.elements &&
       x.elements.length > 0 &&
-      x.elements.find(z => z.name == "PackageReference" && z.type == "element") !== undefined
+      x.elements.find(
+        z => z.name == 'PackageReference' && z.type == 'element'
+      ) !== undefined
   );
 
   return newElm ?? -1;
@@ -287,11 +334,14 @@ function getItemGroupIndex(elm: Element): number {
 
 function checkMoreThenOneItemGroup(elm: Element, project: Project): Element[] {
   let newElm: Element[] = elm.elements.filter(
-    x => x.name == "ItemGroup" &&
-      x.type == "element" &&
+    x =>
+      x.name == 'ItemGroup' &&
+      x.type == 'element' &&
       x.elements &&
       x.elements.length > 0 &&
-      x.elements.find(z => z.name == "PackageReference" && z.type == "element") !== undefined
+      x.elements.find(
+        z => z.name == 'PackageReference' && z.type == 'element'
+      ) !== undefined
   );
   if (newElm && newElm.length > 1) {
     throw `More than one <ItemGroup> find. ${project.projectName} | ${project.projectPath}`;

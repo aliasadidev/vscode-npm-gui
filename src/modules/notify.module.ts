@@ -39,6 +39,7 @@ export function showInformationMessage(message: string) {
  * @param message The message for showing in the message box (with red box)
  */
 export function showErrorMessage(message: any) {
+  console.log(message);
   vscode.window.showErrorMessage(message);
 }
 

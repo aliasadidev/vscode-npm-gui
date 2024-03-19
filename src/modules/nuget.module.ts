@@ -14,6 +14,7 @@ import {
 } from '../models/option.model';
 import { getProxyOption } from './proxy.module';
 import { EOL, jsonToQueryString } from './utils';
+import { showErrorMessage } from './notify.module';
 
 /**
  * Get the request options(proxy,timeout,...)
@@ -118,7 +119,7 @@ async function getPackageVersions(
     );
   } catch (e) {
     console.log(e);
-    console.log(errors);
+    showErrorMessage(errors);
     throw `[An error occurred in the loading package versions (package:${packageName})] details logged in VSCode developer tools`;
   }
 
@@ -221,9 +222,8 @@ export async function searchPackage(
             jsonResponse.packageSourceName = src.sourceName;
             jsonResponse.packageSourceId = src.id;
           } catch (ex) {
-            console.log(
-              `[NuGet Package Manager GUI => ERROR!!!]${EOL}[Request to url:${url}]${EOL}[timeout:${requestOption.timeout}]${EOL}[proxy is active:${!!requestOption.agent}]${EOL}[result:${rawResult}]${EOL}`
-            );
+            const message = `[NuGet Package Manager GUI => ERROR!!!]${EOL}[Request to url:${url}]${EOL}[timeout:${requestOption.timeout}]${EOL}[proxy is active:${!!requestOption.agent}]${EOL}[result:${rawResult}]${EOL}`;
+            showErrorMessage(message);
             throw ex;
           }
 

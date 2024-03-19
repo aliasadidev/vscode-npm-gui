@@ -12,9 +12,7 @@
   "typescript.tsc.autoDetect": "off",
   "editor.formatOnSave": true,
   "editor.detectIndentation": false,
-  "cSpell.words": [
-    "nugetpackagemanagergui"
-  ],
+  "cSpell.words": ["nugetpackagemanagergui"],
   "mochaExplorer.require": "ts-node/register",
   "mochaExplorer.files": "src/test/**/**.test.ts",
   "mochaExplorer.ui": "tdd",
@@ -27,7 +25,7 @@
   },
   "[html][typescript]": {
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
+      "source.fixAll.eslint": "explicit"
     }
   }
 }

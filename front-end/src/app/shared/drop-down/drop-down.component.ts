@@ -76,8 +76,9 @@ export class DropDownComponent implements ControlValueAccessor {
     this.isStyledSelect = false;
     this.label = this.dataSource.find(e => e.key == key)?.value;
     this.isShowList = false;
-    if (this.parent.control.controls[this.formControlName])
-      {this.parent.control.controls[this.formControlName].setValue(key);}
+    if (this.parent.control.controls[this.formControlName]) {
+      this.parent.control.controls[this.formControlName].setValue(key);
+    }
   }
 
   @HostListener('document:click', ['$event'])

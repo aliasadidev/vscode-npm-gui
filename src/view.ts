@@ -27,9 +27,9 @@ export class VSCExpress {
   open(
     filePath: string,
     title = '',
-    viewColumn: vscode.ViewColumn = vscode.ViewColumn.Two,
+    viewColumn: vscode.ViewColumn = vscode.ViewColumn.Two
   ) {
-   const options = {
+    const options = {
       enableScripts: true,
       enableCommandUris: true,
       retainContextWhenHidden: true,

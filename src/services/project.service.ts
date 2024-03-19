@@ -8,7 +8,6 @@ import { getPackages } from '../modules/xml.module';
 import { mergeList } from '../modules/utils';
 import {
   findStableVersion,
-  getPattern,
   isUpdate,
   mergeVersionPatterns,
 } from './version.service';
@@ -73,12 +72,8 @@ async function setPackageVersions(
       project.packages.forEach(pkg => {
         let versions = keyValuePackageVersions[pkg.packageName];
         pkg.newerVersion = findStableVersion(versions);
-        const pattern = getPattern(pkg.packageVersion);
-        if (pattern) {
-          versions = mergeVersionPatterns(versions);
-        } else {
-          pkg.versionList = versions;
-        }
+
+        versions = mergeVersionPatterns(versions);
 
         pkg.isUpdated = isUpdate(pkg.packageVersion, pkg.newerVersion);
         pkg.versionList = versions;

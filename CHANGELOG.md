@@ -1,5 +1,15 @@
 # Change Log
 
+# Version 2.1.0 - March 19, 2024
+
+#### Added
+
+- Support **star** in PackageReference's version `<PackageReference Include="SixLaborsCaptcha.Core" Version="1.*" />`
+
+#### Fixed
+
+- Persist view in memory for continuous accessibility
+
 # Version 2.0.6 - Jan 14, 2023
 
 #### Fixed

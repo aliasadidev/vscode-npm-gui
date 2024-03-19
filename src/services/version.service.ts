@@ -1,3 +1,5 @@
+import { SearchPackageResultVersion } from '../models/nuget.model';
+
 /**
  * Find the latest stable version of a NuGet package
  * @param versions The list of the package versions
@@ -51,6 +53,23 @@ export function mergeVersionPatterns(versions: string[]): string[] {
     pats.forEach(res => {
       if (lst.indexOf(res) == -1) {
         lst.push(res);
+      }
+    });
+  }
+  return lst;
+}
+
+export function mergeVersionPatternsWithSearch(
+  versions: SearchPackageResultVersion[]
+): SearchPackageResultVersion[] {
+  let lst: SearchPackageResultVersion[] = [];
+  for (let i = 0; i < versions.length; i++) {
+    const str = versions[i];
+    lst.push(str);
+    var pats = generateVersionPatterns(str.version);
+    pats.forEach(res => {
+      if (lst.findIndex(x => x.version == res) == -1) {
+        lst.push({ version: res, downloads: 0 }); // TODO: fill download correctly
       }
     });
   }

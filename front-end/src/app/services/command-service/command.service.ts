@@ -88,6 +88,23 @@ export class CommandService {
     return obs;
   }
 
+  copyPackage(
+    packageName: string,
+    selectedVersion: string
+  ): Observable<CommandResult<any>> {
+    var obs = new Observable<CommandResult<any>>(sub => {
+      command(
+        'nugetpackagemanagergui.copyPackage',
+        {
+          packageName: packageName,
+          selectedVersion: selectedVersion,
+        },
+        (res: CommandResult<any>) => sub.next(res)
+      );
+    });
+    return obs;
+  }
+
   updatePackage(
     projectId: number,
     packageName: string,

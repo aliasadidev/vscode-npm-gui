@@ -177,6 +177,17 @@ export class InstallPackageComponent implements AfterViewInit {
     }
   }
 
+  copy(packageName: string) {
+    this.loading.startLoading();
+    const selectedVersion = this.packageListVersion[packageName];
+    this.commandSrv
+        .copyPackage(packageName, selectedVersion)
+        .subscribe(res => {
+          this.commandSrv.syncViews('getData');
+          this.loading.stopLoading();
+        });
+  }
+
   findPackageStableVersion(
     searchPackageResultVersions: SearchPackageResultVersion[]
   ): string {

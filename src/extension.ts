@@ -23,6 +23,7 @@ import {
 } from './services/update.service';
 import { remove, removeAllPackage } from './services/uninstall.service';
 import { install } from './services/install.service';
+import { copy } from './services/copy.service';
 
 export function activate(context: vscode.ExtensionContext) {
   const vscexpress = new VSCExpress(context, 'front-end');
@@ -183,6 +184,26 @@ export function activate(context: vscode.ExtensionContext) {
               configOptions
             ),
           undefined,
+          false
+        );
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      'nugetpackagemanagergui.copyPackage',
+      async (data: {
+        packageName: string;
+        selectedVersion: string;
+      }) => {
+        await tryCatch(
+          async () =>
+            copy(
+              data.packageName,
+              data.selectedVersion
+            ),
+          `${data.packageName} copied to clipboard`,
           false
         );
       }

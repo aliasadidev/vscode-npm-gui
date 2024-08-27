@@ -1,5 +1,11 @@
 # Change Log
 
+# Version 2.1.1 - Aug 19, 2024
+
+#### Added
+
+- Add copy package name functionality into install page
+
 # Version 2.1.0 - March 19, 2024
 
 #### Added

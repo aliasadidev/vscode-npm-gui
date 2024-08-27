@@ -23,6 +23,7 @@ export function getConfigOptions(): ExtensionConfiguration {
         searchUrl: 'https://azuresearch-usnc.nuget.org/query',
         sourceType: SourceType.server,
         packageUrl: 'https://www.nuget.org/packages/{{packageName}}',
+        sourceDirectory: '',
       },
     ],
     vscodeHttpConfig: {},

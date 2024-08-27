@@ -52,4 +52,8 @@ export interface PackageDetail {
    * The package source id
    */
   sourceId: number | null;
+  /**
+   * computed property
+   */
+  packageWebUrl?: string;
 }

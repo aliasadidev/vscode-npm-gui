@@ -5,16 +5,21 @@ import {
   PackageMetadata,
   PackageSearchResult,
   PackageVersion,
+  SearchPackageResultVersion,
+  ServerPackageSearchResult,
 } from '../models/nuget.model';
 import {
   AuthorizationOption,
   AuthorizationType,
   PackageSource,
   RequestOption,
+  SourceType,
 } from '../models/option.model';
 import { getProxyOption } from './proxy.module';
-import { EOL, jsonToQueryString } from './utils';
+import { EOL, jsonToQueryString, mergeList } from './utils';
 import { showErrorMessage } from './notify.module';
+import { localGetPackageVersions, localSearchPackage } from './local.module';
+import { sortVersions } from '../services/version.service';
 
 /**
  * Get the request options(proxy,timeout,...)
@@ -24,7 +29,7 @@ import { showErrorMessage } from './notify.module';
  * @returns
  */
 function getRequestOptions(
-  authOption: AuthorizationOption,
+  authOption: AuthorizationOption | null,
   nugetRequestTimeout: number,
   vscodeHttpConfig: any
 ): RequestOption {
@@ -41,7 +46,7 @@ function getRequestOptions(
     }
   }
 
-  if (authOption.authType == AuthorizationType[AuthorizationType.basicAuth]) {
+  if (authOption?.authType == AuthorizationType[AuthorizationType.basicAuth]) {
     var bytes = utf8.encode(authOption.username + ':' + authOption.password);
     var encoded = base64.encode(bytes);
     requestOption.headers['Authorization'] = 'Basic ' + encoded;
@@ -67,55 +72,57 @@ async function getPackageVersions(
   let errors: string[] = [];
   try {
     result = await Promise.any(
-      packageSources.map(async src => {
-        let url = src.packageVersionsUrl.replace(
-          '{{packageName}}',
-          packageName?.toLowerCase()
-        );
-        const requestOption = getRequestOptions(
-          src.authorization,
-          nugetRequestTimeout,
-          vscodeHttpConfig
-        );
-        return await fetch(url, requestOption)
-          .then(async response => {
-            const rawResult = await response.text();
-            let jsonResponse;
-            try {
-              jsonResponse = JSON.parse(rawResult);
-              if (
-                (jsonResponse && !Array.isArray(jsonResponse.versions)) ||
-                (Array.isArray(jsonResponse.versions) &&
-                  jsonResponse.versions.length == 0)
-              ) {
-                throw 'not found';
-              }
-            } catch (ex) {
-              errors.push(`
+      packageSources
+        .filter(x => x.sourceType.toString() != SourceType[SourceType.local])
+        .map(async src => {
+          let url = src.packageVersionsUrl.replace(
+            '{{packageName}}',
+            packageName?.toLowerCase()
+          );
+          const requestOption = getRequestOptions(
+            src.authorization,
+            nugetRequestTimeout,
+            vscodeHttpConfig
+          );
+          return await fetch(url, requestOption)
+            .then(async response => {
+              const rawResult = await response.text();
+              let jsonResponse;
+              try {
+                jsonResponse = JSON.parse(rawResult);
+                if (
+                  (jsonResponse && !Array.isArray(jsonResponse.versions)) ||
+                  (Array.isArray(jsonResponse.versions) &&
+                    jsonResponse.versions.length == 0)
+                ) {
+                  throw 'not found';
+                }
+              } catch (ex) {
+                errors.push(`
             [NuGet Package Manager GUI => ERROR!!!]
             [Request to url:${url}]
             [timeout:${nugetRequestTimeout}]
             [proxy is active:${!!requestOption.agent}]
             [auth is active:${src.authorization && src.authorization.authType != AuthorizationType[AuthorizationType.none]}]
             [result:${rawResult}]${EOL}`);
-              throw ex;
-            }
+                throw ex;
+              }
 
-            return jsonResponse;
-          })
-          .then(jsonResponse => {
-            let json: PackageVersion = {
-              packageName: packageName,
-              versions: jsonResponse.versions,
-              sourceName: src.sourceName,
-              sourceId: src.id,
-            };
-            return json;
-          })
-          .catch(error => {
-            throw `[An error occurred in the loading package versions (package:${packageName})] ${error.message}`;
-          });
-      })
+              return jsonResponse;
+            })
+            .then(jsonResponse => {
+              let json: PackageVersion = {
+                packageName: packageName,
+                versions: jsonResponse.versions,
+                sourceName: src.sourceName,
+                sourceId: src.id,
+              };
+              return json;
+            })
+            .catch(error => {
+              throw `[An error occurred in the loading package versions (package:${packageName})] ${error.message}`;
+            });
+        })
     );
   } catch (e) {
     console.log(e);
@@ -172,6 +179,34 @@ export async function fetchPackageVersionsBatch(
       )
     )
   );
+
+  const dirs = packageSources.filter(
+    x => x.sourceType.toString() === SourceType[SourceType.local]
+  );
+  if (packageSources.length > 0) {
+    let localPackages: PackageVersion[] = [];
+
+    var searchResult: ServerPackageSearchResult = await localSearchPackage(
+      dirs.map(x => x.sourceDirectory),
+      null,
+      packageSources[0],
+      null,
+      null
+    );
+    searchResult?.data?.forEach(pkg => {
+      const index = result.findIndex(x => x.packageName == pkg.id);
+      if (index === -1) {
+        result.push.
+      }else{
+        const versions: string[] = mergeList([
+          ...result[index].versions,
+          ...pkg.versions.map(x => x.version),
+        ]);
+        result[index].versions = sortVersions(versions);
+      }
+    });
+  }
+
   return result;
 }
 /**
@@ -200,6 +235,16 @@ export async function searchPackage(
 
   const results = await Promise.all(
     packageSources.map(async src => {
+      if (src.sourceType.toString() === SourceType[SourceType.local]) {
+        return await localSearchPackage(
+          [src.sourceDirectory],
+          query,
+          src,
+          take,
+          skip
+        );
+      }
+
       const queryString = jsonToQueryString({
         q: query,
         preRelease: src.preRelease,
@@ -216,7 +261,7 @@ export async function searchPackage(
       return fetch(url, requestOption)
         .then(async response => {
           const rawResult = await response.text();
-          let jsonResponse;
+          let jsonResponse: ServerPackageSearchResult;
           try {
             jsonResponse = JSON.parse(rawResult);
             jsonResponse.packageSourceName = src.sourceName;
@@ -239,7 +284,7 @@ export async function searchPackage(
     return {
       packageSourceId: result.packageSourceId,
       packageSourceName: result.packageSourceName,
-      packages: <PackageMetadata[]>result.data ?? [],
+      packages: result.data ?? [],
       totalHits: +result.totalHits,
     };
   });

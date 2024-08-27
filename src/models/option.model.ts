@@ -52,6 +52,10 @@ export interface PackageSource {
    * The package url
    */
   packageUrl: string;
+  /**
+   * The directory to use for local sources
+   */
+  sourceDirectory: string;
 }
 
 /**

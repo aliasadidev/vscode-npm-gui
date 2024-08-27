@@ -9,8 +9,8 @@ import { DropDownKeyValue } from 'src/app/models/drop-down-key-value';
 import { CommandService } from 'src/app/services/command-service/command.service';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { PackageSource } from '../../../../../src/models/option.model';
-import { getPackageSourceWebUrl } from '../../shared/component-shared';
 import { findStableVersion } from '../../../../../src/services/version.service';
+import { getPackageSourceWebUrl } from 'src/app/shared/component-shared';
 
 @Component({
   selector: 'app-install-package',
@@ -122,6 +122,12 @@ export class InstallPackageComponent implements AfterViewInit {
             this.packageSearchResultList[source.packageSourceId] = source;
             source.packages.forEach(p => {
               p.stableVersion = this.findPackageStableVersion(p.versions);
+              p.packageWebUrl = getPackageSourceWebUrl(
+                this.originalPackageSources.find(x => x.id == packageSourceId)!,
+                p.id,
+                p.stableVersion,
+                [p.projectUrl]
+              );
             });
             this.sourcesPages[source.packageSourceId] = pageNumber;
             this.cd.detectChanges();
@@ -203,6 +209,4 @@ export class InstallPackageComponent implements AfterViewInit {
     }
     return result;
   }
-
-  getPackageSourceWebUrl = getPackageSourceWebUrl;
 }

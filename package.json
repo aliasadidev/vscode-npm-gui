@@ -157,6 +157,7 @@
     "post-bundle": "copyfiles -u 1 src/test/test-data/*.* out/"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
     "@types/chai": "^4.3.0",
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.1.0",
@@ -179,7 +180,9 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
+    "adm-zip": "^0.5.12",
     "base-64": "^1.0.0",
+    "file-type": "^19.0.0",
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.1",
     "sax": "^1.2.4",

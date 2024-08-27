@@ -153,20 +153,13 @@
                 </div>
                 <div
                   class="d-flex flex-column d-flex"
-                  style="text-align: right">
+                  style="text-align: right;min-width: 100px;">
                   <span style="white-space: pre" *ngIf="package.totalDownloads">
                     Total Downloads: {{ package.totalDownloads | number: '0.' }}
                   </span>
                   <a
                     class="packageUrl"
-                    [attr.href]="
-                      getPackageSourceWebUrl(
-                        this.originalPackageSources,
-                        +source.key,
-                        package.id,
-                        package.stableVersion ?? ''
-                      )
-                    "
+                    [attr.href]="package.packageWebUrl"
                     target="_blank"
                     >View In Web</a
                   >

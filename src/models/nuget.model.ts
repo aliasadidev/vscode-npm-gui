@@ -28,6 +28,10 @@ export interface PackageMetadata {
    * computed property
    */
   stableVersion?: string;
+  /**
+   * computed property
+   */
+  packageWebUrl?: string;
 }
 
 /**
@@ -59,6 +63,25 @@ export interface PackageSearchResult {
    * The list of packages
    */
   packages: PackageMetadata[];
+  /**
+   * The number of packages the related to query search
+   */
+  totalHits: number;
+  /**
+   * The id of package source
+   */
+  packageSourceId: number;
+  /**
+   * The name of package source
+   */
+  packageSourceName: string;
+}
+
+export interface ServerPackageSearchResult {
+  /**
+   * The list of packages
+   */
+  data: PackageMetadata[];
   /**
    * The number of packages the related to query search
    */

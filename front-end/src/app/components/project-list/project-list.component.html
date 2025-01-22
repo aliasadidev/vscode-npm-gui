@@ -94,14 +94,7 @@
                 <a
                   class="packageUrl"
                   *ngIf="package.sourceId"
-                  [attr.href]="
-                    getPackageSourceWebUrl(
-                      packageSources,
-                      package.sourceId,
-                      package.packageName,
-                      package.packageVersion
-                    )
-                  "
+                  [attr.href]="package.packageWebUrl"
                   target="_blank"
                   >{{ package.sourceName }}</a
                 >

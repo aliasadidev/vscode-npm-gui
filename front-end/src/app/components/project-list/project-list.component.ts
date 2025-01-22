@@ -3,12 +3,12 @@ import { FilterSearchTypes } from 'src/app/models/filter-search-type';
 import { AlertService } from 'src/app/services/alert-service/alert.service';
 import { CommandService } from 'src/app/services/command-service/command.service';
 import { LoadingScreenService } from 'src/app/services/loading-screen/loading-screen.service';
-import { getPackageSourceWebUrl } from 'src/app/shared/component-shared';
 import { PackageSource } from '../../../../../src/models/option.model';
 import {
   PackageDetail,
   Project,
 } from '../../../../../src/models/project.model';
+import { getPackageSourceWebUrl } from 'src/app/shared/component-shared';
 
 @Component({
   selector: 'app-project-list',
@@ -55,7 +55,7 @@ export class ProjectListComponent implements AfterViewInit {
   getData() {
     this.loading.startLoading();
     this.commandSrv.getData().subscribe(res => {
-      this.projects = res.result;
+      this.setProjects(res.result);
       this.loading.stopLoading();
 
       this.cd.detectChanges();
@@ -67,11 +67,25 @@ export class ProjectListComponent implements AfterViewInit {
 
     this.loading.startLoading();
     this.commandSrv.reload(loadVersion).subscribe(res => {
-      this.projects = res.result;
+      this.setProjects(res.result);
 
       this.loading.stopLoading();
       this.cd.detectChanges();
     });
+  }
+
+  setProjects(projects: Project[]) {
+    projects.forEach(res => {
+      res.packages.forEach(pkg => {
+        pkg.packageWebUrl = getPackageSourceWebUrl(
+          this.packageSources.find(x => x.id == pkg.sourceId)!,
+          pkg.packageName,
+          pkg.packageVersion,
+          []
+        );
+      });
+    });
+    this.projects = projects;
   }
 
   updateAllProjects() {
@@ -141,7 +155,7 @@ export class ProjectListComponent implements AfterViewInit {
 
     this.commandSrv
       .removePackage(projectId, packageName, selectedVersion)
-      .subscribe(res => {
+      .subscribe(() => {
         this.getData();
       });
   }
@@ -185,8 +199,4 @@ export class ProjectListComponent implements AfterViewInit {
       this.cd.detectChanges();
     }
   }
-
-  // ---------------- end search box ------------------------------
-
-  getPackageSourceWebUrl = getPackageSourceWebUrl;
 }

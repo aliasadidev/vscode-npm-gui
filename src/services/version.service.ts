@@ -91,3 +91,30 @@ export function generateVersionPatterns(version: string): string[] {
 
   return lst;
 }
+
+function versionToSortable(version: string) {
+  const components = version.split('.');
+  const numericComponents = components.map(component => {
+    const numericPart = parseInt(component, 10);
+    return isNaN(numericPart) ? component : numericPart;
+  });
+  return numericComponents;
+}
+
+export function sortVersions(versions: string[]): string[] {
+  versions.sort((a, b) => {
+    const versionA = versionToSortable(a);
+    const versionB = versionToSortable(b);
+
+    for (let i = 0; i < Math.min(versionA.length, versionB.length); i++) {
+      if (versionA[i] < versionB[i]) {
+        return -1;
+      } else if (versionA[i] > versionB[i]) {
+        return 1;
+      }
+    }
+
+    return versionA.length - versionB.length;
+  });
+  return versions;
+}

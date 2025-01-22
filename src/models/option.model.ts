@@ -52,6 +52,10 @@ export interface PackageSource {
    * The package url
    */
   packageUrl: string;
+  /**
+   * The directory to use for local sources
+   */
+  sourceDirectory: string;
 }
 
 /**
@@ -63,7 +67,7 @@ export enum SourceType {
    */
   server = 1,
   /**
-   * The package source is a directory [Unsupported yet!]
+   * The package source is a directory
    */
   local = 2,
 }

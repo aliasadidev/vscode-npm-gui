@@ -1,194 +1,196 @@
 {
-  "name": "nugetpackagemanagergui",
-  "displayName": "NuGet Package Manager GUI",
-  "description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from NuGet server for .NET Core 1.1+/.Net5+ projects",
-  "author": "Ali Asadi (ali.asadi.dev@gmail.com)",
-  "publisher": "aliasadidev",
-  "version": "2.2.0",
-  "preview": true,
-  "icon": "images/icon.png",
-  "license": "MIT",
-  "keywords": [
-    "nuget",
-    "nuget package manager",
-    ".net core",
-    ".net 5",
-    ".net 6",
-    "dotnet core",
-    "nuget package manager gui",
-    "nuget package",
-    "dotnet 5",
-    "dotnet 6",
-    "gitlab",
-    "github",
-    "azure"
-  ],
-  "bugs": {
-    "url": "https://github.com/aliasadidev/vscode-npm-gui/issues"
-  },
-  "homepage": "https://github.com/aliasadidev/vscode-npm-gui/blob/master/README.md",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/aliasadidev/vscode-npm-gui.git"
-  },
-  "engines": {
-    "vscode": "^1.87.2"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:nugetpackagemanagergui.view"
-  ],
-  "main": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "nugetpackagemanagergui.view",
-        "title": "NuGet Package Manager GUI"
-      }
+    "name": "nugetpackagemanagergui",
+    "displayName": "NuGet Package Manager GUI",
+    "description": "An extension for Visual Studio Code that lets you easily update/remove/install packages from NuGet server for .NET Core 1.1+/.Net5+ projects",
+    "author": "Ali Asadi (ali.asadi.dev@gmail.com)",
+    "publisher": "aliasadidev",
+    "version": "2.2.0",
+    "preview": true,
+    "icon": "images/icon.png",
+    "license": "MIT",
+    "keywords": [
+        "nuget",
+        "nuget package manager",
+        ".net core",
+        ".net 5",
+        ".net 6",
+        "dotnet core",
+        "nuget package manager gui",
+        "nuget package",
+        "dotnet 5",
+        "dotnet 6",
+        "gitlab",
+        "github",
+        "azure"
     ],
-    "configuration": {
-      "type": "object",
-      "title": "NuGet Package Manager GUI configuration",
-      "properties": {
-        "nugetpackagemanagergui.packageSources": {
-          "description": "The package sources",
-          "type": [
-            "array"
-          ],
-          "items": {
-            "type": "object",
-            "properties": {
-              "sourceName": {
-                "type": "string",
-                "default": "NuGet",
-                "description": "The package source name"
-              },
-              "sourceType": {
-                "type": "string",
-                "default": "server",
-                "enum": [
-                  "server",
-                  "local"
-                ],
-                "description": "Local type isn't supported yet!"
-              },
-              "authorization": {
-                "type": "object",
-                "description": "The package source auth settings",
-                "properties": {
-                  "authType": {
-                    "type": "string",
-                    "default": "none",
-                    "enum": [
-                      "none",
-                      "basicAuth"
-                    ],
-                    "description": "The auth setting"
-                  },
-                  "username": {
-                    "type": "string",
-                    "default": "",
-                    "description": "The username"
-                  },
-                  "password": {
-                    "type": "string",
-                    "default": "",
-                    "description": "The access token key"
-                  }
-                }
-              },
-              "searchUrl": {
-                "type": "string",
-                "default": "https://azuresearch-usnc.nuget.org/query",
-                "description": "The NuGet endpoint address for searching packages"
-              },
-              "packageUrl": {
-                "type": "string",
-                "default": "https://www.nuget.org/packages/{{packageName}}",
-                "description": "The NuGet endpoint address for viewing a package in the registry page\n The {{packageName}} property inject by extension"
-              },
-              "packageVersionsUrl": {
-                "type": "string",
-                "default": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
-                "description": "The NuGet endpoint address for getting package versions\n The {{packageName}} property inject by extension"
-              },
-              "preRelease": {
-                "type": "boolean",
-                "default": true,
-                "description": "true or false determining whether to include pre-release packages in the result of the search"
-              }
-            }
-          },
-          "default": [
+    "bugs": {
+        "url": "https://github.com/aliasadidev/vscode-npm-gui/issues"
+    },
+    "homepage": "https://github.com/aliasadidev/vscode-npm-gui/blob/master/README.md",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aliasadidev/vscode-npm-gui.git"
+    },
+    "engines": {
+        "vscode": "^1.87.2"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:nugetpackagemanagergui.view"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
             {
-              "sourceName": "NuGet",
-              "preRelease": false,
-              "authorization": {
-                "authType": "none"
-              },
-              "packageVersionsUrl": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
-              "searchUrl": "https://azuresearch-usnc.nuget.org/query",
-              "packageUrl": "https://www.nuget.org/packages/{{packageName}}",
-              "sourceType": "server"
+                "command": "nugetpackagemanagergui.view",
+                "title": "NuGet Package Manager GUI"
             }
-          ]
-        },
-        "nugetpackagemanagergui.requestTimeout": {
-          "type": "number",
-          "default": 9000,
-          "description": "The maximum duration for completing a request from this extension"
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "NuGet Package Manager GUI configuration",
+            "properties": {
+                "nugetpackagemanagergui.packageSources": {
+                    "description": "The package sources",
+                    "type": [
+                        "array"
+                    ],
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "sourceName": {
+                                "type": "string",
+                                "default": "NuGet",
+                                "description": "The package source name"
+                            },
+                            "sourceType": {
+                                "type": "string",
+                                "default": "server",
+                                "enum": [
+                                    "server",
+                                    "local"
+                                ],
+                                "description": "Local type isn't supported yet!"
+                            },
+                            "authorization": {
+                                "type": "object",
+                                "description": "The package source auth settings",
+                                "properties": {
+                                    "authType": {
+                                        "type": "string",
+                                        "default": "none",
+                                        "enum": [
+                                            "none",
+                                            "basicAuth"
+                                        ],
+                                        "description": "The auth setting"
+                                    },
+                                    "username": {
+                                        "type": "string",
+                                        "default": "",
+                                        "description": "The username"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "default": "",
+                                        "description": "The access token key"
+                                    }
+                                }
+                            },
+                            "searchUrl": {
+                                "type": "string",
+                                "default": "https://azuresearch-usnc.nuget.org/query",
+                                "description": "The NuGet endpoint address for searching packages"
+                            },
+                            "packageUrl": {
+                                "type": "string",
+                                "default": "https://www.nuget.org/packages/{{packageName}}",
+                                "description": "The NuGet endpoint address for viewing a package in the registry page\n The {{packageName}} property inject by extension"
+                            },
+                            "packageVersionsUrl": {
+                                "type": "string",
+                                "default": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
+                                "description": "The NuGet endpoint address for getting package versions\n The {{packageName}} property inject by extension"
+                            },
+                            "preRelease": {
+                                "type": "boolean",
+                                "default": true,
+                                "description": "true or false determining whether to include pre-release packages in the result of the search"
+                            }
+                        }
+                    },
+                    "default": [
+                        {
+                            "sourceName": "NuGet",
+                            "preRelease": false,
+                            "authorization": {
+                                "authType": "none"
+                            },
+                            "packageVersionsUrl": "https://api.nuget.org/v3-flatcontainer/{{packageName}}/index.json",
+                            "searchUrl": "https://azuresearch-usnc.nuget.org/query",
+                            "packageUrl": "https://www.nuget.org/packages/{{packageName}}",
+                            "sourceType": "server"
+                        }
+                    ]
+                },
+                "nugetpackagemanagergui.requestTimeout": {
+                    "type": "number",
+                    "default": 9000,
+                    "description": "The maximum duration for completing a request from this extension"
+                }
+            }
         }
-      }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run package",
+        "compile": "webpack",
+        "watch": "webpack --watch",
+        "package": "webpack --mode production --devtool hidden-source-map",
+        "compile-tests": "tsc -p . --outDir out",
+        "watch-tests": "tsc -p . -w --outDir out",
+        "pretest": "npm run post-bundle && npm run compile-tests && npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js",
+        "prettier": "npx prettier . --write",
+        "post-bundle": "copyfiles -u 1 src/test/test-data/*.* out/",
+        "build-frontend": "cd front-end && npm install && npx ng build --configuration production",
+        "build-vsix": "npm run build-frontend && npm run package && npx @vscode/vsce package"
+    },
+    "devDependencies": {
+        "@types/chai": "^4.3.0",
+        "@types/glob": "^7.2.0",
+        "@types/mocha": "^9.1.0",
+        "@types/node": "^20.11.28",
+        "@types/node-fetch": "^2.6.1",
+        "@types/vscode": "^1.65.0",
+        "@typescript-eslint/eslint-plugin": "^5.12.1",
+        "@typescript-eslint/parser": "^5.12.1",
+        "@vscode/test-electron": "^2.1.2",
+        "chai": "^4.3.6",
+        "copyfiles": "^2.4.1",
+        "eslint": "^8.9.0",
+        "glob": "^7.2.0",
+        "mocha": "^9.2.2",
+        "prettier": "3.2.5",
+        "ts-loader": "^9.2.6",
+        "ts-node": "^10.7.0",
+        "typescript": "5.1",
+        "webpack": "^5.69.1",
+        "webpack-cli": "^4.9.2"
+    },
+    "dependencies": {
+        "base-64": "^1.0.0",
+        "https-proxy-agent": "^5.0.0",
+        "node-fetch": "^2.6.1",
+        "sax": "^1.2.4",
+        "utf8": "^3.0.0"
+    },
+    "__metadata": {
+        "id": "697a8357-0d3b-4765-8ec9-3a394c9e82c7",
+        "publisherDisplayName": "aliasadidev",
+        "publisherId": "61b7ba22-bafb-4b0b-bbf9-5d043a3651a8",
+        "isPreReleaseVersion": false
     }
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run post-bundle && npm run compile-tests && npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js",
-    "prettier": "npx prettier . --write",
-    "post-bundle": "copyfiles -u 1 src/test/test-data/*.* out/"
-  },
-  "devDependencies": {
-    "@types/chai": "^4.3.0",
-    "@types/glob": "^7.2.0",
-    "@types/mocha": "^9.1.0",
-    "@types/node": "^20.11.28",
-    "@types/node-fetch": "^2.6.1",
-    "@types/vscode": "^1.65.0",
-    "@typescript-eslint/eslint-plugin": "^5.12.1",
-    "@typescript-eslint/parser": "^5.12.1",
-    "@vscode/test-electron": "^2.1.2",
-    "chai": "^4.3.6",
-    "copyfiles": "^2.4.1",
-    "eslint": "^8.9.0",
-    "glob": "^7.2.0",
-    "mocha": "^9.2.2",
-    "prettier": "3.2.5",
-    "ts-loader": "^9.2.6",
-    "ts-node": "^10.7.0",
-    "typescript": "5.1",
-    "webpack": "^5.69.1",
-    "webpack-cli": "^4.9.2"
-  },
-  "dependencies": {
-    "base-64": "^1.0.0",
-    "https-proxy-agent": "^5.0.0",
-    "node-fetch": "^2.6.1",
-    "sax": "^1.2.4",
-    "utf8": "^3.0.0"
-  },
-  "__metadata": {
-    "id": "697a8357-0d3b-4765-8ec9-3a394c9e82c7",
-    "publisherDisplayName": "aliasadidev",
-    "publisherId": "61b7ba22-bafb-4b0b-bbf9-5d043a3651a8",
-    "isPreReleaseVersion": false
-  }
 }

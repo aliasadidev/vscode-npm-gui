@@ -64,11 +64,24 @@
               <th colspan="6" style="text-align: left">
                 {{ project.projectName }}
                 <span
-                  *ngIf="project.isCpm"
+                  *ngIf="project.isCpm && !project.isVirtualPropsProject"
                   class="badge badge-info ml-2"
                   title="Central Package Management (Directory.Packages.props)"
                   >CPM</span
                 >
+                <span
+                  *ngIf="project.isVirtualPropsProject"
+                  class="badge badge-secondary ml-2"
+                  title="PackageVersion entries in Directory.Packages.props not referenced by any project"
+                  >Unreferenced Versions</span
+                >
+                <button
+                  *ngIf="project.isVirtualPropsProject"
+                  type="button"
+                  (click)="removeAllUnreferenced(project.id)"
+                  class="btn btn-default-sm btn-sm ml-2">
+                  Remove All Unreferenced
+                </button>
               </th>
             </tr>
             <tr>
@@ -165,6 +178,7 @@
                   Update
                 </button>
                 <button
+                  *ngIf="!project.isVirtualPropsProject"
                   type="button"
                   (click)="updateAll(project.id, package.packageName)"
                   class="btn btn-default-sm btn-sm">
@@ -177,6 +191,7 @@
                   Remove
                 </button>
                 <button
+                  *ngIf="!project.isVirtualPropsProject"
                   type="button"
                   (click)="removeAll(project.id, package.packageName)"
                   class="btn btn-default-sm btn-sm">

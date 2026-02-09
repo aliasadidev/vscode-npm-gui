@@ -6,187 +6,195 @@ import { LoadingScreenService } from 'src/app/services/loading-screen/loading-sc
 import { getPackageSourceWebUrl } from 'src/app/shared/component-shared';
 import { PackageSource } from '../../../../../src/models/option.model';
 import {
-  PackageDetail,
-  Project,
+    PackageDetail,
+    Project,
 } from '../../../../../src/models/project.model';
 
 @Component({
-  selector: 'app-project-list',
-  templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.scss'],
+    selector: 'app-project-list',
+    templateUrl: './project-list.component.html',
+    styleUrls: ['./project-list.component.scss'],
 })
 export class ProjectListComponent implements AfterViewInit {
-  projects: Project[] = [];
-  packageListVersion: Record<string, string> = {};
-  originalPackageSources: PackageSource[] = [];
-  displayedColumns: string[] = [
-    'PackageName',
-    'InstalledVersion',
-    'Versions',
-    'IsUpdated',
-    'NewerVersion',
-    'Actions',
-  ];
-  colSpan: number = 0;
+    projects: Project[] = [];
+    packageListVersion: Record<string, string> = {};
+    originalPackageSources: PackageSource[] = [];
+    displayedColumns: string[] = [
+        'PackageName',
+        'InstalledVersion',
+        'Versions',
+        'IsUpdated',
+        'NewerVersion',
+        'Actions',
+    ];
+    colSpan: number = 0;
 
-  constructor(
-    private loading: LoadingScreenService,
-    private commandSrv: CommandService,
-    private alertSrv: AlertService,
-    private cd: ChangeDetectorRef
-  ) {
-    this.commandSrv.changeProjects.subscribe(res => {
-      if (res === 'getData') {
-        this.getData();
-      }
-    });
-  }
-
-  ngAfterViewInit(): void {
-    this.loadPackageVersion(false);
-    this.colSpan = this.displayedColumns.length;
-    this.commandSrv.getPackageSources().subscribe(x => {
-      if (Array.isArray(x.result)) {
-        this.packageSources = x.result;
-      }
-    });
-  }
-  packageSources: PackageSource[] = [];
-  getData() {
-    this.loading.startLoading();
-    this.commandSrv.getData().subscribe(res => {
-      this.projects = res.result;
-      this.loading.stopLoading();
-
-      this.cd.detectChanges();
-    });
-  }
-  versionIsLoad: boolean = false;
-  loadPackageVersion(loadVersion: boolean) {
-    this.versionIsLoad = this.versionIsLoad || loadVersion;
-
-    this.loading.startLoading();
-    this.commandSrv.reload(loadVersion).subscribe(res => {
-      this.projects = res.result;
-
-      this.loading.stopLoading();
-      this.cd.detectChanges();
-    });
-  }
-
-  updateAllProjects() {
-    this.loading.startLoading();
-    if (this.versionIsLoad == false) {
-      this.commandSrv.reload(true).subscribe(() => {
-        this.versionIsLoad = true;
-        this.commandSrv.updateAllProjects().subscribe(() => {
-          this.loading.stopLoading();
-          this.getData();
+    constructor(
+        private loading: LoadingScreenService,
+        private commandSrv: CommandService,
+        private alertSrv: AlertService,
+        private cd: ChangeDetectorRef
+    ) {
+        this.commandSrv.changeProjects.subscribe(res => {
+            if (res === 'getData') {
+                this.getData();
+            }
         });
-      });
-    } else {
-      this.commandSrv.updateAllProjects().subscribe(res => {
-        this.loading.stopLoading();
-        this.getData();
-      });
     }
-  }
 
-  getVersion(pkg: PackageDetail) {
-    const knownVersion = pkg.newerVersion !== 'Unknown';
-    const updateStatus =
-      pkg.isUpdated && knownVersion ? 'Yes' : knownVersion ? 'No' : 'Unknown';
-    return updateStatus;
-  }
-
-  getVersionStyle(pkg: PackageDetail) {
-    const knownVersion = pkg.newerVersion !== 'Unknown';
-    return pkg.isUpdated && knownVersion
-      ? 'badge badge-success'
-      : knownVersion
-        ? 'badge badge-danger'
-        : 'badge badge-secondary';
-  }
-
-  update(projectId: number, packageName: string) {
-    if (this.versionIsLoad) {
-      const selectedVersion = this.getSelectedVersion(projectId, packageName);
-
-      this.commandSrv
-        .updatePackage(projectId, packageName, selectedVersion)
-        .subscribe(res => {
-          this.getData();
+    ngAfterViewInit(): void {
+        this.loadPackageVersion(false);
+        this.colSpan = this.displayedColumns.length;
+        this.commandSrv.getPackageSources().subscribe(x => {
+            if (Array.isArray(x.result)) {
+                this.packageSources = x.result;
+            }
         });
-    } else {
-      this.alertSrv.error('Load the package versions first', 'Error');
     }
-  }
+    packageSources: PackageSource[] = [];
+    getData() {
+        this.loading.startLoading();
+        this.commandSrv.getData().subscribe(res => {
+            this.projects = res.result;
+            this.loading.stopLoading();
 
-  updateAll(projectId: number, packageName: string) {
-    if (this.versionIsLoad) {
-      const selectedVersion = this.getSelectedVersion(projectId, packageName);
-
-      this.commandSrv
-        .updateAllPackage(packageName, selectedVersion)
-        .subscribe(() => {
-          this.getData();
+            this.cd.detectChanges();
         });
-    } else {
-      this.alertSrv.error('Load the package versions first', 'Error');
     }
-  }
+    versionIsLoad: boolean = false;
+    loadPackageVersion(loadVersion: boolean) {
+        this.versionIsLoad = this.versionIsLoad || loadVersion;
 
-  remove(projectId: number, packageName: string) {
-    const selectedVersion = this.getSelectedVersion(projectId, packageName);
+        this.loading.startLoading();
+        this.commandSrv.reload(loadVersion).subscribe(res => {
+            this.projects = res.result;
 
-    this.commandSrv
-      .removePackage(projectId, packageName, selectedVersion)
-      .subscribe(res => {
-        this.getData();
-      });
-  }
-
-  removeAll(projectId: number, packageName: string) {
-    this.commandSrv.removeAllPackage(projectId, packageName).subscribe(res => {
-      this.getData();
-    });
-  }
-
-  change(id: number, packageName: string, value: any) {
-    this.packageListVersion[id + '.' + packageName] = value;
-  }
-
-  getSelectedVersion(projectId: number, packageName: string) {
-    return this.packageListVersion[`${projectId}.${packageName}`];
-  }
-
-  // ---------------- start search box ------------------------------
-  searchValue: string = '';
-  filterSearchTypes = FilterSearchTypes;
-  filterType = FilterSearchTypes.Contains;
-  searchFilter(packageName: string) {
-    let result: boolean = true;
-    if (this.searchValue) {
-      if (this.filterType == FilterSearchTypes.StartsWith) {
-        result = packageName
-          .toLocaleLowerCase()
-          .startsWith(this.searchValue.toLocaleLowerCase());
-      } else {
-        result = packageName
-          .toLocaleLowerCase()
-          .includes(this.searchValue.toLocaleLowerCase());
-      }
+            this.loading.stopLoading();
+            this.cd.detectChanges();
+        });
     }
-    return result;
-  }
 
-  onSwitchFilterType() {
-    if (this.searchValue) {
-      this.cd.detectChanges();
+    updateAllProjects() {
+        this.loading.startLoading();
+        if (this.versionIsLoad == false) {
+            this.commandSrv.reload(true).subscribe(() => {
+                this.versionIsLoad = true;
+                this.commandSrv.updateAllProjects().subscribe(() => {
+                    this.loading.stopLoading();
+                    this.getData();
+                });
+            });
+        } else {
+            this.commandSrv.updateAllProjects().subscribe(res => {
+                this.loading.stopLoading();
+                this.getData();
+            });
+        }
     }
-  }
 
-  // ---------------- end search box ------------------------------
+    getVersion(pkg: PackageDetail) {
+        const knownVersion = pkg.newerVersion !== 'Unknown';
+        const updateStatus =
+            pkg.isUpdated && knownVersion ? 'Yes' : knownVersion ? 'No' : 'Unknown';
+        return updateStatus;
+    }
 
-  getPackageSourceWebUrl = getPackageSourceWebUrl;
+    getVersionStyle(pkg: PackageDetail) {
+        const knownVersion = pkg.newerVersion !== 'Unknown';
+        return pkg.isUpdated && knownVersion
+            ? 'badge badge-success'
+            : knownVersion
+                ? 'badge badge-danger'
+                : 'badge badge-secondary';
+    }
+
+    update(projectId: number, packageName: string) {
+        if (this.versionIsLoad) {
+            const selectedVersion = this.getSelectedVersion(projectId, packageName);
+
+            this.commandSrv
+                .updatePackage(projectId, packageName, selectedVersion)
+                .subscribe(res => {
+                    this.getData();
+                });
+        } else {
+            this.alertSrv.error('Load the package versions first', 'Error');
+        }
+    }
+
+    updateAll(projectId: number, packageName: string) {
+        if (this.versionIsLoad) {
+            const selectedVersion = this.getSelectedVersion(projectId, packageName);
+
+            this.commandSrv
+                .updateAllPackage(packageName, selectedVersion)
+                .subscribe(() => {
+                    this.getData();
+                });
+        } else {
+            this.alertSrv.error('Load the package versions first', 'Error');
+        }
+    }
+
+    remove(projectId: number, packageName: string) {
+        const selectedVersion = this.getSelectedVersion(projectId, packageName);
+
+        this.commandSrv
+            .removePackage(projectId, packageName, selectedVersion)
+            .subscribe(res => {
+                this.getData();
+            });
+    }
+
+    removeAll(projectId: number, packageName: string) {
+        this.commandSrv.removeAllPackage(projectId, packageName).subscribe(res => {
+            this.getData();
+        });
+    }
+
+    removeAllUnreferenced(projectId: number) {
+        this.loading.startLoading();
+        this.commandSrv.removeAllUnreferenced(projectId).subscribe(res => {
+            this.loading.stopLoading();
+            this.getData();
+        });
+    }
+
+    change(id: number, packageName: string, value: any) {
+        this.packageListVersion[id + '.' + packageName] = value;
+    }
+
+    getSelectedVersion(projectId: number, packageName: string) {
+        return this.packageListVersion[`${projectId}.${packageName}`];
+    }
+
+    // ---------------- start search box ------------------------------
+    searchValue: string = '';
+    filterSearchTypes = FilterSearchTypes;
+    filterType = FilterSearchTypes.Contains;
+    searchFilter(packageName: string) {
+        let result: boolean = true;
+        if (this.searchValue) {
+            if (this.filterType == FilterSearchTypes.StartsWith) {
+                result = packageName
+                    .toLocaleLowerCase()
+                    .startsWith(this.searchValue.toLocaleLowerCase());
+            } else {
+                result = packageName
+                    .toLocaleLowerCase()
+                    .includes(this.searchValue.toLocaleLowerCase());
+            }
+        }
+        return result;
+    }
+
+    onSwitchFilterType() {
+        if (this.searchValue) {
+            this.cd.detectChanges();
+        }
+    }
+
+    // ---------------- end search box ------------------------------
+
+    getPackageSourceWebUrl = getPackageSourceWebUrl;
 }

@@ -63,6 +63,12 @@
               <th colspan="1">Project Name</th>
               <th colspan="6" style="text-align: left">
                 {{ project.projectName }}
+                <span
+                  *ngIf="project.isCpm"
+                  class="badge badge-info ml-2"
+                  title="Central Package Management (Directory.Packages.props)"
+                  >CPM</span
+                >
               </th>
             </tr>
             <tr>
@@ -106,7 +112,22 @@
                   >{{ package.sourceName }}</a
                 >
               </td>
-              <td>{{ package.packageVersion }}</td>
+              <td>{{ package.packageVersion }}
+                <span
+                  *ngIf="package.isCentrallyManaged"
+                  class="badge badge-info ml-1"
+                  style="font-size: 10px"
+                  title="Version managed centrally in Directory.Packages.props"
+                  >central</span
+                >
+                <span
+                  *ngIf="package.hasVersionOverride"
+                  class="badge badge-warning ml-1"
+                  style="font-size: 10px"
+                  title="VersionOverride set in project file"
+                  >override</span
+                >
+              </td>
               <td>
                 <select
                   #t

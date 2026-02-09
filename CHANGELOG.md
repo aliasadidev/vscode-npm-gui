@@ -1,5 +1,18 @@
 # Change Log
 
+# Version 2.2.0 - Feb 9, 2026
+
+#### Added
+
+- **Central Package Management (CPM) support** — automatically detects `Directory.Packages.props` with `ManagePackageVersionsCentrally` enabled
+- Read and resolve package versions from `Directory.Packages.props` for CPM-enabled projects
+- Install packages in CPM mode: adds `<PackageVersion>` to props file and version-less `<PackageReference>` to project file
+- Update centrally managed package versions in `Directory.Packages.props`, with changes reflected across all sharing projects
+- Remove packages with automatic cleanup of orphaned `<PackageVersion>` entries from props file
+- `VersionOverride` attribute support for per-project version pinning in CPM projects
+- CPM badge on project headers and per-package "central"/"override" indicators in the UI
+- CPM suffix label in the install package project dropdown
+
 # Version 2.1.1 - Aug 19, 2024
 
 #### Added

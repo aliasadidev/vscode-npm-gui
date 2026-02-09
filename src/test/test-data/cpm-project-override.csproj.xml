@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" VersionOverride="14.0.0" />
+        <PackageReference Include="xunit" />
+    </ItemGroup>
+</Project>

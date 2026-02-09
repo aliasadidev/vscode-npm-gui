@@ -63,6 +63,25 @@
               <th colspan="1">Project Name</th>
               <th colspan="6" style="text-align: left">
                 {{ project.projectName }}
+                <span
+                  *ngIf="project.isCpm && !project.isVirtualPropsProject"
+                  class="badge badge-info ml-2"
+                  title="Central Package Management (Directory.Packages.props)"
+                  >CPM</span
+                >
+                <span
+                  *ngIf="project.isVirtualPropsProject"
+                  class="badge badge-secondary ml-2"
+                  title="PackageVersion entries in Directory.Packages.props not referenced by any project"
+                  >Unreferenced Versions</span
+                >
+                <button
+                  *ngIf="project.isVirtualPropsProject"
+                  type="button"
+                  (click)="removeAllUnreferenced(project.id)"
+                  class="btn btn-default-sm btn-sm ml-2">
+                  Remove All Unreferenced
+                </button>
               </th>
             </tr>
             <tr>
@@ -106,7 +125,22 @@
                   >{{ package.sourceName }}</a
                 >
               </td>
-              <td>{{ package.packageVersion }}</td>
+              <td>{{ package.packageVersion }}
+                <span
+                  *ngIf="package.isCentrallyManaged"
+                  class="badge badge-info ml-1"
+                  style="font-size: 10px"
+                  title="Version managed centrally in Directory.Packages.props"
+                  >central</span
+                >
+                <span
+                  *ngIf="package.hasVersionOverride"
+                  class="badge badge-warning ml-1"
+                  style="font-size: 10px"
+                  title="VersionOverride set in project file"
+                  >override</span
+                >
+              </td>
               <td>
                 <select
                   #t
@@ -144,6 +178,7 @@
                   Update
                 </button>
                 <button
+                  *ngIf="!project.isVirtualPropsProject"
                   type="button"
                   (click)="updateAll(project.id, package.packageName)"
                   class="btn btn-default-sm btn-sm">
@@ -156,6 +191,7 @@
                   Remove
                 </button>
                 <button
+                  *ngIf="!project.isVirtualPropsProject"
                   type="button"
                   (click)="removeAll(project.id, package.packageName)"
                   class="btn btn-default-sm btn-sm">

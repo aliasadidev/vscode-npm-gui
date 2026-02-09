@@ -12,14 +12,15 @@ suite('xml.module.ts tests', () => {
 </Project>`;
 
     const expected: PackageDetail[] = [
-      { packageName: 'Microsoft.NET.Test.Sdk', packageVersion: '16.7.1' },
-      { packageName: 'xunit', packageVersion: '2.4.1' },
+      { packageName: 'Microsoft.NET.Test.Sdk', packageVersion: '16.7.1', versionOverride: undefined },
+      { packageName: 'xunit', packageVersion: '2.4.1', versionOverride: undefined },
     ];
     const packages = getPackages(xml, {
       id: 0,
       packages: [],
       projectName: '',
       projectPath: '',
+      isCpm: false,
     });
     assert.deepStrictEqual(packages, expected);
   });

@@ -10,11 +10,11 @@ import * as fs from 'fs';
  * @returns {Project}
  */
 export function getProject(projectList: Project[], projectID: number): Project {
-  let project = projectList.find(d => d.id === projectID);
-  if (project === undefined) {
-    throw 'The project file does not exists';
-  }
-  return project;
+    let project = projectList.find(d => d.id === projectID);
+    if (project === undefined) {
+        throw 'The project file does not exists';
+    }
+    return project;
 }
 
 /**
@@ -24,11 +24,11 @@ export function getProject(projectList: Project[], projectID: number): Project {
  * @returns {PackageDetail}
  */
 export function getPackage(
-  project: Project,
-  packageName: string
+    project: Project,
+    packageName: string
 ): PackageDetail {
-  let pkgIndex = getPackageIndex(project, packageName);
-  return project.packages[pkgIndex];
+    let pkgIndex = getPackageIndex(project, packageName);
+    return project.packages[pkgIndex];
 }
 /**
  * Get the package index from the project
@@ -37,11 +37,11 @@ export function getPackage(
  * @returns return the index of package
  */
 export function getPackageIndex(project: Project, packageName: string): number {
-  let pkgIndex = project.packages.findIndex(e => e.packageName === packageName);
-  if (pkgIndex === -1) {
-    throw `The selected package does not exists in '${project.projectName}' project`;
-  }
-  return pkgIndex;
+    let pkgIndex = project.packages.findIndex(e => e.packageName === packageName);
+    if (pkgIndex === -1) {
+        throw `The selected package does not exists in '${project.projectName}' project`;
+    }
+    return pkgIndex;
 }
 
 /**
@@ -51,19 +51,43 @@ export function getPackageIndex(project: Project, packageName: string): number {
  * @returns {ServiceResult}
  */
 export function checkAccess(
-  project: Project,
-  mode: number = fs.constants.O_RDWR
+    project: Project,
+    mode: number = fs.constants.O_RDWR
 ): ServiceResult {
-  let commandResult: ServiceResult;
-  let hasAccess = hasFileAccess(project.projectPath, mode);
-  if (hasAccess.isSuccessful) {
-    commandResult = { isSuccessful: true };
-  } else {
-    commandResult = {
-      message: hasAccess.errorMessage,
-      isSuccessful: false,
-      exception: hasAccess.exception,
-    };
-  }
-  return commandResult;
+    let commandResult: ServiceResult;
+    let hasAccess = hasFileAccess(project.projectPath, mode);
+    if (hasAccess.isSuccessful) {
+        commandResult = { isSuccessful: true };
+    } else {
+        commandResult = {
+            message: hasAccess.errorMessage,
+            isSuccessful: false,
+            exception: hasAccess.exception,
+        };
+    }
+    return commandResult;
+}
+
+/**
+ * Check file access for an arbitrary file path
+ * @param filePath The file path to check
+ * @param mode Check a file for read-write access
+ * @returns {ServiceResult}
+ */
+export function checkAccessForPath(
+    filePath: string,
+    mode: number = fs.constants.O_RDWR
+): ServiceResult {
+    let commandResult: ServiceResult;
+    let hasAccess = hasFileAccess(filePath, mode);
+    if (hasAccess.isSuccessful) {
+        commandResult = { isSuccessful: true };
+    } else {
+        commandResult = {
+            message: hasAccess.errorMessage,
+            isSuccessful: false,
+            exception: hasAccess.exception,
+        };
+    }
+    return commandResult;
 }

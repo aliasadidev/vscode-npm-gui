@@ -3,8 +3,8 @@ import { Project } from '../models/project.model';
 import { ServiceResult } from '../models/common.model';
 import { readFileContent, writeToFile } from '../modules/file.module';
 import { fetchPackageVersions } from '../modules/nuget.module';
-import { addPackage } from '../modules/xml.module';
-import { checkAccess, getProject } from './common.service';
+import { addPackage, addPackageReferenceWithoutVersion, addPackageVersion } from '../modules/xml.module';
+import { checkAccess, checkAccessForPath, getProject } from './common.service';
 import { PackageVersion } from '../models/nuget.model';
 import { findStableVersion, isUpdate } from './version.service';
 
@@ -38,6 +38,56 @@ export async function install(
   if (pkgIsInstalled == false) {
     commandResult = checkAccess(project);
     if (commandResult.isSuccessful) {
+      if (project.isCpm && project.propsFilePath) {
+        // === CPM Mode ===
+        // Also check access to props file
+        commandResult = checkAccessForPath(project.propsFilePath);
+        if (!commandResult.isSuccessful) {
+          return commandResult;
+        }
+
+        // 1. Add PackageVersion to Directory.Packages.props (or update if exists)
+        const propsContent = readFileContent(project.propsFilePath);
+        const updatedProps = addPackageVersion(propsContent, packageName, selectedVersion);
+        writeToFile(project.propsFilePath, updatedProps);
+
+        // 2. Add PackageReference without Version to the project file
+        const projectFileContent = readFileContent(project.projectPath);
+        const xml: string = addPackageReferenceWithoutVersion(
+          projectFileContent,
+          packageName,
+          project
+        );
+        writeToFile(project.projectPath, xml);
+
+        // 3. Fetch version info from NuGet API
+        const pkgVersions: PackageVersion = await fetchPackageVersions(
+          packageName,
+          config.packageSources,
+          config.requestTimeout,
+          config.vscodeHttpConfig
+        );
+        const newerPackageVersion = findStableVersion(pkgVersions.versions);
+        const isUpdatedResult = isUpdate(selectedVersion, newerPackageVersion);
+
+        project.packages.push({
+          versionList: pkgVersions.versions,
+          isUpdated: isUpdatedResult,
+          newerVersion: newerPackageVersion,
+          packageName: packageName,
+          packageVersion: selectedVersion,
+          sourceName: pkgVersions.sourceName,
+          sourceId: pkgVersions.sourceId,
+          isCentrallyManaged: true,
+          hasVersionOverride: false,
+        });
+
+        commandResult = {
+          message: `${packageName} installed in ${project.projectName} (CPM)`,
+          isSuccessful: true,
+        };
+      } else {
+        // === Non-CPM Mode (existing behavior) ===
       const projectFileContent = readFileContent(project.projectPath);
       const xml: string = addPackage(
         projectFileContent,
@@ -54,21 +104,24 @@ export async function install(
       );
 
       const newerPackageVersion = findStableVersion(pkgVersions.versions);
-      const isUpdated = isUpdate(selectedVersion, newerPackageVersion);
+        const isUpdatedResult = isUpdate(selectedVersion, newerPackageVersion);
 
       project.packages.push({
         versionList: pkgVersions.versions,
-        isUpdated: isUpdated,
+          isUpdated: isUpdatedResult,
         newerVersion: newerPackageVersion,
         packageName: packageName,
         packageVersion: selectedVersion,
         sourceName: pkgVersions.sourceName,
         sourceId: pkgVersions.sourceId,
+          isCentrallyManaged: false,
+          hasVersionOverride: false,
       });
       commandResult = {
         message: `${packageName} installed in ${project.projectName}`,
         isSuccessful: true,
       };
+    }
     }
   } else {
     commandResult = {

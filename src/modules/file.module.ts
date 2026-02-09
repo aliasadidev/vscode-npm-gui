@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { ValidationResult } from '../models/common.model';
 
 /**
@@ -85,4 +86,25 @@ export function hasFileAccess(
   }
 
   return result;
+}
+
+/**
+ * Starting from the directory containing the given project file,
+ * walk up the directory hierarchy looking for a Directory.Packages.props file.
+ * Returns the absolute path if found, or undefined.
+ * @param projectPath Absolute path to a .csproj/.fsproj file
+ */
+export function findPropsFile(projectPath: string): string | undefined {
+  let dir = path.dirname(projectPath);
+  const root = path.parse(dir).root;
+  while (true) {
+    const candidate = path.join(dir, 'Directory.Packages.props');
+    if (fs.existsSync(candidate)) {
+      return candidate;
+    }
+    if (dir === root) {
+      return undefined;
+    }
+    dir = path.dirname(dir);
+  }
 }

@@ -107,4 +107,8 @@ export interface PackageDetail {
    * The package version
    */
   packageVersion: string;
+  /**
+     * The VersionOverride attribute value (CPM only)
+     */
+  versionOverride?: string;
 }
